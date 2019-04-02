@@ -1,0 +1,147 @@
+//package com.dgi.dsi.winregistre.api;
+//
+//
+//
+//import com.dgi.dsi.winregistre.dao.RoleRepository;
+//import com.dgi.dsi.winregistre.dao.UserRepository;
+//
+//
+//import com.dgi.dsi.winregistre.entites.AppRole;
+//import com.dgi.dsi.winregistre.entites.AppUser;
+//
+//import com.dgi.dsi.winregistre.service.UserService;
+//import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.ApiParam;
+//import io.swagger.annotations.ApiResponse;
+//import io.swagger.annotations.ApiResponses;
+//import org.modelmapper.ModelMapper;
+//import org.springframework.beans.factory.annotation.Autowired;
+//
+//import org.springframework.http.ResponseEntity;
+//import org.springframework.security.access.prepost.PreAuthorize;
+//import org.springframework.security.authentication.AuthenticationManager;
+//
+//import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+//import org.springframework.security.core.Authentication;
+//import org.springframework.web.bind.annotation.*;
+//
+//import javax.servlet.http.HttpServletRequest;
+//import java.util.ArrayList;
+//import java.util.List;
+//
+//
+///**
+// * Created by rajeevkumarsingh on 02/08/17.
+// */
+//@RestController
+//@RequestMapping("/api/auth")
+//public class AuthController {
+//
+//    @Autowired
+//    AuthenticationManager authenticationManager;
+//
+//    @Autowired
+//    UserRepository userRepository;
+//
+//    @Autowired
+//    RoleRepository roleRepository;
+//
+////    @Autowired
+////    JwtTokenProvider tokenProvider;
+////
+//    @Autowired
+//    private UserService userService;
+//
+//    @Autowired
+//    private ModelMapper modelMapper;
+//
+//    @PostMapping("/signin")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+//    @ApiOperation(value = "${UserController.signin}")
+//    @ApiResponses(value = {//
+//            @ApiResponse(code = 400, message = "Something went wrong"), //
+//            @ApiResponse(code = 422, message = "Invalid username/password supplied")})
+//    public ResponseEntity<?> login(//
+//                        @ApiParam("Username") @RequestParam String username, //
+//                        @ApiParam("Password") @RequestParam String password) {
+//
+//        Authentication authentication = authenticationManager.authenticate(
+//                new UsernamePasswordAuthenticationToken(
+//                        username,
+//                        password
+//                )
+//        );
+//
+//
+//        System.out.println("------authentication----------"+authentication.getCredentials()+" ***********  "+authentication.getAuthorities()+"---"+authentication.getPrincipal()+"------authentication----------");
+//
+////        SecurityContextHolder.getContext().setAuthentication(authentication);
+//        List<AppRole> roles = new ArrayList<AppRole>();
+//                authentication.getAuthorities().forEach(r-> {
+//           roles.add(new AppRole(r.getAuthority()));
+//        });
+//
+//        String jwt = userService.createToken(username, roles);
+//        jwt = "Bearer "+jwt;
+//        System.out.println("--------------jwt------------"+jwt+"--------------jwt------------");
+//        return ResponseEntity.ok(jwt);
+//    }
+//
+//
+//
+//    @PostMapping("/signup")
+//    @ApiOperation(value = "${UserController.signup}")
+//    @ApiResponses(value = {//
+//            @ApiResponse(code = 400, message = "Something went wrong"), //
+//            @ApiResponse(code = 403, message = "Access denied"), //
+//            @ApiResponse(code = 422, message = "Username is already in use"), //
+//            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
+//    public String signup(@ApiParam("Signup AppUser") @RequestBody AppUser user) {
+//        return userService.signup(modelMapper.map(user, AppUser.class));
+//    }
+//
+//    @DeleteMapping(value = "/{username}")
+//    @PreAuthorize("hasRole('ADMIN')")
+//    @ApiOperation(value = "${UserController.delete}")
+//    @ApiResponses(value = {//
+//            @ApiResponse(code = 400, message = "Something went wrong"), //
+//            @ApiResponse(code = 403, message = "Access denied"), //
+//            @ApiResponse(code = 404, message = "The user doesn't exist"), //
+//            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
+//    public String delete(@ApiParam("Username") @PathVariable String username) {
+//        userService.delete(username);
+//        return username;
+//    }
+//
+//    @GetMapping(value = "/{username}")
+//    @PreAuthorize("hasRole('ROLE_ADMIN')")
+//    @ApiOperation(value = "${UserController.search}", response = AppUser.class)
+//    @ApiResponses(value = {//
+//            @ApiResponse(code = 400, message = "Something went wrong"), //
+//            @ApiResponse(code = 403, message = "Access denied"), //
+//            @ApiResponse(code = 404, message = "The user doesn't exist"), //
+//            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
+//    public AppUser search(@ApiParam("Username") @PathVariable String username) {
+//        return modelMapper.map(userService.search(username), AppUser.class);
+//    }
+//
+//    @GetMapping(value = "/me")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+//    @ApiOperation(value = "${UserController.me}", response = AppUser.class)
+//    @ApiResponses(value = {//
+//            @ApiResponse(code = 400, message = "Something went wrong"), //
+//            @ApiResponse(code = 403, message = "Access denied"), //
+//            @ApiResponse(code = 500, message = "Expired or invalid JWT token")})
+//    public AppUser whoami(HttpServletRequest req) {
+//        return modelMapper.map(userService.whoami(req), AppUser.class);
+//    }
+//
+//    @GetMapping("/refresh")
+//    @PreAuthorize("hasRole('ADMIN') or hasRole('USER')")
+//    public String refresh(HttpServletRequest req) {
+//        return userService.refresh(req.getRemoteUser());
+//    }
+//
+//
+//
+//}
