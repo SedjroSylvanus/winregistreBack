@@ -12,6 +12,8 @@ import com.dgi.dsi.winregistre.dao.ContactRepository;
 import com.dgi.dsi.winregistre.entites.modelIreport.OrderModel;
 import com.dgi.dsi.winregistre.entitiesIfri.Client;
 import com.dgi.dsi.winregistre.service.AccountService;
+
+import com.dgi.dsi.winregistre.service.JourFerie;
 import com.dgi.dsi.winregistre.service.serviceIreport.InvoiceService;
 import com.dgi.dsi.winregistre.service.serviceIreport.OrderService;
 import org.apache.log4j.LogManager;
@@ -26,7 +28,12 @@ import org.springframework.format.datetime.DateFormatter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import java.time.LocalDate;
+//import java.util.Calendar;
+//import java.util.Date;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Locale;
 
@@ -94,15 +101,48 @@ public class WinregistreApplication implements CommandLineRunner {
 //		accountService.addRoleToUse("admin", "USER");
 //		accountService.addRoleToUse("user", "USER");
 
-        SimpleDateFormat df = new SimpleDateFormat("EEE");
-        String date = "01/05/2019";
-        System.out.println("------------->"+df.parse(date));
+//        Calendar cal = Calendar.getInstance();
+//        cal.set(Calendar.YEAR, 2019);
+//        cal.set(Calendar.MONTH, 10);
+//        cal.set(Calendar.DAY_OF_MONTH, 02);
+//
+//        int semaine = cal.get(Calendar.DAY_OF_WEEK);
+//        System.out.println("----->Jour de la semaine: " + semaine);// Afficher le numéro du jour de la semaine soit 1 pour dimanche
 
-        if(df.format(date)== "mer."){
-            System.out.println("Ok");
-        }else{
-            System.out.println("Non Ok");
-        }
+
+
+        JourFerie testFonctionJF = new JourFerie();
+        LocalDate date = LocalDate.of(2019,05,04);
+        System.out.println("<<<<<<<-------->>>>>>>>>>>>>"+(date.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy",Locale.FRENCH))));
+        System.out.println("<<<<<<<-------->>>>>>>>>>>>>"+(date.format(DateTimeFormatter.ofPattern("EEEE",Locale.FRENCH))));
+
+        System.out.println("<<<<<<<<<<<Samedi>>>>>>>>"+testFonctionJF.isSamedi(date));
+        System.out.println("<<<<<<<<<Jour +2>>>>>><<"+date.plus(2, ChronoUnit.DAYS));
+
+
+        System.out.println("<<<<<<<<<<<Dimanche>>>>>>>>"+testFonctionJF.isDimanche(date));
+        System.out.println("<<<<<<<<<Jour +1>>>>>><<"+date.plus(1, ChronoUnit.DAYS));
+
+//        if((date.format(DateTimeFormatter.ofPattern("EEEE",Locale.FRENCH))).equals("samedi")
+//        || (date.format(DateTimeFormatter.ofPattern("EEEE",Locale.FRENCH))).equals("dimanche")){
+//            System.out.println("OK");
+//        }else{
+//            System.out.println("Non Ok");
+//        }
+        System.out.println("<<<<<<<-------->>>>>>>>>>>>>"+(date.getDayOfWeek()));
+        System.out.println(testFonctionJF.isBankHoliday( LocalDate.of(2019,01,10)));
+
+//        SimpleDateFormat df = new SimpleDateFormat("EEE");
+//        String date = "01/05/2019";
+//        System.out.println("------------->"+df.parse(date));
+//
+//        if(df.format(date)== "mer."){
+//            System.out.println("Ok");
+//        }else{
+//            System.out.println("Non Ok");
+//        }
+
+
 //        AgentDao.save(new Agent("Wassani", "Barow", df.format("12/01/1982"), "wassan@gmail.com", 97543734, "wassan.png"));
 //        System.out.println("Debut d'enregistrement dans client");
 //        Client c1 = new Client(10, "Ostian", 9876);
