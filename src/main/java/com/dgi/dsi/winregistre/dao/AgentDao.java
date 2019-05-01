@@ -24,6 +24,7 @@ import com.dgi.dsi.winregistre.entites.Agent;
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface AgentDao extends JpaRepository<Agent, Long>{
 
+//    Agent findByNom(String username);
     Agent findByUsername(String username);
     Boolean existsByUsername(String username);
 

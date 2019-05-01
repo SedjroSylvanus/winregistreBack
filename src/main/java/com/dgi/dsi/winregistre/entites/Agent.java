@@ -49,12 +49,20 @@ public class Agent extends Personne  implements Serializable {
     private Date updatedAt  = new Date();;
 
 
+    @OneToMany(mappedBy = "agent")
+    private List<DBFile> fichiers = new ArrayList<>();
 
 	@ManyToMany(fetch=FetchType.EAGER)
 	private Collection<AppRole> roles = new ArrayList<>();
 
+	public List<DBFile> getFichiers() {
+		return fichiers;
+	}
 
-
+	@JsonIgnore
+	public void setFichiers(List<DBFile> fichiers) {
+		this.fichiers = fichiers;
+	}
 
 
 //	@ManyToMany(fetch = FetchType.LAZY)
