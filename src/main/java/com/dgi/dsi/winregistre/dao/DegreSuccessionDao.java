@@ -9,8 +9,9 @@ import com.dgi.dsi.winregistre.entites.DegreSuccession;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface DegreSuccessionDao extends JpaRepository<DegreSuccession,  Long>{
-	
-	
+
+
+    DegreSuccession findByCodeLike(String code);
 }
 	
 

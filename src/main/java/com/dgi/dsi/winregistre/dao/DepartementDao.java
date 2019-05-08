@@ -15,6 +15,8 @@ public interface DepartementDao extends JpaRepository<Departement, Long>{
 
     public Departement findByCode(String code);
 
+    Departement findByCodeLike(String code);
+
 }
 	
 

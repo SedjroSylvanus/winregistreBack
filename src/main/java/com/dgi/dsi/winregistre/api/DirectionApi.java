@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.Departement;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +22,8 @@ import com.dgi.dsi.winregistre.dao.ExerciceDao;
 import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.Direction;
 import com.dgi.dsi.winregistre.entites.Exercice;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -55,7 +57,12 @@ public class DirectionApi {
 		return userForm;
 
 	}
-	
+	@GetMapping(value = "/searchDirectionByCode/{code}")
+	public Direction updateDirectionByCode(@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+	}
 	
 	@DeleteMapping(value = "/deleteDirection/{id}")
 	public boolean deleteBanque(@PathVariable Long id) {
@@ -85,15 +92,18 @@ public class DirectionApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeDirection/{id}")
-	public Direction updatePartielBanque(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeDirection")
+	public Direction updatePartielBanque(@Valid @RequestBody Direction direction) {
 
-		Direction exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		Direction directionRech = exerciceDao.findOne(direction.getId());
+		if (directionRech != null) {
+			direction.setId(directionRech.getId());
+			return exerciceDao.save(direction);
+		}else{
+			exerciceDao.save(direction);
 		}
-		return exercice;
+		return direction;
 	}
+
 
 }

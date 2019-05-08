@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.JourFerie;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +21,8 @@ import com.dgi.dsi.winregistre.dao.ExerciceDao;
 import com.dgi.dsi.winregistre.dao.ModePaiementDao;
 import com.dgi.dsi.winregistre.entites.Exercice;
 import com.dgi.dsi.winregistre.entites.ModePaiement;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -55,7 +57,13 @@ public class ModePaiementApi {
 
 	}
 	
-	
+		@GetMapping(value = "/searchModePaiementByCode/{code}")
+	public ModePaiement updateModePaiementByCode(@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+	}
+
 	@DeleteMapping(value = "/deleteModePaiement/{id}")
 	public boolean deleteModePaiement(@PathVariable Long id) {
 		// contactRepository.delete(id);
@@ -84,15 +92,17 @@ public class ModePaiementApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeModePaiement/{id}")
-	public ModePaiement updatePartielModePaiement(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeModePaiement")
+	public ModePaiement updatePartielModePaiement(@Valid @RequestBody ModePaiement modePaiement) {
 
-		ModePaiement exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		ModePaiement modePaiementRech = exerciceDao.findOne(modePaiement.getId());
+		if (modePaiementRech != null) {
+			modePaiement.setId(modePaiementRech.getId());
+			return exerciceDao.save(modePaiement);
+		}else{
+			exerciceDao.save(modePaiement);
 		}
-		return exercice;
+		return modePaiement;
 	}
 
 }

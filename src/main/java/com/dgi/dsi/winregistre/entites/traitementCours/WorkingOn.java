@@ -4,17 +4,19 @@ package com.dgi.dsi.winregistre.entites.traitementCours;
 import com.dgi.dsi.winregistre.entites.Acte;
 import com.dgi.dsi.winregistre.entites.Agent;
 
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 import java.util.Objects;
 
-public class WorkingOn {
+public class WorkingOn implements Serializable {
 
     private Acte acte;
-    private Date date;
+    private LocalDate date;
     private  String duree;
     private Agent user;
 
-    public WorkingOn(Acte acte, Date date, Agent user) {
+    public WorkingOn(Acte acte, LocalDate date, Agent user) {
         this.acte = acte;
         this.date = date;
 
@@ -29,11 +31,11 @@ public class WorkingOn {
         this.acte = acte;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
 

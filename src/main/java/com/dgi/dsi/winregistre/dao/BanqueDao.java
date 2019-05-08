@@ -17,6 +17,7 @@ public interface BanqueDao extends JpaRepository<Banque, Long> {
 
     List<Banque> findByDesignationLike(String designation);
 
+    Banque findByCodeLike(String code);
 //exemple avec paramètre
 //    @Query("select u from User u where u.firstname = :firstname or u.lastname = :lastname")
 //    Banque findByLastnameOrFirstname(@Param("lastname") String lastname,

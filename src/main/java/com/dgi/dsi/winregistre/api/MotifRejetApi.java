@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.ModePaiement;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +20,8 @@ import com.dgi.dsi.winregistre.dao.BanqueDao;
 import com.dgi.dsi.winregistre.dao.MotifRejetDao;
 import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.MotifRejet;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -54,7 +56,12 @@ public class MotifRejetApi {
 
 	}
 	
-	
+			@GetMapping(value = "/searchMotifRejetByCode/{code}")
+	public MotifRejet updateMotifRejetByCode(@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+	}
 	@DeleteMapping(value = "/deleteMotifRejet/{id}")
 	public boolean deleteMotifRejet(@PathVariable Long id) {
 		// contactRepository.delete(id);
@@ -83,15 +90,17 @@ public class MotifRejetApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeMotifRejet/{id}")
-	public MotifRejet updatePartielMotifRejet(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeMotifRejet")
+	public MotifRejet updatePartielMotifRejet(@Valid @RequestBody MotifRejet motifRejet) {
 
-		MotifRejet exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		MotifRejet motifRejetRech = exerciceDao.findOne(motifRejet.getId());
+		if (motifRejetRech != null) {
+			motifRejet.setId(motifRejetRech.getId());
+			return exerciceDao.save(motifRejet);
+		}else{
+			exerciceDao.save(motifRejet);
 		}
-		return exercice;
+		return motifRejet;
 	}
 
 }

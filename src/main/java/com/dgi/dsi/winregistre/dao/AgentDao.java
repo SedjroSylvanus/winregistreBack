@@ -8,6 +8,7 @@ import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
 import com.dgi.dsi.winregistre.entites.AppUser;
+import com.dgi.dsi.winregistre.entites.Service;
 import org.hibernate.SessionFactory;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
 import org.springframework.boot.autoconfigure.web.ServerProperties.Session;
@@ -24,13 +25,13 @@ import com.dgi.dsi.winregistre.entites.Agent;
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface AgentDao extends JpaRepository<Agent, Long>{
 
-//    Agent findByNom(String username);
     Agent findByUsername(String username);
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
 
 
+    Agent findByMatriculeEquals(String matricule);
 
 
     @Transactional
@@ -52,7 +53,7 @@ public interface AgentDao extends JpaRepository<Agent, Long>{
 
     List<Agent> findByIdIn(List<Long> pollIds, Sort sort);
 
-    public List<Agent> findByMatricule(String matricule);
+    public Agent findByMatricule(String matricule);
 //    Optional<Agent> findByLogin(String login);
 
     List<Agent> findAllByNom(String param, String param2);

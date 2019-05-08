@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.Exercice;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +20,8 @@ import com.dgi.dsi.winregistre.dao.BanqueDao;
 import com.dgi.dsi.winregistre.dao.InstitutionDao;
 import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.Institution;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -53,7 +55,13 @@ public class InstitutionApi {
 		return userForm;
 
 	}
-	
+	@GetMapping(value = "/searchInstitutionByCode/{code}")
+	public Institution updateInstitutionByCode(@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+	}
+
 	
 	@DeleteMapping(value = "/deleteInstitution/{id}")
 	public boolean deleteInstitution(@PathVariable Long id) {
@@ -83,15 +91,17 @@ public class InstitutionApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeInstitution/{id}")
-	public Institution updatePartielInstitution(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeInstitution")
+	public Institution updatePartielInstitution(@Valid @RequestBody Institution institution) {
 
-		Institution exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		Institution institutionRech = exerciceDao.findOne(institution.getId());
+		if (institutionRech != null) {
+			institution.setId(institutionRech.getId());
+			return exerciceDao.save(institution);
+		}else{
+			exerciceDao.save(institution);
 		}
-		return exercice;
+		return institution;
 	}
 
 }

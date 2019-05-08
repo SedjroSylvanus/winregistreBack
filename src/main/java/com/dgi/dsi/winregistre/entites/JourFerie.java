@@ -1,5 +1,7 @@
 package com.dgi.dsi.winregistre.entites;
 
+import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
+
 import java.io.Serializable;
 import java.util.Date;
 
@@ -13,13 +15,11 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name="jourferie")
-public class JourFerie implements Serializable{
+public class JourFerie extends EntityBaseBean implements Serializable{
 	
 
 	private static final long serialVersionUID = 1L;	
-	
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+
 	
 	private String code;
 	
@@ -30,40 +30,7 @@ public class JourFerie implements Serializable{
 	
 
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dateCreation = new Date();
-	
-	private String encodeur;
 
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	
-
-	public Date getDateCreation() {
-		return dateCreation;
-	}
-
-	public void setDateCreation(Date dateCreation) {
-		this.dateCreation = dateCreation;
-	}
-
-	public String getEncodeur() {
-		return encodeur;
-	}
-
-	public void setEncodeur(String encodeur) {
-		this.encodeur = encodeur;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
 
 
 	public String getCode() {
@@ -99,8 +66,8 @@ public class JourFerie implements Serializable{
 
 	@Override
 	public String toString() {
-		return "JourFerie [code=" + code + ", designation=" + designation + ", dateJourFerie=" + dateJourFerie
-				+ ", dateCreation=" + dateCreation + ", encodeur=" + encodeur + "]";
+		return "JourFerieService [code=" + code + ", designation=" + designation + ", dateJourFerie=" + dateJourFerie
+				+ "]";
 	}
 
 	public JourFerie(String code, String designation, Date dateJourFerie, String encodeur) {
@@ -108,7 +75,7 @@ public class JourFerie implements Serializable{
 		this.code = code;
 		this.designation = designation;
 		this.dateJourFerie = dateJourFerie;
-		this.encodeur = encodeur;
+
 	}
 
 

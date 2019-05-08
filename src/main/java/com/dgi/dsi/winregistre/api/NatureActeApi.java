@@ -16,31 +16,51 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dgi.dsi.winregistre.dao.TypeActeDao;
-import com.dgi.dsi.winregistre.entites.TypeActe;
+import com.dgi.dsi.winregistre.dao.NatureActeDao;
+import com.dgi.dsi.winregistre.entites.NatureActe;
 
 
 @RestController
 @CrossOrigin("*")
-public class TypeActeApi {
+public class NatureActeApi {
 
 
 //	@Autowired
 //	private ExerciceDao exerciceDao;
 	
 	@Autowired
-	private TypeActeDao exerciceDao;
+	private NatureActeDao exerciceDao;
 
 
-	@GetMapping(value = "/listTypeActes")
-	public List<TypeActe> getTypeActes() {
+	@GetMapping(value = "/listNatureActes")
+	public List<NatureActe> getTypeActes() {
 		return exerciceDao.findAll();
 	}
 
-	@PostMapping("/ajoutTypeActe")
-	public TypeActe ajoutTypeActe(@RequestBody TypeActe userForm) {
+	@GetMapping(value = "/getNatureActeByDesignation/{designation}")
+	public NatureActe getNatureActeByDesignation(@PathVariable String designation) {
+		// contactRepository.delete(id);
 
-		TypeActe userSearch = exerciceDao.findOne(userForm.getId());
+		return  exerciceDao.findByDesignationEquals(designation);
+
+
+	}
+
+	@GetMapping(value = "/getNatureActeByCode/{code}")
+	public NatureActe getNatureActeByCode(@PathVariable String code) {
+		// contactRepository.delete(id);
+
+		return  exerciceDao.findByCodeEquals(code);
+
+
+	}
+
+
+
+	@PostMapping("/ajoutNatureActe")
+	public NatureActe ajoutTypeActe(@RequestBody NatureActe userForm) {
+
+		NatureActe userSearch = exerciceDao.findOne(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -53,11 +73,11 @@ public class TypeActeApi {
 	}
 	
 	
-	@DeleteMapping(value = "/deleteTypeActe/{id}")
+	@DeleteMapping(value = "/deleteNatureActe/{id}")
 	public boolean deleteTypeActe(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		TypeActe exercice = exerciceDao.findOne(id);
+		NatureActe exercice = exerciceDao.findOne(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -70,10 +90,10 @@ public class TypeActeApi {
 
 	}
 
-	@PutMapping(value = "/mergePTypeActe/{id}")
-	public TypeActe updateTypeActe(@PathVariable Long id) {
+	@PutMapping(value = "/mergePNatureActe/{id}")
+	public NatureActe updateTypeActe(@PathVariable Long id) {
 
-		TypeActe exercice = exerciceDao.findOne(id);
+		NatureActe exercice = exerciceDao.findOne(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -81,10 +101,10 @@ public class TypeActeApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeTypeActe/{id}")
-	public TypeActe updatePartielTypeActe(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeNatureActe/{id}")
+	public NatureActe updatePartielTypeActe(@PathVariable Long id) {
 
-		TypeActe exercice = exerciceDao.findOne(id);
+		NatureActe exercice = exerciceDao.findOne(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);

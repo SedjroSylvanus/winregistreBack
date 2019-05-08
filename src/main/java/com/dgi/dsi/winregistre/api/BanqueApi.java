@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.Agent;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dgi.dsi.winregistre.dao.BanqueDao;
 
 import com.dgi.dsi.winregistre.entites.Banque;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -81,16 +83,26 @@ public class BanqueApi {
 		}
 		return exercice;
 	}
-	
-	@PatchMapping(value = "/mergeBanque/{id}")
-	public Banque updatePartielBanque(@PathVariable Long id) {
 
-		Banque exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		@GetMapping(value = "/searchBanqueByCode/{code}")
+	public Banque updateBanqueByCode (@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+
+	}
+
+	@PatchMapping(value = "/mergeBanque")
+	public Banque updatePartielBanque( @Valid @RequestBody Banque banque) {
+
+		Banque banqueRecherchee = exerciceDao.findOne(banque.getId());
+		if (banqueRecherchee != null) {
+			banque.setId(banqueRecherchee.getId());
+			return exerciceDao.save(banque);
+		}else{
+			exerciceDao.save(banque);
 		}
-		return exercice;
+		return banque;
 	}
 
 }

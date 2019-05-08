@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.DegreSuccession;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
@@ -12,11 +12,12 @@ import com.dgi.dsi.winregistre.dao.DepartementDao;
 
 import com.dgi.dsi.winregistre.entites.Departement;
 
+import javax.validation.Valid;
 
 
 @RestController
 @CrossOrigin("*")
-@RequestMapping("/departement")
+//@RequestMapping("/departement")
 public class DepartementApi {
 
 
@@ -51,7 +52,14 @@ public class DepartementApi {
 
 	}
 	
-	
+
+	@GetMapping(value = "/searchDepartementByCode/{code}")
+	public Departement updateDepartementByCode (@PathVariable String code) {
+
+		return departementDao.findByCodeLike("%"+code+"%");
+
+	}
+
 	@DeleteMapping(value = "/deleteDepartement/{id}")
 	public boolean deleteDepartement(@PathVariable Long id) {
 		// contactRepository.delete(id);
@@ -79,15 +87,18 @@ public class DepartementApi {
 		return userForm;
 	}
 	
-	@PatchMapping(value = "/mergeDepartement/{id}")
-	public Departement updatePartielDepartement(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeDepartement")
+	public Departement updatePartielDepartement(@Valid @RequestBody Departement departement) {
 
-		Departement exercice = departementDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return departementDao.save(exercice);
+		Departement departementRech = departementDao.findOne(departement.getId());
+		if (departementRech != null) {
+			departement.setId(departementRech.getId());
+			return departementDao.save(departement);
+		}else{
+			departementDao.save(departement);
 		}
-		return exercice;
+		return departement;
 	}
+
 
 }

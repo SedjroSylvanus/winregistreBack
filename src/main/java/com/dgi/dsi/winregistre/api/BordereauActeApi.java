@@ -21,6 +21,8 @@ import com.dgi.dsi.winregistre.dao.BordereauActeDao;
 import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.BordereauActe;
 
+import javax.validation.Valid;
+
 
 @RestController
 @CrossOrigin("*")
@@ -38,6 +40,19 @@ public class BordereauActeApi {
 	public List<BordereauActe> getBordereauActes() {
 		return exerciceDao.findAll();
 	}
+
+
+	@GetMapping(value = "/oneBordereauActeByNumero/{numero}")
+	public BordereauActe oneBordereauActeById(@PathVariable String numero) {
+		// contactRepository.delete(id);
+
+		BordereauActe bordereauActe = exerciceDao.findByNumeroEquals(numero);
+
+
+		return bordereauActe;
+
+	}
+
 
 	@PostMapping("/ajoutBordereauActe")
 	public BordereauActe ajoutBordereauActe(@RequestBody BordereauActe userForm) {
@@ -84,14 +99,16 @@ public class BordereauActeApi {
 	}
 	
 	@PatchMapping(value = "/mergeBordereauActe/{id}")
-	public BordereauActe updatePartielBordereauActe(@PathVariable Long id) {
+	public BordereauActe updatePartielBordereauActe(@Valid @RequestBody BordereauActe bordereauActe) {
 
-		BordereauActe exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		BordereauActe bordereauActeRecherche = exerciceDao.findOne(bordereauActe.getId());
+		if (bordereauActeRecherche != null) {
+			bordereauActe.setId(bordereauActeRecherche.getId());
+			return exerciceDao.save(bordereauActe);
+		}else{
+			exerciceDao.save(bordereauActe);
 		}
-		return exercice;
+		return bordereauActe;
 	}
 
 }

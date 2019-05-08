@@ -1,69 +1,78 @@
 package com.dgi.dsi.winregistre.entites;
 
-import java.io.Serializable;
-import java.util.Date;
+import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
 @Table(name="commune")
-public class Commune implements Serializable{
-	
+public class Commune extends EntityBaseBean implements Serializable{
 
-	private static final long serialVersionUID = 1L;	
-	
-	@Id @GeneratedValue(strategy=GenerationType.AUTO)
-	private Long id;
+
+		private static final long serialVersionUID = 1L;
+
 	
 	private String code;
 	
-	private String libelle;
-	
+	private String designation;
+	private Boolean centreEnregistrement;
+
 
 	@ManyToOne
 	@NotNull(message="Le Département est obligatoire")
 	private Departement departement;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dateCreation = new Date();
-	
-	private String encodeur;
 
-	public Long getId() {
-		return id;
+
+
+	@OneToMany(mappedBy="communeActe")
+	List<Acte> actes = new ArrayList<>();
+
+	public List<Acte> getActes() {
+		return actes;
 	}
 
-	public void setId(Long id) {
-		this.id = id;
+	@JsonIgnore
+	public void setActes(List<Acte> actes) {
+		this.actes = actes;
 	}
 
+//	@Temporal(TemporalType.TIMESTAMP)
+//	private Date dateCreation = new Date();
+//
+//
+//	private String encodeur;
 
 
-
-	public Date getDateCreation() {
-		return dateCreation;
+	public String getDesignation() {
+		return designation;
 	}
 
-	public void setDateCreation(Date dateCreation) {
-		this.dateCreation = dateCreation;
+	public void setDesignation(String designation) {
+		this.designation = designation;
 	}
 
-	public String getEncodeur() {
-		return encodeur;
-	}
-
-	public void setEncodeur(String encodeur) {
-		this.encodeur = encodeur;
-	}
+//	public Date getDateCreation() {
+//		return dateCreation;
+//	}
+//
+//	public void setDateCreation(Date dateCreation) {
+//		this.dateCreation = dateCreation;
+//	}
+//
+//	public String getEncodeur() {
+//		return encodeur;
+//	}
+//
+//	public void setEncodeur(String encodeur) {
+//		this.encodeur = encodeur;
+//	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
@@ -81,12 +90,12 @@ public class Commune implements Serializable{
 		this.code = code;
 	}
 
-	public String getLibelle() {
-		return libelle;
+	public Boolean getCentreEnregistrement() {
+		return centreEnregistrement;
 	}
 
-	public void setLibelle(String libelle) {
-		this.libelle = libelle;
+	public void setCentreEnregistrement(Boolean centreEnregistrement) {
+		this.centreEnregistrement = centreEnregistrement;
 	}
 
 	public Departement getDepartement() {
@@ -97,34 +106,28 @@ public class Commune implements Serializable{
 		this.departement = departement;
 	}
 
-	public Commune(String code, String libelle, String encodeur) {
+	public Commune(String code, String designation, String encodeur) {
 		super();
 		this.code = code;
-		this.libelle = libelle;
-		this.encodeur = encodeur;
-	}
-	
+		this.designation = designation;
+
+
+		}
 	
 
-	public Commune(String code, String libelle, Departement departement, String encodeur) {
+	public Commune(String code, String designation, Departement departement, String encodeur) {
 		super();
 		this.code = code;
-		this.libelle = libelle;
+		this.designation = designation;
 		this.departement = departement;
-		this.encodeur = encodeur;
+
 	}
 
 	@Override
 	public String toString() {
-		return "Commune [code=" + code + ", libelle=" + libelle + ", departement=" + departement + ", dateCreation="
-				+ dateCreation + ", encodeur=" + encodeur + "]";
+		return "Commune [code=" + code + ", libelle=" + designation + ", departement=" + departement + ", dateCreation="
+				+ "]";
 	}
-
-
-
-
-
-
 
 
 

@@ -1,14 +1,23 @@
 package com.dgi.dsi.winregistre.api;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 
-import com.dgi.dsi.winregistre.dao.AvoirPourcentageDao;
-import com.dgi.dsi.winregistre.dao.RoleRepository;
-import com.dgi.dsi.winregistre.entites.AppRole;
+import com.dgi.dsi.winregistre.dao.ActeDao;
+import com.dgi.dsi.winregistre.entites.Acte;
+import com.dgi.dsi.winregistre.entites.Service;
+import com.dgi.dsi.winregistre.service.CalculDroit;
+import com.dgi.dsi.winregistre.service.JourFerieService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+import org.springframework.context.ApplicationContext;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dgi.dsi.winregistre.dao.AgentDao;
 
 import com.dgi.dsi.winregistre.entites.Agent;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.view.jasperreports.JasperReportsPdfView;
 
 
 import javax.validation.Valid;
@@ -39,7 +50,65 @@ public class AgentApi {
 	private AgentDao agentDao;
 
 	@Autowired
-	private RoleRepository roleRepository;
+	private ApplicationContext applicationContext;
+
+	@Autowired
+	private ActeDao acteDao;
+
+	@Autowired
+	private CalculDroit calculDroit;
+
+
+
+//	private JourFerieService jourFerie = new JourFerieService();
+
+
+//    @GetMapping(value = "/isSamedi/{date}")
+//    public String isSamedi(@PathVariable String date) {
+//        List<Acte> actes = acteDao.findAll();
+//        for(int i=0; i< actes.size();i++){
+//            System.out.println(actes.get(i).getNumero());
+//        }
+//        LocalDate dateF = LocalDate.parse(date, DateTimeFormatter.ofPattern("dd/MM/yyyy", Locale.FRENCH));
+//
+//        System.out.println(dateF);
+//        if((dateF.format(DateTimeFormatter.ofPattern("EEEE", Locale.FRENCH))).equals("samedi")){
+//            return "Samedi";
+//        }else{
+//            return "Non Samedi";
+//        }
+
+//    	Log.info("<<<<<<<<<<--est Samedi--->>>>>>>>>>>><"+jourFerie.isSamedi(date));
+//	    return jourFerie.isSamedi(date);
+//    }
+
+
+
+
+	@GetMapping(value = "/serviceAgent/{matricule}")
+	public Service serviceAgent(@PathVariable String matricule) {
+		// contactRepository.delete(id);
+
+		Service service = (agentDao.findByMatriculeEquals(matricule)).getService();
+
+
+		return service;
+
+	}
+
+    @GetMapping(value = "/etatAgent")
+    @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+    public ModelAndView getEtatAgent(ModelMap modelMap) {
+        JasperReportsPdfView view = new JasperReportsPdfView();
+        view.setUrl("classpath:/reprot/report.jrxml");
+        view.setApplicationContext(applicationContext);
+         Map<String, Object> params = new HashMap<>();
+         params.put("datasource", agentDao.findAll());
+
+
+         return new ModelAndView(view, params);
+    }
+
 
 
     @GetMapping(value = "/listAgents")
@@ -49,7 +118,7 @@ public class AgentApi {
 	}
 
     @GetMapping(value = "/listAgents/{matricule}")
-    public List<Agent> getAgents(@PathVariable String matricule) {
+    public Agent getAgents(@PathVariable String matricule) {
 	    return agentDao.findByMatricule(matricule);
     }
 
@@ -69,17 +138,17 @@ public class AgentApi {
 	}
 
 	@DeleteMapping(value = "/deleteAgent/{id}")
-	public boolean deleteAgent(@PathVariable Long id) {
+	public Agent deleteAgent(@PathVariable Long id) {
 		// contactRepository.delete(id);
 
 		Agent exercice = agentDao.findOne(id);
 
 		if (exercice != null) {
-			agentDao.delete(exercice);
-			return true;
+
+			return exercice;
 		} else {
 
-			return false;
+			return null;
 		}
 
 	}
@@ -88,41 +157,41 @@ public class AgentApi {
 	public Agent updateAgent( @Valid @RequestBody Agent userForm,
                               @PathVariable String matricule) {
 
-        List<Agent> exercice = agentDao.findByMatricule(matricule);
-        if (exercice.get(0) != null) {
+        Agent exercice = agentDao.findByMatricule(matricule);
+        if (exercice != null) {
 
-            userForm.setId(exercice.get(0).getId());
+            userForm.setId(exercice.getId());
             agentDao.saveAndFlush(userForm);
 
         } else {
 
-            agentDao.saveAndFlush(exercice.get(0));
+            agentDao.saveAndFlush(exercice);
         }
-        return exercice.get(0);
+        return exercice;
 	}
 
-	@PatchMapping(value = "/mergeAgent/{matricule}")
-	public Agent updatePartielAgent( @Valid @RequestBody Agent userForm,
-                                     @PathVariable String matricule) {
+	@PatchMapping(value = "/mergeAgent")
+//	@PatchMapping(value = "/mergeAgent/{matricule}")
+	public Agent updatePartielAgent( @Valid @RequestBody Agent userForm) {
+		//,
+//                                     @PathVariable String matricule) {
 
-        List<Agent> exercice = agentDao.findByMatricule(matricule);
-        if (exercice.get(0) != null) {
+        Agent agent = agentDao.findByMatricule(userForm.getMatricule());
+//        System.out.println(agent.size());
+        if (agent != null) {
 
-            userForm.setId(exercice.get(0).getId());
+            userForm.setId(agent.getId());
+            userForm.setPassword(agent.getPassword());
             agentDao.saveAndFlush(userForm);
 
         } else {
 
-            agentDao.saveAndFlush(exercice.get(0));
+            agentDao.saveAndFlush(agent);
         }
-        return exercice.get(0);
+        return agent;
 	}
 
-	@GetMapping(value = "/roles")
-	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CLIENT')")
-	public List<AppRole> getRoles() {
-		return roleRepository.findAll();
-	}
+
 
 
 }

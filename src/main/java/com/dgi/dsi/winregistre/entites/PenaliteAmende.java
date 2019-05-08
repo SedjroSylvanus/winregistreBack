@@ -30,7 +30,7 @@ public class PenaliteAmende extends EntityBaseBean implements Serializable {
 
 	private String periodicite;
 	private Double mtPenaliteAmende;
-	private Integer dalaiEcheance;
+	private Integer delaiEcheance;
 	private String grille;
 
 	private Double mtMinimum;
@@ -38,9 +38,13 @@ public class PenaliteAmende extends EntityBaseBean implements Serializable {
 	private String jourMoisAnnee;
 	private Double mtPenaliteEcheance;
 	private Double droitSimpleMinimum;
+	private Integer echeance;
+
+
 
 	@OneToMany(mappedBy = "penaliteAmende")
-	private List<TypeActe> typeActes = new ArrayList<>();
+	private List<Acte> actes = new ArrayList<>();
+
 
 	public PenaliteAmende() {
 		super();
@@ -78,12 +82,12 @@ public class PenaliteAmende extends EntityBaseBean implements Serializable {
 		this.mtPenaliteAmende = mtPenaliteAmende;
 	}
 
-	public Integer getDalaiEcheance() {
-		return dalaiEcheance;
+	public Integer getDelaiEcheance() {
+		return delaiEcheance;
 	}
 
-	public void setDalaiEcheance(Integer dalaiEcheance) {
-		this.dalaiEcheance = dalaiEcheance;
+	public void setDelaiEcheance(Integer delaiEcheance) {
+		this.delaiEcheance = delaiEcheance;
 	}
 
 	public String getGrille() {
@@ -138,20 +142,20 @@ public class PenaliteAmende extends EntityBaseBean implements Serializable {
 	public String toString() {
 		return "PenaliteAmende [codePenaliteAmende=" + codePenaliteAmende + ", libellePenaliteAmende="
 				+ libellePenaliteAmende + ", periodicite=" + periodicite + ", mtPenaliteAmende=" + mtPenaliteAmende
-				+ ", dalaiEcheance=" + dalaiEcheance + ", grille=" + grille + ", mtMinimum=" + mtMinimum
+				+ ", delaiEcheance=" + delaiEcheance + ", grille=" + grille + ", mtMinimum=" + mtMinimum
 				+ ", mtMaximum=" + mtMaximum + ", jourMoisAnnee=" + jourMoisAnnee + ", mtPenaliteEcheance="
 				+ mtPenaliteEcheance + ", droitSimpleMinimum=" + droitSimpleMinimum + "]";
 	}
 
 	public PenaliteAmende(String codePenaliteAmende, String libellePenaliteAmende, String periodicite,
-			Double mtPenaliteAmende, Integer dalaiEcheance, String grille, Double mtMinimum, Double mtMaximum,
+			Double mtPenaliteAmende, Integer delaiEcheance, String grille, Double mtMinimum, Double mtMaximum,
 			String jourMoisAnnee, Double mtPenaliteEcheance, Double droitSimpleMinimum) {
 		super();
 		this.codePenaliteAmende = codePenaliteAmende;
 		this.libellePenaliteAmende = libellePenaliteAmende;
 		this.periodicite = periodicite;
 		this.mtPenaliteAmende = mtPenaliteAmende;
-		this.dalaiEcheance = dalaiEcheance;
+		this.delaiEcheance = delaiEcheance;
 		this.grille = grille;
 		this.mtMinimum = mtMinimum;
 		this.mtMaximum = mtMaximum;
@@ -160,13 +164,20 @@ public class PenaliteAmende extends EntityBaseBean implements Serializable {
 		this.droitSimpleMinimum = droitSimpleMinimum;
 	}
 
-	public List<TypeActe> getTypeActes() {
-		return typeActes;
+	public Integer getEcheance() {
+		return echeance;
+	}
+
+	public void setEcheance(Integer echeance) {
+		this.echeance = echeance;
+	}
+
+	public List<Acte> getActes() {
+		return actes;
 	}
 
 	@JsonIgnore
-	public void setTypeActes(List<TypeActe> typeActes) {
-		this.typeActes = typeActes;
+	public void setActes(List<Acte> actes) {
+		actes = actes;
 	}
-
 }

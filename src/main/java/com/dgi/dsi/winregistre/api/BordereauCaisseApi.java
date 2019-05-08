@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.BordereauActe;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +21,8 @@ import com.dgi.dsi.winregistre.dao.BordereauCaisseDao;
 import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.BordereauCaisse;
 
+import javax.validation.Valid;
+
 
 @RestController
 @CrossOrigin("*")
@@ -33,6 +35,17 @@ public class BordereauCaisseApi {
 	@Autowired
 	private BordereauCaisseDao exerciceDao;
 
+
+		@GetMapping(value = "/oneBordereauCaisseByINumero/{numero}")
+	public BordereauCaisse oneBordereauCaisseById(@PathVariable String numero) {
+		// contactRepository.delete(id);
+
+			BordereauCaisse bordereauCaisse = exerciceDao.findByNumeroEquals(numero);
+
+
+		return bordereauCaisse;
+
+	}
 
 	@GetMapping(value = "/listBordereauCaisses")
 	public List<BordereauCaisse> getBordereauCaisses() {
@@ -84,14 +97,16 @@ public class BordereauCaisseApi {
 	}
 	
 	@PatchMapping(value = "/mergeBordereauCaisse/{id}")
-	public BordereauCaisse updatePartielBanque(@PathVariable Long id) {
+	public BordereauCaisse updatePartielBanque(@Valid @RequestBody BordereauCaisse bordereauCaisse) {
 
-		BordereauCaisse exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		BordereauCaisse bordereauCaisseRech = exerciceDao.findOne(bordereauCaisse.getId());
+		if (bordereauCaisseRech != null) {
+			bordereauCaisse.setId(bordereauCaisseRech.getId());
+			return exerciceDao.save(bordereauCaisse);
+		}else{
+			exerciceDao.save(bordereauCaisse);
 		}
-		return exercice;
+		return bordereauCaisse;
 	}
 
 }

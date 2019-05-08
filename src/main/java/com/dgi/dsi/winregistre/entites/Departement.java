@@ -27,7 +27,7 @@ public class Departement extends EntityBaseBean implements Serializable{
 
 	private String code;
 	
-	private String libelle;
+	private String designation;
 	
 
 	
@@ -75,12 +75,12 @@ public class Departement extends EntityBaseBean implements Serializable{
 		this.code = code;
 	}
 
-	public String getLibelle() {
-		return libelle;
+	public String getDesignation() {
+		return designation;
 	}
 
-	public void setLibelle(String libelle) {
-		this.libelle = libelle;
+	public void setDesignation(String designation) {
+		this.designation = designation;
 	}
 
 	public List<Commune> getCommunes() {
@@ -95,14 +95,14 @@ public class Departement extends EntityBaseBean implements Serializable{
 
 	@Override
 	public String toString() {
-		return "Departement [code=" + code + ", libelle=" + libelle + ", dateCreation=" + dateCreation + ", encodeur="
+		return "Departement [code=" + code + ", libelle=" + designation + ", dateCreation=" + dateCreation + ", encodeur="
 				+ encodeur + ", communes=" + communes + "]";
 	}
 
 	public Departement(String code, String libelle, String encodeur) {
 		super();
 		this.code = code;
-		this.libelle = libelle;
+		this.designation = libelle;
 		this.encodeur = encodeur;
 	}
 

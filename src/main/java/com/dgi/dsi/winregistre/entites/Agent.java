@@ -9,6 +9,7 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.dgi.dsi.winregistre.parent.entites.Personne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import net.bytebuddy.implementation.bind.MethodDelegationBinder;
 import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -16,9 +17,14 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
 @Table(name = "agent")
+//,
 
-//		, uniqueConstraints = { @UniqueConstraint(name = "nom_prenom", columnNames = { "nom", "prenoms" }),
-//		@UniqueConstraint(name = "email", columnNames = { "email" }) })
+//		uniqueConstraints = {
+//		@UniqueConstraint(name = "nom_prenom", columnNames = { "nom", "prenoms" }),
+//		@UniqueConstraint(name = "email", columnNames = { "email" }) ,
+//		@UniqueConstraint(name = "matricule", columnNames = { "matricule" })
+
+//		})
 //@EntityListeners(AuditingEntityListener.class)
 //@JsonIgnoreProperties(value = {"createdAt", "updatedAt"},
 //        allowGetters = true)
@@ -31,37 +37,39 @@ public class Agent extends Personne  implements Serializable {
 
 
     @NotBlank
+	@Column(unique = true)
 	private String matricule;
-	private Boolean caissier;
-	private String indiceCaisse;
+
+//	private Boolean caissier;
+	private String indiceAgent;
 //	`CAI_Code` VARCHAR(10)  NOT NULL ,
-	private String cServiceRecette;
-	private String cServiceAssiette;
+//	private Boolean cServiceRecette;
+//	private Boolean cServiceAssiette;
 
-    @Column(nullable = false, updatable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreatedDate
-    private Date createdAt = new Date();
+//    @Column(nullable = false, updatable = false)
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @CreatedDate
+//    private Date createdAt;
+//
+//    @Column(nullable = false)
+//    @Temporal(TemporalType.TIMESTAMP)
+//    @LastModifiedDate
+//    private Date updatedAt ;
 
-    @Column(nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    @LastModifiedDate
-    private Date updatedAt  = new Date();;
 
-
-    @OneToMany(mappedBy = "agent")
-    private List<DBFile> fichiers = new ArrayList<>();
 
 	@ManyToMany(fetch=FetchType.EAGER)
 	private Collection<AppRole> roles = new ArrayList<>();
 
-	public List<DBFile> getFichiers() {
-		return fichiers;
+	@ManyToOne
+	private Service service;
+
+	public Service getService() {
+		return service;
 	}
 
-	@JsonIgnore
-	public void setFichiers(List<DBFile> fichiers) {
-		this.fichiers = fichiers;
+	public void setService(Service service) {
+		this.service = service;
 	}
 
 
@@ -83,21 +91,21 @@ public class Agent extends Personne  implements Serializable {
 		super();
 	}
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+//    public Date getCreatedAt() {
+//        return createdAt;
+//    }
+//
+//    public void setCreatedAt(Date createdAt) {
+//        this.createdAt = createdAt;
+//    }
+//
+//    public Date getUpdatedAt() {
+//        return updatedAt;
+//    }
+//
+//    public void setUpdatedAt(Date updatedAt) {
+//        this.updatedAt = updatedAt;
+//    }
 
 
 
@@ -116,39 +124,41 @@ public class Agent extends Personne  implements Serializable {
 
 
 
-	public Boolean getCaissier() {
-		return caissier;
+//	public Boolean getCaissier() {
+//		return caissier;
+//	}
+//
+//	public void setCaissier(Boolean caissier) {
+//		this.caissier = caissier;
+//	}
+//
+//
+//
+	public String getIndiceAgent() {
+		return indiceAgent;
 	}
 
-	public void setCaissier(Boolean caissier) {
-		this.caissier = caissier;
+	public void setIndiceAgent(String indiceAgent) {
+		this.indiceAgent = indiceAgent;
 	}
+//
+//	public Boolean getcServiceRecette() {
+//		return cServiceRecette;
+//	}
+//
+//	public void setcServiceRecette(Boolean cServiceRecette) {
+//		this.cServiceRecette = cServiceRecette;
+//	}
+//
+//	public Boolean getcServiceAssiette() {
+//		return cServiceAssiette;
+//	}
+//
+//	public void setcServiceAssiette(Boolean cServiceAssiette) {
+//		this.cServiceAssiette = cServiceAssiette;
+//	}
 
-	public String getIndiceCaisse() {
-		return indiceCaisse;
-	}
-
-	public void setIndiceCaisse(String indiceCaisse) {
-		this.indiceCaisse = indiceCaisse;
-	}
-
-	public String getcServiceRecette() {
-		return cServiceRecette;
-	}
-
-	public void setcServiceRecette(String cServiceRecette) {
-		this.cServiceRecette = cServiceRecette;
-	}
-
-	public String getcServiceAssiette() {
-		return cServiceAssiette;
-	}
-
-	public void setcServiceAssiette(String cServiceAssiette) {
-		this.cServiceAssiette = cServiceAssiette;
-	}
-
-//	@Override
+	//	@Override
 //	public String toString() {
 //		return "Agent{" +
 //				"matricule='" + matricule + '\'' +

@@ -8,8 +8,9 @@ import com.dgi.dsi.winregistre.entites.MotifRejet;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface MotifRejetDao extends JpaRepository<MotifRejet, Long>{
-	
-	
+
+
+    MotifRejet findByCodeLike(String code);
 }
 	
 

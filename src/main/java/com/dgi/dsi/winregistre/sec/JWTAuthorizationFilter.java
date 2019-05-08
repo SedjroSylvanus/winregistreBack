@@ -36,7 +36,7 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 		
 		String jwt=request.getHeader(SecurityConstants.HEADER_STRING);
 
-//		System.out.println("JWTAuthorizationFilter------------>"+jwt);
+		System.out.println("JWTAuthorizationFilter JWT ------------>"+jwt);
 
 		if(request.getMethod().equals("OPTIONS")) {
 		response.setStatus(HttpServletResponse.SC_OK);
@@ -54,9 +54,20 @@ public class JWTAuthorizationFilter extends OncePerRequestFilter {
 					.getBody();
 			
 			String username=claims.getSubject();
-//			System.out.println("JWTAuthorizationFilter claims------------>"+claims);
+			System.out.println("JWTAuthorizationFilter claims------------>"+claims);
+			Integer iat =(Integer) claims.get("iat");
+			System.out.println("iat--------->"+iat);
 
-			ArrayList<Map<String,String>> roles=(ArrayList<Map<String,String>>)claims.get("auth");//auth
+			ArrayList<Map<String,String>> roles;
+			if(iat == null){
+				System.out.println("OK");
+				roles=(ArrayList<Map<String,String>>)claims.get("roles");
+			}else{
+				System.out.println("Non Ok");
+				roles=(ArrayList<Map<String,String>>)claims.get("auth");
+			}
+
+//			ArrayList<Map<String,String>> roles=(ArrayList<Map<String,String>>)claims.get("roles");//auth; roles
 			System.out.println(claims);
 			
 			Collection<GrantedAuthority>authorities=new ArrayList<>();

@@ -10,8 +10,9 @@ import com.dgi.dsi.winregistre.entites.Service;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface ServiceDao extends JpaRepository<Service, Long>{
-	
-	
+
+
+    Service findByCodeLike(String code);
 }
 	
 

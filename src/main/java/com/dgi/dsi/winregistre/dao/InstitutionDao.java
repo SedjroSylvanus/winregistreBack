@@ -8,8 +8,9 @@ import com.dgi.dsi.winregistre.entites.Institution;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface InstitutionDao extends JpaRepository<Institution, Long>{
-	
-	
+
+
+    Institution findByCodeLike(String code);
 }
 	
 

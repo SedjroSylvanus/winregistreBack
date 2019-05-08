@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.Statut;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +22,8 @@ import com.dgi.dsi.winregistre.dao.TrancheDao;
 import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.Exercice;
 import com.dgi.dsi.winregistre.entites.Tranche;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -85,15 +87,18 @@ public class TrancheApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeTranche/{id}")
-	public Tranche updatePartielBanque(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeTranche")
+	public Tranche updatePartielBanque(@Valid @RequestBody Tranche tranche) {
 
-		Tranche exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		Tranche trancheRech = exerciceDao.findOne(tranche.getId());
+		if (trancheRech != null) {
+			tranche.setId(trancheRech.getId());
+			return exerciceDao.save(tranche);
+		}else{
+			exerciceDao.save(tranche);
 		}
-		return exercice;
+		return tranche;
 	}
+
 
 }

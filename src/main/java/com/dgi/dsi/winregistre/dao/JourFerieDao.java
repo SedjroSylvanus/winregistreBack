@@ -10,8 +10,9 @@ import com.dgi.dsi.winregistre.entites.JourFerie;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface JourFerieDao extends JpaRepository<JourFerie, Long>{
-	
-	
+
+
+    JourFerie findByCodeLike(String code);
 }
 	
 

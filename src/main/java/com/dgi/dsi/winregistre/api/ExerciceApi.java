@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.Direction;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.dgi.dsi.winregistre.dao.ExerciceDao;
 import com.dgi.dsi.winregistre.entites.Exercice;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -81,13 +83,15 @@ public class ExerciceApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/merge/{id}")
-	public Exercice updatePartielExercice(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeExercice")
+	public Exercice updatePartielExercice(@Valid @RequestBody Exercice exercice) {
 
-		Exercice exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
+		Exercice exerciceRech = exerciceDao.findOne(exercice.getId());
+		if (exerciceRech != null) {
+			exercice.setId(exerciceRech.getId());
 			return exerciceDao.save(exercice);
+		}else{
+			exerciceDao.save(exercice);
 		}
 		return exercice;
 	}

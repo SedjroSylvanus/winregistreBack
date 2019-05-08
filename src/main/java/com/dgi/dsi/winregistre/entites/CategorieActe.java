@@ -2,17 +2,11 @@ package com.dgi.dsi.winregistre.entites;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +23,7 @@ public class CategorieActe extends EntityBaseBean implements Serializable {
 	private String designation;
 
 	@OneToMany(mappedBy="categorieActe")
-	private List<TypeActe> typeActes= new ArrayList<>();
+	private List<NatureActe> typeActes= new ArrayList<>();
 	
 	
 	@OneToMany(mappedBy="categorieActe")
@@ -78,13 +72,13 @@ public class CategorieActe extends EntityBaseBean implements Serializable {
 		return "Banque [code=" + code + ", designation=" + designation + "]";
 	}
 
-	public List<TypeActe> getTypeActes() {
+	public List<NatureActe> getTypeActes() {
 		return typeActes;
 	}
 
 
 	@JsonIgnore
-	public void setTypeActes(List<TypeActe> typeActes) {
+	public void setTypeActes(List<NatureActe> typeActes) {
 		this.typeActes = typeActes;
 	}
 

@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.Produit;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +22,8 @@ import com.dgi.dsi.winregistre.dao.ServiceDao;
 import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.Exercice;
 import com.dgi.dsi.winregistre.entites.Service;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -56,7 +58,13 @@ public class ServiceApi {
 
 	}
 	
-	
+		@GetMapping(value = "/searchServiceByCode/{code}")
+	public Service updateServiceByCode(@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+	}
+
 	@DeleteMapping(value = "/deleteService/{id}")
 	public boolean deleteService(@PathVariable Long id) {
 		// contactRepository.delete(id);
@@ -85,15 +93,17 @@ public class ServiceApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeService/{id}")
-	public Service updatePartielService(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeService")
+	public Service updatePartielService(@Valid @RequestBody Service service) {
 
-		Service exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		Service serviceRech = exerciceDao.findOne(service.getId());
+		if (serviceRech != null) {
+			service.setId(serviceRech.getId());
+			return exerciceDao.save(service);
+		}else{
+			exerciceDao.save(service);
 		}
-		return exercice;
+		return service;
 	}
 
 }

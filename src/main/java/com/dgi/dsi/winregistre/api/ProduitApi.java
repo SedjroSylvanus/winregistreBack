@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dgi.dsi.winregistre.dao.BanqueDao;
 import com.dgi.dsi.winregistre.dao.ProduitDao;
-import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.Produit;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -53,8 +53,14 @@ public class ProduitApi {
 		return userForm;
 
 	}
-	
-	
+
+	@GetMapping(value = "/searchProduitByCode/{code}")
+	public Produit updateProduitByCode(@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+	}
+
 	@DeleteMapping(value = "/deleteProduit/{id}")
 	public boolean deleteProduit(@PathVariable Long id) {
 		// contactRepository.delete(id);
@@ -83,15 +89,16 @@ public class ProduitApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeProduit/{id}")
-	public Produit updatePartielProduit(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeProduit")
+	public Produit updatePartielProduit(@Valid @RequestBody Produit produit) {
 
-		Produit exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		Produit produitRech = exerciceDao.findOne(produit.getId());
+		if (produitRech != null) {
+			produit.setId(produitRech.getId());
+			return exerciceDao.save(produit);
+		}else{
+			exerciceDao.save(produit);
 		}
-		return exercice;
+		return produit;
 	}
-
 }

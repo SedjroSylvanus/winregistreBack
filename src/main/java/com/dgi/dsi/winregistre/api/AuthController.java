@@ -2,7 +2,7 @@
 //
 //
 //
-//import com.dgi.dsi.winregistre.dao.RoleRepository;
+//import com.dgi.dsi.winregistre.dao.RoleDao;
 //import com.dgi.dsi.winregistre.dao.UserRepository;
 //
 //
@@ -44,7 +44,7 @@
 //    UserRepository userRepository;
 //
 //    @Autowired
-//    RoleRepository roleRepository;
+//    RoleDao roleRepository;
 //
 ////    @Autowired
 ////    JwtTokenProvider tokenProvider;

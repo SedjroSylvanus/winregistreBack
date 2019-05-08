@@ -10,8 +10,9 @@ import com.dgi.dsi.winregistre.entites.Statut;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface StatutDao extends JpaRepository<Statut, Long>{
-	
-	
+
+
+    Statut findByCodeLike(String code);
 }
 	
 

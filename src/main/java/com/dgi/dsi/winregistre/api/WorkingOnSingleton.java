@@ -42,15 +42,17 @@ class WorkingOnSingleton {
 
 
     public WorkingOn getWorkingOnFromAUser(Agent user) {
-        final WorkingOn[] workingOnSearch = new WorkingOn[1];
+        final List<WorkingOn>   workingOnSearch = new ArrayList<>();
+//        final WorkingOn[] workingOnSearch = new WorkingOn[1];
         workingOns.forEach(workingOn -> {
             if (workingOn.getUser().equals(user)) {
-                workingOnSearch[0] = workingOn;
+                workingOnSearch.add(workingOn);
+//                workingOnSearch[0] = workingOn;
             }
         });
 
 
-        return workingOnSearch[0];
+        return workingOnSearch.get(0);
 
     }
 

@@ -8,8 +8,10 @@ import com.dgi.dsi.winregistre.entites.CategorieActe;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface CategorieActeDao extends JpaRepository<CategorieActe, Long>{
-	
-	
+
+
+
+    CategorieActe findByCodeLike(String code);
 }
 	
 

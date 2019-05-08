@@ -2,6 +2,7 @@ package com.dgi.dsi.winregistre.api;
 
 import java.util.List;
 
+import com.dgi.dsi.winregistre.entites.CategorieActe;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dgi.dsi.winregistre.dao.CommuneDao;
 
 import com.dgi.dsi.winregistre.entites.Commune;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -52,6 +55,19 @@ public class CommuneApi {
 
 	}
 
+	@GetMapping(value = "/getCommuneByDesignation/{designation}")
+	public Commune getCommuneByDesignation (@PathVariable String designation) {
+
+		return communeDao.findByDesignationEquals(designation);
+
+	}
+	@GetMapping(value = "/searchCommuneByCode/{code}")
+	public Commune updateCommuneByCode (@PathVariable String code) {
+
+		return communeDao.findByCodeEquals(code);
+
+	}
+
 	@DeleteMapping(value = "/deleteCommune/{id}")
 	public boolean deleteCommune(@PathVariable Long id) {
 		// contactRepository.delete(id);
@@ -68,26 +84,29 @@ public class CommuneApi {
 
 	}
 
-	@PutMapping(value = "/mergePCommune/{id}")
-	public Commune updateCommune(@PathVariable Long id) {
+//	@PutMapping(value = "/mergePCommune")
+//	public Commune updateCommune(@PathVariable Long id) {
+//
+//		Commune commune = communeDao.findOne(id);
+//		if (commune != null) {
+//			commune.setId(id);
+//			return communeDao.save(commune);
+//		}
+//		return commune;
+//	}
 
-		Commune commune = communeDao.findOne(id);
-		if (commune != null) {
-			commune.setId(id);
+	@PatchMapping(value = "/mergeCommune")
+	public Commune updatePartielCommune(@Valid @RequestBody Commune commune) {
+
+		Commune communeRech = communeDao.findOne(commune.getId());
+		if (communeRech != null) {
+			commune.setId(communeRech.getId());
 			return communeDao.save(commune);
+		}else{
+			communeDao.save(commune);
 		}
 		return commune;
 	}
 
-	@PatchMapping(value = "/mergeCommune/{id}")
-	public Commune updatePartielCommune(@PathVariable Long id) {
-
-		Commune commune = communeDao.findOne(id);
-		if (commune != null) {
-			commune.setId(id);
-			return communeDao.save(commune);
-		}
-		return commune;
-	}
 
 }

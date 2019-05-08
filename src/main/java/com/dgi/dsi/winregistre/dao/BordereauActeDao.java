@@ -9,7 +9,7 @@ import com.dgi.dsi.winregistre.entites.BordereauActe;
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface BordereauActeDao extends JpaRepository<BordereauActe, Long>{
 	
-	
+	BordereauActe findByNumeroEquals(String numero);
 }
 	
 

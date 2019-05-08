@@ -1,11 +1,10 @@
 package com.dgi.dsi.winregistre.api;
 
 import com.dgi.dsi.winregistre.dao.AgentDao;
-import com.dgi.dsi.winregistre.dao.RoleRepository;
+import com.dgi.dsi.winregistre.dao.RoleDao;
 
 
 import com.dgi.dsi.winregistre.entites.Agent;
-import com.dgi.dsi.winregistre.entites.AppRole;
 import com.dgi.dsi.winregistre.entites.AppUser;
 
 import com.dgi.dsi.winregistre.payload.LoginRequest;
@@ -21,14 +20,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.util.ArrayList;
-import java.util.List;
 
 
 /**
@@ -45,7 +40,7 @@ public class AuthAgentApi {
     AgentDao userRepository;
 
     @Autowired
-    RoleRepository roleRepository;
+    RoleDao roleRepository;
 
     //    @Autowired
 //    JwtTokenProvider tokenProvider;
@@ -63,11 +58,10 @@ public class AuthAgentApi {
             @ApiResponse(code = 400, message = "Something went wrong"), //
             @ApiResponse(code = 404, message = "Not Found"), //
             @ApiResponse(code = 422, message = "Invalid username/password supplied")})
-    public ResponseEntity<?> login(
-            @Valid @RequestBody LoginRequest loginRequest){
+    public ResponseEntity<?> login(@Valid @RequestBody LoginRequest loginRequest){
 
 //                                   @ApiParam("Username") @RequestParam String username, //
-//                                   @ApiParam("Password") @RequestParam String password){
+//                                   @ApiParam("Password") @RequestParam String password)
 
 //        Authentication authentication = authenticationManager.authenticate(
 //                new UsernamePasswordAuthenticationToken(
@@ -89,7 +83,6 @@ public class AuthAgentApi {
 //        jwt = "Bearer "+jwt;
 //        System.out.println("--------------jwt------------"+jwt+"--------------jwt------------");
 //        return ResponseEntity.ok(jwt);
-        System.out.println(loginRequest.getUsername()+"        "+loginRequest.getPassword());
         return ResponseEntity.ok(userService.signin(loginRequest.getUsername(), loginRequest.getPassword()));
     }
 

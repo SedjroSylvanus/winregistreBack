@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +20,8 @@ import com.dgi.dsi.winregistre.dao.BanqueDao;
 import com.dgi.dsi.winregistre.dao.StatutDao;
 import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.Statut;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -53,7 +55,13 @@ public class StatutApi {
 		return userForm;
 
 	}
-	
+		@GetMapping(value = "/searchStatutByCode/{code}")
+	public Statut updateStatutByCode(@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+	}
+
 	
 	@DeleteMapping(value = "/deleteStatut/{id}")
 	public boolean deleteStatut(@PathVariable Long id) {
@@ -83,15 +91,18 @@ public class StatutApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeStatut/{id}")
-	public Statut updatePartielStatut(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeStatut")
+	public Statut updatePartielStatut(@Valid @RequestBody Statut statut) {
 
-		Statut exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		Statut statutRech = exerciceDao.findOne(statut.getId());
+		if (statutRech != null) {
+			statut.setId(statutRech.getId());
+			return exerciceDao.save(statut);
+		}else{
+			exerciceDao.save(statut);
 		}
-		return exercice;
+		return statut;
 	}
+
 
 }

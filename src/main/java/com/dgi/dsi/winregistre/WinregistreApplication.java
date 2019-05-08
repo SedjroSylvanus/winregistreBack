@@ -1,8 +1,7 @@
 package com.dgi.dsi.winregistre;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 
 
 import com.dgi.dsi.winregistre.dao.ClientDao;
@@ -10,12 +9,13 @@ import com.dgi.dsi.winregistre.dao.ContactRepository;
 
 
 import com.dgi.dsi.winregistre.entites.modelIreport.OrderModel;
-import com.dgi.dsi.winregistre.entitiesIfri.Client;
 import com.dgi.dsi.winregistre.service.AccountService;
 
-import com.dgi.dsi.winregistre.service.JourFerie;
+import com.dgi.dsi.winregistre.service.JourFerieService;
 import com.dgi.dsi.winregistre.service.serviceIreport.InvoiceService;
 import com.dgi.dsi.winregistre.service.serviceIreport.OrderService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.modelmapper.ModelMapper;
@@ -24,17 +24,13 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
-import org.springframework.format.datetime.DateFormatter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import java.text.SimpleDateFormat;
-
-import java.time.LocalDate;
+import java.time.*;
 //import java.util.Calendar;
 //import java.util.Date;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.List;
 import java.util.Locale;
 
 @SpringBootApplication
@@ -49,6 +45,19 @@ public class WinregistreApplication implements CommandLineRunner {
 
 //    @PersistenceContext()
 //    private EntityManager entityManager;
+
+
+
+    @Autowired
+    private ObjectMapper objectMapper;
+
+
+
+    @PostConstruct
+    public void setUp() {
+        objectMapper.registerModule(new JavaTimeModule());
+    }
+
 
     @Autowired
     private ContactRepository contactRepository;
@@ -111,16 +120,17 @@ public class WinregistreApplication implements CommandLineRunner {
 
 
 
-        JourFerie testFonctionJF = new JourFerie();
-        LocalDate date = LocalDate.of(2019,05,04);
-        System.out.println("<<<<<<<-------->>>>>>>>>>>>>"+(date.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy",Locale.FRENCH))));
-        System.out.println("<<<<<<<-------->>>>>>>>>>>>>"+(date.format(DateTimeFormatter.ofPattern("EEEE",Locale.FRENCH))));
+        JourFerieService testFonctionJF = new JourFerieService();
+        LocalDate date = LocalDate.parse("2019-10-05",DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.ENGLISH));
+//                LocalDate.of(2019,05,04);
+        System.out.println("<<<<<<<-------->>>>>>>>>>>>>"+(date.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy",Locale.ENGLISH))));
+        System.out.println("<<<<<<<-------->>>>>>>>>>>>>"+(date.format(DateTimeFormatter.ofPattern("EEEE",Locale.ENGLISH))));
 
-        System.out.println("<<<<<<<<<<<Samedi>>>>>>>>"+testFonctionJF.isSamedi(date));
+        System.out.println("<<<<<<<<<<<Samedi>>>>>>>>"+testFonctionJF.isSamedi("2019-10-05"));
         System.out.println("<<<<<<<<<Jour +2>>>>>><<"+date.plus(2, ChronoUnit.DAYS));
 
 
-        System.out.println("<<<<<<<<<<<Dimanche>>>>>>>>"+testFonctionJF.isDimanche(date));
+        System.out.println("<<<<<<<<<<<Dimanche>>>>>>>>"+testFonctionJF.isDimanche(date.toString()));
         System.out.println("<<<<<<<<<Jour +1>>>>>><<"+date.plus(1, ChronoUnit.DAYS));
 
 //        if((date.format(DateTimeFormatter.ofPattern("EEEE",Locale.FRENCH))).equals("samedi")
@@ -129,8 +139,22 @@ public class WinregistreApplication implements CommandLineRunner {
 //        }else{
 //            System.out.println("Non Ok");
 //        }
-        System.out.println("<<<<<<<-------->>>>>>>>>>>>>"+(date.getDayOfWeek()));
-        System.out.println(testFonctionJF.isBankHoliday( LocalDate.of(2019,01,10)));
+        System.out.println("<<<<<<<----JOUR---->>>>>>>>>>>>>"+(date.getDayOfWeek()));
+        System.out.println(testFonctionJF.isFerie( date.toString()));
+
+
+        LocalDateTime ldt = LocalDateTime.of(2018, Month.DECEMBER, 25, 13, 37, 0);
+        LocalDateTime ldt2 = ldt.plus(3, ChronoUnit.DAYS);
+        LocalDateTime ldt3 = ldt.minusMinutes(1337);
+
+        System.out.println("ldt " + ldt + " ldt2 " + ldt2 + " ldt3 " + ldt3);
+        Period p = Period.between(ldt.toLocalDate(), ldt2.toLocalDate());
+        Duration d = Duration.between(ldt.toLocalTime(), ldt3.toLocalTime());
+        System.out.println("Période : " + p);
+        System.out.println("Durée : " + d.getSeconds());
+        System.out.println("Ecart en jour : " + ChronoUnit.DAYS.between(ldt, ldt2));
+
+
 
 //        SimpleDateFormat df = new SimpleDateFormat("EEE");
 //        String date = "01/05/2019";

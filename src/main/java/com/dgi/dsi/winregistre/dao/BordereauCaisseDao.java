@@ -9,8 +9,8 @@ import com.dgi.dsi.winregistre.entites.BordereauCaisse;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface BordereauCaisseDao extends JpaRepository<BordereauCaisse, Long>{
-	
-	
+
+    BordereauCaisse findByNumeroEquals(String numero);
 }
 	
 

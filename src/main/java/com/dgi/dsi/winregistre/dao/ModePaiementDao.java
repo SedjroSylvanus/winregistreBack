@@ -10,8 +10,9 @@ import com.dgi.dsi.winregistre.entites.ModePaiement;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface ModePaiementDao extends JpaRepository<ModePaiement, Long>{
-	
-	
+
+
+    ModePaiement findByCodeLike(String code);
 }
 	
 

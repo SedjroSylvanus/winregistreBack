@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.Institution;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -21,6 +21,8 @@ import com.dgi.dsi.winregistre.dao.ExerciceDao;
 import com.dgi.dsi.winregistre.dao.JourFerieDao;
 import com.dgi.dsi.winregistre.entites.Exercice;
 import com.dgi.dsi.winregistre.entites.JourFerie;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -54,7 +56,13 @@ public class JourFerieApi {
 		return userForm;
 
 	}
-	
+	@GetMapping(value = "/searchJourFerieByCode/{code}")
+	public JourFerie updateJourFerieByCode(@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+	}
+
 	
 	@DeleteMapping(value = "/deleteJourFerie/{id}")
 	public boolean deleteJourFerie(@PathVariable Long id) {
@@ -84,15 +92,16 @@ public class JourFerieApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeJourFerie/{id}")
-	public JourFerie updatePartielJourFerie(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeJourFerie")
+	public JourFerie updatePartielJourFerie(@Valid @RequestBody JourFerie jourFerie) {
 
-		JourFerie exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		JourFerie jourFerieRech = exerciceDao.findOne(jourFerie.getId());
+		if (jourFerieRech != null) {
+			jourFerie.setId(jourFerieRech.getId());
+			return exerciceDao.save(jourFerie);
+		}else{
+			exerciceDao.save(jourFerie);
 		}
-		return exercice;
+		return jourFerie;
 	}
-
 }

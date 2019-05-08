@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.TypePenaliteAmende;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,17 +16,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dgi.dsi.winregistre.dao.BanqueDao;
-import com.dgi.dsi.winregistre.dao.ExerciceDao;
 import com.dgi.dsi.winregistre.dao.PenaliteAmendeDao;
-import com.dgi.dsi.winregistre.entites.Banque;
-import com.dgi.dsi.winregistre.entites.Exercice;
-import com.dgi.dsi.winregistre.entites.PenaliteAmende;
+
+import javax.validation.Valid;
 
 
 @RestController
 @CrossOrigin("*")
-public class PenaliteAmendeApi {
+public class TypePenaliteAmendeApi {
 
 
 //	@Autowired
@@ -36,15 +33,15 @@ public class PenaliteAmendeApi {
 	private PenaliteAmendeDao exerciceDao;
 
 
-	@GetMapping(value = "/listPenaliteAmendes")
-	public List<PenaliteAmende> getPenaliteAmendes() {
+	@GetMapping(value = "/listTypePenaliteAmendes")
+	public List<TypePenaliteAmende> getPenaliteAmendes() {
 		return exerciceDao.findAll();
 	}
 
-	@PostMapping("/ajoutPenaliteAmende")
-	public PenaliteAmende ajoutBanque(@RequestBody PenaliteAmende userForm) {
+	@PostMapping("/ajoutTypePenaliteAmende")
+	public TypePenaliteAmende ajoutBanque(@RequestBody TypePenaliteAmende userForm) {
 
-		PenaliteAmende userSearch = exerciceDao.findOne(userForm.getId());
+		TypePenaliteAmende userSearch = exerciceDao.findOne(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -57,11 +54,11 @@ public class PenaliteAmendeApi {
 	}
 	
 	
-	@DeleteMapping(value = "/deletePenaliteAmende/{id}")
+	@DeleteMapping(value = "/deleteTypePenaliteAmende/{id}")
 	public boolean deletePenaliteAmende(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		PenaliteAmende exercice = exerciceDao.findOne(id);
+		TypePenaliteAmende exercice = exerciceDao.findOne(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -74,10 +71,10 @@ public class PenaliteAmendeApi {
 
 	}
 
-	@PutMapping(value = "/mergePPenaliteAmende/{id}")
-	public PenaliteAmende updatePenaliteAmende(@PathVariable Long id) {
+	@PutMapping(value = "/mergePTypePenaliteAmende/{id}")
+	public TypePenaliteAmende updatePenaliteAmende(@PathVariable Long id) {
 
-		PenaliteAmende exercice = exerciceDao.findOne(id);
+		TypePenaliteAmende exercice = exerciceDao.findOne(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -85,15 +82,18 @@ public class PenaliteAmendeApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergePenaliteAmende/{id}")
-	public PenaliteAmende updatePartielPenaliteAmende(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeTypePenaliteAmende")
+	public TypePenaliteAmende updatePartielPenaliteAmende(@Valid @RequestBody TypePenaliteAmende penaliteAmende) {
 
-		PenaliteAmende exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		TypePenaliteAmende penaliteAmendeRech = exerciceDao.findOne(penaliteAmende.getId());
+		if (penaliteAmendeRech != null) {
+			penaliteAmende.setId(penaliteAmendeRech.getId());
+			return exerciceDao.save(penaliteAmende);
+		}else{
+			exerciceDao.save(penaliteAmende);
 		}
-		return exercice;
+		return penaliteAmende;
 	}
+
 
 }

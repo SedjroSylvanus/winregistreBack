@@ -15,6 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name = "direction")
@@ -49,12 +50,13 @@ public class Direction extends EntityBaseBean implements Serializable {
 	public void setCode(String code) {
 		this.code = code;
 	}
-	
+
 
 	public List<Service> getServices() {
 		return services;
 	}
 
+	@JsonIgnore
 	public void setServices(List<Service> services) {
 		this.services = services;
 	}

@@ -8,8 +8,9 @@ import com.dgi.dsi.winregistre.entites.Produit;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface ProduitDao extends JpaRepository<Produit, Long>{
-	
-	
+
+
+    Produit findByCodeLike(String code);
 }
 	
 

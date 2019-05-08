@@ -9,8 +9,10 @@ import com.dgi.dsi.winregistre.entites.Commune;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface CommuneDao extends JpaRepository<Commune, Long>{
-	
-	
+
+
+    Commune findByCodeEquals(String code);
+    Commune findByDesignationEquals(String designation);
 }
 	
 

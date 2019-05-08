@@ -13,19 +13,21 @@ import java.util.Locale;
 /**
  * Gestions des jours feries Francais
  */
-public class JourFerie {
+public class JourFerieService {
+
 
     private List<LocalDate> fixedDay;
 
     private void initFixedDay(final int year) {
         LocalDate easterDay = getEasterDay(year);
-        fixedDay = Lists.newArrayList(LocalDate.of(year, Month.JANUARY, 1),
+        fixedDay = Lists.newArrayList(
+                LocalDate.of(year, Month.JANUARY, 1),
                 LocalDate.of(year, Month.MAY, 1),
-                LocalDate.of(year, Month.MAY, 8),
-                LocalDate.of(year, Month.JULY, 14),
+//                LocalDate.of(year, Month.MAY, 8),
+                LocalDate.of(year, Month.AUGUST, 1),
                 LocalDate.of(year, Month.AUGUST, 15),
                 LocalDate.of(year, Month.NOVEMBER, 1),
-                LocalDate.of(year, Month.NOVEMBER, 11),
+//                LocalDate.of(year, Month.NOVEMBER, 11),
                 LocalDate.of(year, Month.DECEMBER, 25), // nativité du christ
                 LocalDate.of(year, Month.DECEMBER, 31),// 31 décembre
                 LocalDate.of(year, Month.JANUARY, 10),//fête des Vodouns
@@ -156,8 +158,10 @@ public class JourFerie {
      * @param date
      * @return
      */
-    public Boolean isSamedi(LocalDate date) {
-        if((date.format(DateTimeFormatter.ofPattern("EEEE", Locale.FRENCH))).equals("samedi")){
+    public Boolean isSamedi(String date) {
+        LocalDate dateFormatter = LocalDate.parse(date,DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.ENGLISH));
+//        System.out.println(date.format(DateTimeFormatter.ofPattern("EEEE, dd MMMM, yyyy",Locale.ENGLISH)));;
+        if((dateFormatter.format(DateTimeFormatter.ofPattern("EEEE", Locale.ENGLISH))).equals("Saturday")){
             return true;
         }else{
             return false;
@@ -171,8 +175,9 @@ public class JourFerie {
      * @param date
      * @return
      */
-    public Boolean isDimanche(LocalDate date) {
-        if((date.format(DateTimeFormatter.ofPattern("EEEE",Locale.FRENCH))).equals("dimanche")){
+    public Boolean isDimanche(String date) {
+        LocalDate dateFormatter = LocalDate.parse(date,DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.ENGLISH));
+        if((dateFormatter.format(DateTimeFormatter.ofPattern("EEEE",Locale.ENGLISH))).equals("Sunday")){
             return true;
         }else{
             return false;
@@ -183,15 +188,17 @@ public class JourFerie {
     /**
      * Verifie si la date ets un jour ferie.
      *
-     * @param date
+     * @param dateText
      * @return
      */
-    public boolean isBankHoliday(LocalDate date) {
-        assert date != null;
-        initFixedDay(date.getYear());
+    public boolean isFerie(String dateText) {
+        LocalDate dateFormatter = LocalDate.parse(dateText,DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.ENGLISH));
+
+        assert dateFormatter != null;
+        initFixedDay(dateFormatter.getYear());
         boolean retour = false;
         for (LocalDate l : fixedDay) {
-            if (l.isEqual(date)) {
+            if (l.isEqual(dateFormatter)) {
                 retour = true;
                 break;
             }

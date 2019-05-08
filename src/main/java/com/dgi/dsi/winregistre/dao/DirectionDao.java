@@ -10,8 +10,9 @@ import com.dgi.dsi.winregistre.entites.Direction;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface DirectionDao extends JpaRepository<Direction, Long>{
-	
-	
+
+
+    Direction findByCodeLike(String code);
 }
 	
 

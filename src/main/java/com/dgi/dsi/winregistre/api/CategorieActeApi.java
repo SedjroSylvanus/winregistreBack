@@ -3,7 +3,8 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.BordereauCaisse;
+import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +23,8 @@ import com.dgi.dsi.winregistre.dao.ExerciceDao;
 import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.CategorieActe;
 import com.dgi.dsi.winregistre.entites.Exercice;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -55,7 +58,13 @@ public class CategorieActeApi {
 		return userForm;
 
 	}
-	
+	@GetMapping(value = "/searchCategorieActeByCode/{code}")
+	public CategorieActe updateCategorieActeByCode (@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+
+	}
 	
 	@DeleteMapping(value = "/deleteCategorieActe/{id}")
 	public boolean deleteCategorieActe(@PathVariable Long id) {
@@ -85,15 +94,20 @@ public class CategorieActeApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeCategorieActe/{id}")
-	public CategorieActe updatePartielCategorieActe(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeCategorieActe")
+	public CategorieActe updatePartielCategorieActe(@Valid @RequestBody CategorieActe categorieActe) {
 
-		CategorieActe exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		CategorieActe categorieActeRech = exerciceDao.findOne(categorieActe.getId());
+		if (categorieActeRech != null) {
+			categorieActe.setId(categorieActeRech.getId());
+			return exerciceDao.save(categorieActe);
+		}else{
+			exerciceDao.save(categorieActe);
 		}
-		return exercice;
+		return categorieActe;
 	}
+
+
+
 
 }

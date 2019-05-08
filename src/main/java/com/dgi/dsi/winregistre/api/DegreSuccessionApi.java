@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-
+import com.dgi.dsi.winregistre.entites.Commune;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dgi.dsi.winregistre.dao.DegreSuccessionDao;
 
 import com.dgi.dsi.winregistre.entites.DegreSuccession;
+
+import javax.validation.Valid;
 
 
 @RestController
@@ -54,7 +56,13 @@ public class DegreSuccessionApi {
 
 	}
 	
-	
+	@GetMapping(value = "/searchByDegreSuccessionCode/{code}")
+	public DegreSuccession updateDegreSuccessionByCode (@PathVariable String code) {
+
+		return exerciceDao.findByCodeLike("%"+code+"%");
+
+	}
+
 	@DeleteMapping(value = "/deleteDegreSuccession/{id}")
 	public boolean deleteDegreSuccession(@PathVariable Long id) {
 		// contactRepository.delete(id);
@@ -83,15 +91,17 @@ public class DegreSuccessionApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeDegreSuccession/{id}")
-	public DegreSuccession updatePartielDegreSuccession(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeDegreSuccession")
+	public DegreSuccession updatePartielDegreSuccession(@Valid @RequestBody DegreSuccession degreSuccession) {
 
-		DegreSuccession exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		DegreSuccession degreSuccessionRech = exerciceDao.findOne(degreSuccession.getId());
+		if (degreSuccessionRech != null) {
+			degreSuccession.setId(degreSuccessionRech.getId());
+			return exerciceDao.save(degreSuccession);
+		}else{
+			exerciceDao.save(degreSuccession);
 		}
-		return exercice;
+		return degreSuccession;
 	}
 
 }
