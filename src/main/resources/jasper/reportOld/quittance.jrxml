@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="432" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ce823cb7-6ccf-4588-8fc4-c94c60ef3bbd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Admin\\Documents\\NetBeansProjects\\winregistre\\web\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="montantLettre" class="java.lang.String"/>
+	<parameter name="nomCaissier" class="java.lang.String"/>
+	<field name="code" class="java.lang.String"/>
+	<field name="designation" class="java.lang.String"/>
+	<field name="communes" class="java.util.List"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="110">
+			<line>
+				<reportElement x="115" y="105" width="435" height="1" uuid="5e6dcb81-fa8a-4d21-8bbb-5ab69d9b72a2"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="45" width="113" height="20" uuid="b0a48336-d3c5-4376-88b3-8f2579e2ec4f"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Code]]></text>
+			</staticText>
+			<line>
+				<reportElement x="112" y="68" width="435" height="1" uuid="daea62aa-e270-4fae-aa77-0c0694b339de"/>
+			</line>
+			<textField>
+				<reportElement x="113" y="81" width="437" height="20" uuid="269122f8-b545-45b7-b87f-529fd19d184e"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{designation}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="-2" y="81" width="115" height="20" uuid="64b74129-c3c7-489d-8d98-d536784c9318"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Désignation]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="113" y="45" width="437" height="20" uuid="712beee1-2317-40bd-8768-0e9095d7b96c"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="381" y="0" width="174" height="20" uuid="9cf2e72b-b8e5-4c09-823d-29c3932dc0ec"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Numero Quittance]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="86" splitType="Stretch">
+			<subreport isUsingCache="false">
+				<reportElement x="0" y="0" width="555" height="80" uuid="d942916d-8c2b-4a96-ac6f-43bc3480bfcd"/>
+				<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{communes})]]></dataSourceExpression>
+				<subreportExpression><![CDATA[$P{SUBREPORT_DIR} + "quittance_subreport.jasper"]]></subreportExpression>
+			</subreport>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="74">
+			<textField>
+				<reportElement x="-2" y="0" width="289" height="74" uuid="296213ad-8afb-4406-9ff0-8a79249dbb89"/>
+				<textElement textAlignment="Center" verticalAlignment="Bottom">
+					<font fontName="Times New Roman" size="14" isBold="true" isItalic="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{montantLettre}.toUpperCase()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="300" y="0" width="255" height="20" uuid="7f69006e-17da-4055-80c9-716c9047fd88"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Le Caissier]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="300" y="53" width="255" height="20" uuid="64463bd3-d9ff-4c2a-aa73-919976d4855a"/>
+				<textElement textAlignment="Right">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nomCaissier}.toUpperCase()]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+</jasperReport>

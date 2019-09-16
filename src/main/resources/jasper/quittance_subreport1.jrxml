@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="quittance_subreport1" pageWidth="555" pageHeight="802" whenNoDataType="BlankPage" columnWidth="555" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="cd26ee46-4d18-4899-b56a-abe574725cf4">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="code" class="java.lang.String"/>
+	<field name="designation" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="12" y="41" width="206" height="20" uuid="3b7c84a3-39b6-4e61-8985-cefef54a0436"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[code]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="225" y="41" width="206" height="20" uuid="536a23a7-5afa-4cc4-a524-2fdaae981c0e"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[designation]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="12" y="0" width="206" height="20" uuid="656a308b-6fc4-4b54-a32f-8f1165405005"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{code}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="225" y="0" width="206" height="20" uuid="a29cad81-a241-482b-acd1-e79d6ca978e5"/>
+				<textElement textAlignment="Justified">
+					<font fontName="Times New Roman" size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{designation}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+</jasperReport>

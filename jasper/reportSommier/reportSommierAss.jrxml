@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="698" leftMargin="72" rightMargin="72" topMargin="20" bottomMargin="20" uuid="7c61ff4e-9b93-45ab-932e-10b473c34189">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="numero" class="java.lang.String"/>
+	<field name="droitSimple" class="java.lang.Double"/>
+	<field name="penalite" class="java.lang.Double"/>
+	<field name="amende" class="java.lang.Double"/>
+	<field name="montantActe" class="java.lang.Double"/>
+	<field name="designationMarche" class="java.lang.String"/>
+	<field name="folioSommierAss" class="java.lang.String"/>
+	<field name="caseSommierAss" class="java.lang.String"/>
+	<field name="volumeSommierAss" class="java.lang.String"/>
+	<field name="numeroOrdreSommierAss" class="java.lang.String"/>
+	<field name="redevance" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="76" splitType="Stretch">
+			<image>
+				<reportElement x="2" y="1" width="93" height="75" uuid="66ded706-4364-4117-8e54-73faae8ca18d"/>
+				<imageExpression><![CDATA["C:\\Users\\Admin\\Pictures\\11.jpg"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="603" y="1" width="93" height="75" uuid="17b14054-a4a4-4cce-88d7-37d5ec311dd2"/>
+				<imageExpression><![CDATA["C:\\Users\\Admin\\Pictures\\11.jpg"]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="115" y="1" width="463" height="24" uuid="8fe6ad14-b546-4ad2-b49c-1902ae8482f5"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Direction Départementale de l'Atlantique et du Littoral]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="183" y="41" width="342" height="35" uuid="2bc23c91-379c-4956-bc0f-116c0b82f3d4"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Centre de l'Enrégistrement et du Timbre]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="36" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="492" y="0" width="206" height="20" uuid="d51a4ac2-1f47-4106-8cd4-b93f162fd0bf"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="56" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="455" y="0" width="100" height="20" uuid="43b4faa6-81c1-4945-babb-6bca03f165ec"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{folioSommierAss}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="60" y="0" width="100" height="20" uuid="59077d2e-f083-4420-a51d-db8aafb75e66"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{caseSommierAss}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="255" y="3" width="120" height="20" uuid="6932848f-cfd4-4e56-9c2f-c6c8a67186fb"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{volumeSommierAss}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="36" width="100" height="20" uuid="0a1a1257-3009-463e-8d68-57783ae560ba"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[N° Ordre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="100" y="36" width="100" height="20" uuid="69749399-385b-4bcc-9e3e-895511e87411"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Numero Acte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="204" y="36" width="100" height="20" uuid="d4994d5e-e7d8-4281-ad31-cd85a7b770a8"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Désignation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="403" y="36" width="73" height="20" uuid="2d09a6fb-c273-4b3f-b9c0-d55daea9bee9"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Pénalité]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="476" y="36" width="79" height="20" uuid="04d697d3-7910-48ac-ba93-b3946cc084a3"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Montant Acte]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="3" width="60" height="20" uuid="c56a1aa6-a354-4227-810b-307a31252c96"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Case:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="195" y="0" width="60" height="20" uuid="148ed1be-3a71-4612-8426-7ca3916ddcdc"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Volume:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="395" y="3" width="60" height="20" uuid="8c2334fa-ac15-48cc-8ce0-0968ddc1b814"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Folio:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="304" y="36" width="100" height="20" uuid="0b4ecd48-b13b-4ac6-96e5-8d1996d303ac"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Droit Simple]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="555" y="36" width="141" height="20" uuid="4575c679-2145-4937-b881-56be601c65c2"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<text><![CDATA[Amende]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="100" height="20" uuid="8da21cd8-93b2-4835-95f3-375b249db2eb"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numeroOrdreSommierAss}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="100" y="0" width="100" height="20" uuid="425d08fb-41b3-428d-beb5-b9c9fd29c4f3"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="204" y="0" width="100" height="20" uuid="776e7785-99da-40b6-a5a6-8cb9161cdd05"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{designationMarche}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="403" y="2" width="73" height="20" uuid="3b407a3f-8e3e-426e-9fab-14a29d8061fd"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{penalite}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="476" y="0" width="79" height="20" uuid="63391cdc-b1e0-461c-8705-04bc5104fe01"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{montantActe}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="304" y="2" width="100" height="20" uuid="1f776881-2456-4273-9447-9ad7948ebc6e"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{droitSimple}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="562" y="2" width="134" height="20" uuid="c10439b9-b84d-4d2c-bbba-72bf80069533"/>
+				<textElement>
+					<font pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amende}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch">
+			<textField>
+				<reportElement x="576" y="34" width="80" height="20" uuid="8fc3609d-461d-47ae-8b25-2d206fe39ab7"/>
+				<textElement textAlignment="Right">
+					<font size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Page "+$V{PAGE_NUMBER}+" /"]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report">
+				<reportElement x="656" y="34" width="40" height="20" uuid="a926ef3e-71a9-4315-b45a-0ba790452ec6"/>
+				<textElement>
+					<font size="12" isBold="true" pdfFontName="Times-Bold"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" " + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
