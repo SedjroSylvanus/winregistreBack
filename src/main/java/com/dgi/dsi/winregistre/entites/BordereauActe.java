@@ -1,45 +1,66 @@
 package com.dgi.dsi.winregistre.entites;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="bordereauacte")
+@Table(name="bordereauacte", schema = "winregist")
+//@Table(name="bordereauacte")
+
 public class BordereauActe extends EntityBaseBean implements Serializable  {
 	
 
 	
 
 
-	private static final long serialVersionUID = 1L;	
+	private static final long serialVersionUID = 1L;
+
+
+//	@Column(unique = true)
 	private String numero;
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date dateBordereau ;
 	
 	
-	private Integer nbreActe;
-	private Double totalDS;
-	private Double totalPenalite;
-	private Double totalAmende ;
+	private Integer nbreActe ;
+	private Double totalDS = 0.;
+	private Double totalPenalite = 0.;
+	private Double totalAmende = 0.;
+	private Double totalRedevance = 0.;
+//	private Double droitSimple = 0.;
+	private Double totalTimbre = 0.;
+	private Double totalPlusValueImobiliere = 0.;
+
 	
-	@ManyToOne
-	private CategorieActe categorieActe;
+	private Boolean validated ;
+	private Boolean sourceInterne ;
+	private Boolean transferred = Boolean.FALSE ;
+	private String numeroBordereauValidateur ;
+
+//	@ManyToOne
+//	private CategorieActe categorieActe;
+
+
+
+
+	@JsonIgnore
+	@OneToMany(mappedBy="bordereauActe")
+	List<Acte> actesBordereau = new ArrayList<>();
 
 
 	@ManyToOne
 	private Agent agent;
 
-	@ManyToOne
-	private Institution institution;
+//	@ManyToOne
+//	private Institution institution;
 
 	public String getNumero() {
 		return numero;
@@ -89,13 +110,37 @@ public class BordereauActe extends EntityBaseBean implements Serializable  {
 		this.totalAmende = totalAmende;
 	}
 
-	public CategorieActe getCategorieActe() {
-		return categorieActe;
+	public Boolean getValidated() {
+		return validated;
 	}
 
-	public void setCategorieActe(CategorieActe categorieActe) {
-		this.categorieActe = categorieActe;
+	public void setValidated(Boolean validated) {
+		this.validated = validated;
 	}
+
+    public Boolean getTransferred() {
+        return transferred;
+    }
+
+    public void setTransferred(Boolean transferred) {
+        this.transferred = transferred;
+    }
+
+    public Boolean getSourceInterne() {
+		return sourceInterne;
+	}
+
+	public void setSourceInterne(Boolean sourceInterne) {
+		this.sourceInterne = sourceInterne;
+	}
+
+	//	public CategorieActe getCategorieActe() {
+//		return categorieActe;
+//	}
+//
+//	public void setCategorieActe(CategorieActe categorieActe) {
+//		this.categorieActe = categorieActe;
+//	}
 
 	public Agent getAgent() {
 		return agent;
@@ -105,50 +150,86 @@ public class BordereauActe extends EntityBaseBean implements Serializable  {
 		this.agent = agent;
 	}
 
-	public Institution getInstitution() {
-		return institution;
-	}
-
-	public void setInstitution(Institution institution) {
-		this.institution = institution;
-	}
+//	public Institution getInstitution() {
+//		return institution;
+//	}
+//
+//	public void setInstitution(Institution institution) {
+//		this.institution = institution;
+//	}
 
 	@Override
 	public String toString() {
 		return "BordereauActeDao [numero=" + numero + ", dateBordereau=" + dateBordereau + ", nbreActe=" + nbreActe
 				+ ", totalDS=" + totalDS + ", totalPenalite=" + totalPenalite + ", totalAmende=" + totalAmende
-				+ ", categorieActe=" + categorieActe + ", agent=" + agent + ", institution=" + institution + "]";
+				+ ", agent=" + agent + "]"+ super.toString();
 	}
 
 	public BordereauActe() {
 		super();
-	}
-
-	public BordereauActe(String numero, Date dateBordereau, Integer nbreActe, Double totalDS, Double totalPenalite,
-			Double totalAmende, CategorieActe categorieActe, Agent agent, Institution institution) {
-		super();
-		this.numero = numero;
-		this.dateBordereau = dateBordereau;
-		this.nbreActe = nbreActe;
-		this.totalDS = totalDS;
-		this.totalPenalite = totalPenalite;
-		this.totalAmende = totalAmende;
-		this.categorieActe = categorieActe;
-		this.agent = agent;
-		this.institution = institution;
+			this.totalDS = 0.;
+		this.totalPenalite = 0.;
+		this.totalAmende = 0.;
+		this.totalRedevance = 0.;
+		this.totalTimbre = 0.;
 	}
 
 
+    public BordereauActe(String numero, Date dateBordereau, Integer nbreActe, Double totalDS, Double totalPenalite, Double totalAmende, Double totalRedevance, Double totalTimbre, List<Acte> actes, Agent agent) {
+        this.numero = numero;
+        this.dateBordereau = dateBordereau;
+        this.nbreActe = nbreActe;
+        this.totalDS = totalDS;
+        this.totalPenalite = totalPenalite;
+        this.totalAmende = totalAmende;
+        this.totalRedevance = totalRedevance;
+        this.totalTimbre = totalTimbre;
+        this.actesBordereau = actes;
+        this.agent = agent;
+    }
+
+	public List<Acte> getActesBordereau() {
+		return actesBordereau;
+	}
+
+	public void setActesBordereau(List<Acte> actesBordereau) {
+		this.actesBordereau = actesBordereau;
+	}
+
+	//	  `CONT_NUM` varchar(13) NOT NULL,
 
 
-//	  `CONT_NUM` varchar(13) NOT NULL,
+	public Double getTotalRedevance() {
+		return totalRedevance;
+	}
+
+	public void setTotalRedevance(Double totalRedevance) {
+		this.totalRedevance = totalRedevance;
+	}
+
+    public Double getTotalTimbre() {
+        return totalTimbre;
+    }
+
+    public void setTotalTimbre(Double totalTimbre) {
+        this.totalTimbre = totalTimbre;
+    }
+
+	public String getNumeroBordereauValidateur() {
+		return numeroBordereauValidateur;
+	}
+
+	public void setNumeroBordereauValidateur(String numeroBordereauValidateur) {
+		this.numeroBordereauValidateur = numeroBordereauValidateur;
+	}
+
+	public Double getTotalPlusValueImobiliere() {
+		return totalPlusValueImobiliere;
+	}
+
+	public void setTotalPlusValueImobiliere(Double totalPlusValueImobiliere) {
+		this.totalPlusValueImobiliere = totalPlusValueImobiliere;
+	}
 	
-
-
-
 	
-
-	
-	
-
 }

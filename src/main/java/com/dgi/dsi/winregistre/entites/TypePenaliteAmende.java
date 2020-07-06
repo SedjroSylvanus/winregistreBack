@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -12,7 +13,9 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "typePenaliteAmende")
+@Table(name = "typePenaliteAmende", schema = "winregist")
+//@Table(name = "typePenaliteAmende")
+
 public class TypePenaliteAmende extends EntityBaseBean implements Serializable {
 
 
@@ -23,17 +26,21 @@ public class TypePenaliteAmende extends EntityBaseBean implements Serializable {
 	private String periodicite;
 	private Double mtPenaliteAmende;
 	private Integer delaiEcheance;
-	private String grille;
+//	private String grille;
 	private Integer echeance;
 
 	private Double mtMinimum;
 	private Double mtMaximum;
 	private String jourMoisAnnee;
 	private Double mtPenaliteEcheance;
-	private Double droitSimpleMinimum;
+	private Double mtPeriode;
+//	private Double droitSimpleMinimum;
 
 	@OneToMany(mappedBy = "typePenaliteAmende")
 	private List<NatureActe> natureActes = new ArrayList<>();
+
+//	@ManyToOne
+//	private GrilleActeSousSeingPrive grilleActeSousSeingPrive;
 
 	public TypePenaliteAmende() {
 		super();
@@ -97,13 +104,13 @@ public class TypePenaliteAmende extends EntityBaseBean implements Serializable {
 		this.natureActes = natureActes;
 	}
 
-	public String getGrille() {
-		return grille;
-	}
-
-	public void setGrille(String grille) {
-		this.grille = grille;
-	}
+//	public String getGrille() {
+//		return grille;
+//	}
+//
+//	public void setGrille(String grille) {
+//		this.grille = grille;
+//	}
 
 	public Double getMtMinimum() {
 		return mtMinimum;
@@ -137,38 +144,57 @@ public class TypePenaliteAmende extends EntityBaseBean implements Serializable {
 		this.mtPenaliteEcheance = mtPenaliteEcheance;
 	}
 
-	public Double getDroitSimpleMinimum() {
-		return droitSimpleMinimum;
-	}
+//	public Double getDroitSimpleMinimum() {
+//		return droitSimpleMinimum;
+//	}
+//
+//	public void setDroitSimpleMinimum(Double droitSimpleMinimum) {
+//		this.droitSimpleMinimum = droitSimpleMinimum;
+//	}
 
-	public void setDroitSimpleMinimum(Double droitSimpleMinimum) {
-		this.droitSimpleMinimum = droitSimpleMinimum;
-	}
+//	public GrilleActeSousSeingPrive getGrilleActeSousSeingPrive() {
+//		return grilleActeSousSeingPrive;
+//	}
+//
+//	public void setGrilleActeSousSeingPrive(GrilleActeSousSeingPrive grilleActeSousSeingPrive) {
+//		this.grilleActeSousSeingPrive = grilleActeSousSeingPrive;
+//	}
+
 
 	@Override
 	public String toString() {
-		return "TypePenaliteAmende [codePenaliteAmende=" + code + ", libellePenaliteAmende="
-				+ designation + ", periodicite=" + periodicite + ", mtPenaliteAmende=" + mtPenaliteAmende
-				+ ", dalaiEcheance=" + delaiEcheance + ", grille=" + grille + ", mtMinimum=" + mtMinimum
-				+ ", mtMaximum=" + mtMaximum + ", jourMoisAnnee=" + jourMoisAnnee + ", mtPenaliteEcheance="
-				+ mtPenaliteEcheance + ", droitSimpleMinimum=" + droitSimpleMinimum + "]";
+		return "TypePenaliteAmende{" +
+				"code='" + code + '\'' +
+				", designation='" + designation + '\'' +
+				", periodicite='" + periodicite + '\'' +
+				", mtPenaliteAmende=" + mtPenaliteAmende +
+				", delaiEcheance=" + delaiEcheance +
+				", echeance=" + echeance +
+				", mtMinimum=" + mtMinimum +
+				", mtMaximum=" + mtMaximum +
+				", jourMoisAnnee='" + jourMoisAnnee + '\'' +
+				", mtPenaliteEcheance=" + mtPenaliteEcheance +
+				", mtPeriode=" + mtPeriode +
+				", natureActes=" + natureActes +
+
+				'}';
 	}
 
 	public TypePenaliteAmende(String code, String designation, String periodicite,
-                              Double mtPenaliteAmende, Integer dalaiEcheance, String grille, Double mtMinimum, Double mtMaximum,
-                              String jourMoisAnnee, Double mtPenaliteEcheance, Double droitSimpleMinimum) {
+							  Double mtPenaliteAmende, Integer dalaiEcheance, Double mtMinimum, Double mtMaximum,
+							  String jourMoisAnnee, Double mtPenaliteEcheance) {
 		super();
 		this.code = code;
 		this.designation = designation;
 		this.periodicite = periodicite;
 		this.mtPenaliteAmende = mtPenaliteAmende;
 		this.delaiEcheance = dalaiEcheance;
-		this.grille = grille;
+
 		this.mtMinimum = mtMinimum;
 		this.mtMaximum = mtMaximum;
 		this.jourMoisAnnee = jourMoisAnnee;
 		this.mtPenaliteEcheance = mtPenaliteEcheance;
-		this.droitSimpleMinimum = droitSimpleMinimum;
+
 	}
 
 	public List<NatureActe> getTypeActes() {
@@ -180,4 +206,11 @@ public class TypePenaliteAmende extends EntityBaseBean implements Serializable {
 		this.natureActes = natureActes;
 	}
 
+	public Double getMtPeriode() {
+		return mtPeriode;
+	}
+
+	public void setMtPeriode(Double mtPeriode) {
+		this.mtPeriode = mtPeriode;
+	}
 }

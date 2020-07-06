@@ -1,18 +1,18 @@
 package com.dgi.dsi.winregistre.entites;
 
 import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="bordereaucaisse")
+@Table(name="bordereaucaisse", schema = "winregist")
 public class BordereauCaisse extends EntityBaseBean implements Serializable  {
 	
 
@@ -22,8 +22,8 @@ public class BordereauCaisse extends EntityBaseBean implements Serializable  {
 	private static final long serialVersionUID = 1L;	
 	private String numero;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dateBordereauCaisse ;
+//	@Temporal(TemporalType.TIMESTAMP)
+	private LocalDate dateBordereauCaisse ;
 
 	private Integer nbreQuittance;
 
@@ -36,11 +36,18 @@ public class BordereauCaisse extends EntityBaseBean implements Serializable  {
 	private Double TotalAmende;
 	private Double TotalTimbre;
 	private Double totalRedevance;
+	private Double totalPlusValueImobiliere;
+
+	
 	private Boolean journeeCloture = Boolean.FALSE;
 	private Double totalAutrePaiement;
 
 	@ManyToOne
 	private Agent agent;
+
+
+	@OneToMany(mappedBy="bordereauCaisse")
+	List<Quittance> quittances = new ArrayList<>();
 
 	@Override
 	public String toString() {
@@ -48,7 +55,7 @@ public class BordereauCaisse extends EntityBaseBean implements Serializable  {
 				+ nbreQuittance + ", mtBordereauCaisse=" + mtBordereauCaisse + ", totalPenalite=" + totalPenalite
 				+ ", totalDroitSimple=" + totalDroitSimple + ", TotalAmende=" + TotalAmende + ", TotalTimbre="
 				+ TotalTimbre + ", totalRedevance=" + totalRedevance + ", journeeCloture=" + journeeCloture
-				+ ", totalAutrePaiement=" + totalAutrePaiement + ", agent=" + agent + "]";
+				+ ", totalAutrePaiement=" + totalAutrePaiement + ", agent=" + agent + "]"+ super.toString();
 	}
 
 	public String getNumero() {
@@ -59,11 +66,11 @@ public class BordereauCaisse extends EntityBaseBean implements Serializable  {
 		this.numero = numero;
 	}
 
-	public Date getDateBordereauCaisse() {
+	public LocalDate getDateBordereauCaisse() {
 		return dateBordereauCaisse;
 	}
 
-	public void setDateBordereauCaisse(Date dateBordereauCaisse) {
+	public void setDateBordereauCaisse(LocalDate dateBordereauCaisse) {
 		this.dateBordereauCaisse = dateBordereauCaisse;
 	}
 
@@ -151,7 +158,7 @@ public class BordereauCaisse extends EntityBaseBean implements Serializable  {
 		super();
 	}
 
-	public BordereauCaisse(String numero, Date dateBordereauCaisse, Integer nbreQuittance, Double mtBordereauCaisse,
+	public BordereauCaisse(String numero, LocalDate dateBordereauCaisse, Integer nbreQuittance, Double mtBordereauCaisse,
 			Double totalPenalite, Double totalDroitSimple, Double totalAmende, Double totalTimbre,
 			Double totalRedevance, Boolean journeeCloture, Double totalAutrePaiement, Agent agent) {
 		super();
@@ -169,13 +176,22 @@ public class BordereauCaisse extends EntityBaseBean implements Serializable  {
 		this.agent = agent;
 	}
 
+	public List<Quittance> getQuittances() {
+		return quittances;
+	}
 
+	@JsonIgnore
+	public void setQuittances(List<Quittance> quittances) {
+		this.quittances = quittances;
+	}
 
+	public Double getTotalPlusValueImobiliere() {
+		return totalPlusValueImobiliere;
+	}
 
-
+	public void setTotalPlusValueImobiliere(Double totalPlusValueImobiliere) {
+		this.totalPlusValueImobiliere = totalPlusValueImobiliere;
+	}
 	
-
 	
-	
-
 }

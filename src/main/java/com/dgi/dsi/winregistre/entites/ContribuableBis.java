@@ -1,5 +1,6 @@
 package com.dgi.dsi.winregistre.entites;
 
+import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.dgi.dsi.winregistre.parent.entites.Personne;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.NotBlank;
@@ -8,11 +9,13 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Table(name = "contribuableb")
+@Table(name = "contribuablebis", schema = "winregist")
+//@Table(name = "contribuablebis")
+
+//@Table(name= "contribuable_base")
 //,
 
 //		uniqueConstraints = {
@@ -26,149 +29,142 @@ import java.util.List;
 //        allowGetters = true)
 
 
-public class Contribuable  implements Serializable {     //extends Personne
-
-//    private static final long serialVersionUID = 1L;
-//
-//
-//
-//    @NotBlank
-//	@Column(unique = true)
-//	@Size(max = 13, min = 13)
-//	private String ifu;
-//	private String raisonSocial;
-//	private String telephone;
-//	private String email;
-//
-////	@ManyToMany(fetch=FetchType.EAGER)
-////	private Collection<AppRole> rolesCont = new ArrayList<>();
-//
-//
-////	@OneToMany(mappedBy="contribuable")
-////	private List<Acte> actes = new ArrayList<>();
-//
-//
-//
-//	public Contribuable() {
-//		super();
-//	}
-//
-//	public String getIfu() {
-//		return ifu;
-//	}
-//
-//	public void setIfu(String ifu) {
-//		this.ifu = ifu;
-//	}
-//
-//	public String getRaisonSocial() {
-//		return raisonSocial;
-//	}
-//
-//	public void setRaisonSocial(String raisonSocial) {
-//		this.raisonSocial = raisonSocial;
-//	}
-//
-//	public String getTelephone() {
-//		return telephone;
-//	}
-//
-//	public void setTelephone(String telephone) {
-//		this.telephone = telephone;
-//	}
-//
-//	@Override
-//	public String getEmail() {
-//		return email;
-//	}
-//
-//	@Override
-//	public void setEmail(String email) {
-//		this.email = email;
-//	}
-
-//	public Collection<AppRole> getRoles() {
-//		return rolesCont;
-//	}
-//
-//	public void setRoles(Collection<AppRole> roles) {
-//		this.rolesCont = roles;
-//	}
-
-//	public List<Acte> getActes() {
-//		return actes;
-//	}
-//
-//	@JsonIgnore
-//	public void setActes(List<Acte> actes) {
-//		this.actes = actes;
-//	}
-
-
+public class ContribuableBis extends EntityBaseBean implements Serializable {     //extends Personne
 
 
 	private static final long serialVersionUID = 1L;
 
 
 
-	@NotBlank
-	@Column(unique = true)
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Long id;
+
+
+//	@NotBlank
+//	@Column(unique = true)
 	@Size(max = 13, min = 13)
-	private String CONT_IMMATR;
-	private String CONT_NOM;
-	private String CONT_PREN;
-	private String CONT_TEL;
-	private String CONT_RAIS;
-	private String CONT_MAIL;
+	@Column( name = "cont_immatr")
+	private String contImmatr;
+	@Column( name = "cont_nom")
+	private String contNom;
+	@Column( name = "cont_pren")
+	private String contPren;
+	@Column( name = "cont_tel")
+	private String contTel;
+	@Column( name = "cont_rais")
+	private String contRais;
+	@Column( name = "cont_mail")
+	private String contMail;
 
-	public Contribuable() {
+
+	 @OneToMany(mappedBy = "contribuableBeneficiaire")
+	 @JsonIgnore
+    private List<Acte> acteBeneficiaire = new ArrayList<>();
+
+
+	  @OneToMany(mappedBy = "contribuablePrestataire")
+	  @JsonIgnore
+    private List<Acte> actePrestataire = new  ArrayList<>();
+
+
+
+
+	public ContribuableBis() {
 	}
 
-	public String getCONT_IMMATR() {
-		return CONT_IMMATR;
+
+	@Override
+	public Long getId() {
+		return id;
 	}
 
-	public void setCONT_IMMATR(String CONT_IMMATR) {
-		this.CONT_IMMATR = CONT_IMMATR;
+	@Override
+	public void setId(Long id) {
+		this.id = id;
 	}
 
-	public String getCONT_NOM() {
-		return CONT_NOM;
+	public String getContImmatr() {
+		return contImmatr;
 	}
 
-	public void setCONT_NOM(String CONT_NOM) {
-		this.CONT_NOM = CONT_NOM;
+	public void setContImmatr(String contImmatr) {
+		this.contImmatr = contImmatr;
 	}
 
-	public String getCONT_PREN() {
-		return CONT_PREN;
+	public String getContNom() {
+		return contNom;
 	}
 
-	public void setCONT_PREN(String CONT_PREN) {
-		this.CONT_PREN = CONT_PREN;
+	public void setContNom(String contNom) {
+		this.contNom = contNom;
 	}
 
-	public String getCONT_TEL() {
-		return CONT_TEL;
+	public String getContPren() {
+		return contPren;
 	}
 
-	public void setCONT_TEL(String CONT_TEL) {
-		this.CONT_TEL = CONT_TEL;
+	public void setContPren(String contPren) {
+		this.contPren = contPren;
 	}
 
-	public String getCONT_RAIS() {
-		return CONT_RAIS;
+	public String getContTel() {
+		return contTel;
 	}
 
-	public void setCONT_RAIS(String CONT_RAIS) {
-		this.CONT_RAIS = CONT_RAIS;
+	public void setContTel(String contTel) {
+		this.contTel = contTel;
 	}
 
-	public String getCONT_MAIL() {
-		return CONT_MAIL;
+	public String getContRais() {
+		return contRais;
 	}
 
-	public void setCONT_MAIL(String CONT_MAIL) {
-		this.CONT_MAIL = CONT_MAIL;
+	public void setContRais(String contRais) {
+		this.contRais = contRais;
 	}
+
+	public String getContMail() {
+		return contMail;
+	}
+
+	public void setContMail(String contMail) {
+		this.contMail = contMail;
+	}
+
+	public List<Acte> getActeBeneficiaire() {
+        return acteBeneficiaire;
+    }
+
+//    @JsonIgnore
+    public void setActeBeneficiaire(List<Acte> acteBeneficiaire) {
+        this.acteBeneficiaire = acteBeneficiaire;
+    }
+
+    public List<Acte> getActePrestataire() {
+        return actePrestataire;
+    }
+
+//    @JsonIgnore
+    public void setActePrestataire(List<Acte> actePrestataire) {
+        this.actePrestataire = actePrestataire;
+    }
+
+//	public List<Acte> getActeBeneficiaire() {
+//		return acteBeneficiaire;
+//	}
+//
+//	@JsonIgnore
+//	public void setActeBeneficiaire(List<Acte> acteBeneficiaire) {
+//		this.acteBeneficiaire = acteBeneficiaire;
+//	}
+//
+//	public List<Acte> getActePrestataire() {
+//		return actePrestataire;
+//	}
+//
+//	@JsonIgnore
+//	public void setActePrestataire(List<Acte> actePrestataire) {
+//		this.actePrestataire = actePrestataire;
+//	}
 }

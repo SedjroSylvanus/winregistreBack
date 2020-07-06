@@ -10,6 +10,9 @@ import com.dgi.dsi.winregistre.entites.MotifRejet;
 public interface MotifRejetDao extends JpaRepository<MotifRejet, Long>{
 
 
+
+    public MotifRejet findByIdIs(String id);
+    public MotifRejet findByIdIs(Long id);
     MotifRejet findByCodeLike(String code);
 }
 	

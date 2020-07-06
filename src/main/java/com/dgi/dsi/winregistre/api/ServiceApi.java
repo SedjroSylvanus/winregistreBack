@@ -3,9 +3,11 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-import com.dgi.dsi.winregistre.entites.Produit;
+import com.dgi.dsi.winregistre.dao.NumeroOrdreDao;
+import com.dgi.dsi.winregistre.entites.NumeroOrdre;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,11 +18,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dgi.dsi.winregistre.dao.BanqueDao;
-import com.dgi.dsi.winregistre.dao.ExerciceDao;
 import com.dgi.dsi.winregistre.dao.ServiceDao;
-import com.dgi.dsi.winregistre.entites.Banque;
-import com.dgi.dsi.winregistre.entites.Exercice;
 import com.dgi.dsi.winregistre.entites.Service;
 
 import javax.validation.Valid;
@@ -36,6 +34,8 @@ public class ServiceApi {
 	
 	@Autowired
 	private ServiceDao exerciceDao;
+	@Autowired
+	private NumeroOrdreDao numeroOrdreDao;
 
 
 	@GetMapping(value = "/listServices")
@@ -43,22 +43,39 @@ public class ServiceApi {
 		return exerciceDao.findAll();
 	}
 
+	@Transactional
 	@PostMapping("/ajoutService")
 	public Service ajoutService(@RequestBody Service userForm) {
 
-		Service userSearch = exerciceDao.findOne(userForm.getId());
+		NumeroOrdre numeroOrdre = new NumeroOrdre();
 
-		if (userSearch == null) {
-			exerciceDao.saveAndFlush(userForm);
-		} else {
-			throw new RuntimeException(userSearch + "Exercice inexistant");
-		}
+		System.out.println(userForm.getCode());
 
-		return userForm;
+		System.out.println("--------------11---------->"+userForm);
+
+			Service serviceAjoute = exerciceDao.saveAndFlush(userForm);
+			System.out.println("-----------22------------->"+userForm);
+			if (serviceAjoute != null) {
+				numeroOrdre.setNumeroOrdre(0);
+				numeroOrdre.setService(serviceAjoute);
+				numeroOrdreDao.saveAndFlush(numeroOrdre);
+			}
+
+
+
+
+		return serviceAjoute;
 
 	}
 	
-		@GetMapping(value = "/searchServiceByCode/{code}")
+	@GetMapping(value = "/ServiceByDesignation/{designation}")
+	public Service ServiceByDesignation(@PathVariable String designation) {
+
+		return exerciceDao.designationByService(designation);
+
+	}
+
+	@GetMapping(value = "/searchServiceByCode/{code}")
 	public Service updateServiceByCode(@PathVariable String code) {
 
 		return exerciceDao.findByCodeLike("%"+code+"%");
@@ -69,7 +86,7 @@ public class ServiceApi {
 	public boolean deleteService(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		Service exercice = exerciceDao.findOne(id);
+		Service exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -85,7 +102,7 @@ public class ServiceApi {
 	@PutMapping(value = "/mergePService/{id}")
 	public Service updateService(@PathVariable Long id) {
 
-		Service exercice = exerciceDao.findOne(id);
+		Service exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -96,7 +113,7 @@ public class ServiceApi {
 	@PatchMapping(value = "/mergeService")
 	public Service updatePartielService(@Valid @RequestBody Service service) {
 
-		Service serviceRech = exerciceDao.findOne(service.getId());
+		Service serviceRech = exerciceDao.findByIdIs(service.getId());
 		if (serviceRech != null) {
 			service.setId(serviceRech.getId());
 			return exerciceDao.save(service);

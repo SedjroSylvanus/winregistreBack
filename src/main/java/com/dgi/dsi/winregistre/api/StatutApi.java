@@ -44,7 +44,7 @@ public class StatutApi {
 	@PostMapping("/ajoutStatut")
 	public Statut ajoutStatut(@RequestBody Statut userForm) {
 
-		Statut userSearch = exerciceDao.findOne(userForm.getId());
+		Statut userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -67,7 +67,7 @@ public class StatutApi {
 	public boolean deleteStatut(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		Statut exercice = exerciceDao.findOne(id);
+		Statut exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -83,7 +83,7 @@ public class StatutApi {
 	@PutMapping(value = "/mergePStatut/{id}")
 	public Statut updateStatut(@PathVariable Long id) {
 
-		Statut exercice = exerciceDao.findOne(id);
+		Statut exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -94,7 +94,7 @@ public class StatutApi {
 	@PatchMapping(value = "/mergeStatut")
 	public Statut updatePartielStatut(@Valid @RequestBody Statut statut) {
 
-		Statut statutRech = exerciceDao.findOne(statut.getId());
+		Statut statutRech = exerciceDao.findByIdIs(statut.getId());
 		if (statutRech != null) {
 			statut.setId(statutRech.getId());
 			return exerciceDao.save(statut);

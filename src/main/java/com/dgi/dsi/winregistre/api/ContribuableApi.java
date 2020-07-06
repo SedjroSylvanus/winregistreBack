@@ -1,108 +1,86 @@
 package com.dgi.dsi.winregistre.api;
 
+import com.dgi.dsi.winregistre.dao.ContribuableDao;
+import com.dgi.dsi.winregistre.entites.Acte;
+import com.dgi.dsi.winregistre.entites.ContribuableBis;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 
-
-import com.dgi.dsi.winregistre.entites.Agent;
-import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.dgi.dsi.winregistre.dao.BanqueDao;
-
-import com.dgi.dsi.winregistre.entites.Banque;
-
-import javax.validation.Valid;
+import javax.websocket.server.PathParam;
 
 
 @RestController
 @CrossOrigin("*")
-public class BanqueApi {
+public class ContribuableApi {
 
 
 //	@Autowired
 //	private ExerciceDao exerciceDao;
 	
 	@Autowired
-	private BanqueDao exerciceDao;
+	private ContribuableDao contribuableDao;
+	private ContribuableDao getContribuableDao;
 
 
-	@GetMapping(value = "/listBanques")
-	public List<Banque> getBanques() {
-		return exerciceDao.findAll();
+	@GetMapping(value = "/listContribuables")
+	public List<ContribuableBis> getContribuables() {
+		return contribuableDao.findAll();
 	}
 
-	@PostMapping("/ajoutBanque")
-	public Banque ajoutBanque(@RequestBody Banque userForm) {
 
-		Banque userSearch = exerciceDao.findOne(userForm.getId());
+	@GetMapping(value = "/listContribuablesByPage")
+	public Page<ContribuableBis> listContribuablesByPage(@RequestParam(value="page", required=true)  int page, @RequestParam(value="size", required=true)  int size, @RequestParam(value="keyWord", required=false)  String keyWord) {
 
-		if (userSearch == null) {
-			exerciceDao.saveAndFlush(userForm);
-		} else {
-			throw new RuntimeException(userSearch + "Exercice inexistant");
-		}
+		Page<ContribuableBis> contribuableBis;
+		if(keyWord == null || keyWord.isEmpty()) {
+			Pageable firstPageWithTwoElements = PageRequest.of(page, size);
+			contribuableBis = contribuableDao.listeConstriByPage("%"+""+"%", firstPageWithTwoElements);
 
-		return userForm;
-
-	}
-	
-	
-	@DeleteMapping(value = "/deleteBanque/{id}")
-	public boolean deleteBanque(@PathVariable Long id) {
-		// contactRepository.delete(id);
-		
-		Banque exercice = exerciceDao.findOne(id);
-		
-		if (exercice != null) {
-			exerciceDao.delete(exercice);
-			return true;
 		}else {
+			Pageable firstPageWithTwoElements = PageRequest.of(page, size);
+			contribuableBis = contribuableDao.listeConstriByPage("%"+keyWord.toUpperCase()+"%", firstPageWithTwoElements);
 
-			return  false;
 		}
+			
+				return contribuableBis;
+	}
+	
 
+
+	@GetMapping(value = "/getContribuableByIfu/{ifu}")
+	public ContribuableBis getContribuableByIfu(@PathVariable String ifu) {
+		// contactRepository.delete(id);
+
+		ContribuableBis contribuableBis = contribuableDao.findAllByContImmatr(ifu);
+//		System.out.println(contribuableBis.toString());
+
+			return contribuableBis;
+	}
+
+	@GetMapping(value = "/getContribuableByRaisonSocial/{raisoc}")
+	public  List<ContribuableBis>  getContribuableByRaisonSocial(@PathVariable String raisoc) {
+		// contactRepository.delete(id);
+
+		List<ContribuableBis>  contribuableBis = contribuableDao.findByContRaisLike("%"+raisoc.toUpperCase()+"%");
+
+		return contribuableBis;
 
 	}
 
-	@PutMapping(value = "/mergePBanque/{id}")
-	public Banque updateBanque(@PathVariable Long id) {
+	@GetMapping(value = "/getContribuableByNom/{nom}")
+	public  List<ContribuableBis>  getContribuableByNom(@PathVariable String nom) {
+		// contactRepository.delete(id);
 
-		Banque exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
-		}
-		return exercice;
-	}
+		List<ContribuableBis>  contribuableBis = contribuableDao.findByContNomLike("%"+nom.toUpperCase()+"%");
 
-		@GetMapping(value = "/searchBanqueByCode/{code}")
-	public Banque updateBanqueByCode (@PathVariable String code) {
-
-		return exerciceDao.findByCodeLike("%"+code+"%");
-
+		return contribuableBis;
 
 	}
 
-	@PatchMapping(value = "/mergeBanque")
-	public Banque updatePartielBanque( @Valid @RequestBody Banque banque) {
-
-		Banque banqueRecherchee = exerciceDao.findOne(banque.getId());
-		if (banqueRecherchee != null) {
-			banque.setId(banqueRecherchee.getId());
-			return exerciceDao.save(banque);
-		}else{
-			exerciceDao.save(banque);
-		}
-		return banque;
-	}
 
 }

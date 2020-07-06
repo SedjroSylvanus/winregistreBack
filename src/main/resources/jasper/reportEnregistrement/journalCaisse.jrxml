@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="journalCaisse" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" isSummaryWithPageHeaderAndFooter="true" uuid="115119c1-b387-43d9-81d0-0f7f81b270ab">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="winregistre.xml"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageHeight" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.pageWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.topMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.bottomMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.leftMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.rightMargin" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnWidth" value="pixel"/>
+	<property name="com.jaspersoft.studio.unit.columnSpacing" value="pixel"/>
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<parameter name="logoMEF" class="java.lang.String"/>
+	<parameter name="logoDGI" class="java.lang.String"/>
+	<parameter name="dateBordereau" class="java.util.Date"/>
+	<parameter name="userName" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select quittance.numero_quittance, dq1.montantdq "Droit Simple" , dq2.montantdq Penalite ,
+dq3.montantdq Redevance , dq4.montantdq Amende 
+from  
+winregist.quittance join winregist.detailquittance dq1 on quittance.id = dq1.quittance_id and dq1.nature_impot ='Droit Simple'
+join winregist.bordereaucaisse bc on quittance.bordereau_caisse_id = bc.id
+left join winregist.detailquittance dq2 on quittance.id = dq2.quittance_id and dq2.nature_impot ='Pénalité'
+left join winregist.detailquittance dq3 on quittance.id = dq3.quittance_id and dq3.nature_impot ='Redevance'
+left join winregist.detailquittance dq4 on quittance.id = dq4.quittance_id and dq4.nature_impot ='Amende'
+where bc.date_bordereau_caisse = $P{dateBordereau} and   bc.encodeur = $P{userName}]]>
+	</queryString>
+	<field name="numero_quittance" class="java.lang.String">
+		<property name="com.jaspersoft.studio.field.label" value="numero_quittance"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="quittance"/>
+	</field>
+	<field name="Droit Simple" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="Droit Simple"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="detailquittance"/>
+	</field>
+	<field name="penalite" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="penalite"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="detailquittance"/>
+	</field>
+	<field name="redevance" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="redevance"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="detailquittance"/>
+	</field>
+	<field name="amende" class="java.lang.Double">
+		<property name="com.jaspersoft.studio.field.label" value="amende"/>
+		<property name="com.jaspersoft.studio.field.tree.path" value="detailquittance"/>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="144" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="113" width="162" height="30" uuid="3a8ddd92-8e62-43a7-86a0-af3b987353bf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9767553f-222c-43f6-9121-b41a41c1f043"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<text><![CDATA[N° Quittance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="162" y="113" width="160" height="30" uuid="cda728fb-3e19-4e2e-96fb-d0e3c2b737dc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1d0fc314-40cb-4560-8f36-ae953d0aa77c"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<text><![CDATA[Droit Simple]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="322" y="113" width="160" height="30" uuid="2c7c0812-f757-4d7e-bea3-cbd137b30121">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cc0f5e35-bb04-4918-863a-8d2030bd2036"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<text><![CDATA[Pénalite]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="482" y="113" width="160" height="30" uuid="604fb6e2-730e-4ec9-8943-6513b7c13374">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e54b9b06-fdcd-4cf7-9cfe-b5885e427c14"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<text><![CDATA[Redevance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="642" y="113" width="160" height="30" uuid="05ed38e5-b0cb-4ecb-b11c-bbe7d95488cf">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4981c577-501e-4b62-98a3-ca9e9b4cc619"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<text><![CDATA[Amende]]></text>
+			</staticText>
+			<image scaleImage="RetainShape" hAlign="Left">
+				<reportElement x="0" y="0" width="182" height="50" uuid="66e73387-42e7-4632-bff8-4491bd254c1f"/>
+				<imageExpression><![CDATA[$P{logoMEF}]]></imageExpression>
+			</image>
+			<image hAlign="Right">
+				<reportElement x="622" y="0" width="179" height="50" uuid="ab0359c9-cd47-4963-b94e-eec8e3ceefca"/>
+				<imageExpression><![CDATA[$P{logoDGI}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="130" y="48" width="580" height="32" uuid="f727238b-703c-4452-bbc4-59e5a4c4424b">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1d0fc314-40cb-4560-8f36-ae953d0aa77c"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="24" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<text><![CDATA[Journal de Caisse]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="110" y="80" width="258" height="30" uuid="554518dd-4dff-48d4-9875-ae2cfd719755">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1d0fc314-40cb-4560-8f36-ae953d0aa77c"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd MMM yyyy").format($P{dateBordereau})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="0" y="82" width="110" height="28" uuid="b7076aae-0b64-4cec-ac44-a127039edd42">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1d0fc314-40cb-4560-8f36-ae953d0aa77c"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="18" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<text><![CDATA[Date :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="368" y="82" width="110" height="30" uuid="289f118c-f1b3-413e-852c-e988525a2e7c">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1d0fc314-40cb-4560-8f36-ae953d0aa77c"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="18" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<text><![CDATA[Agent :]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="478" y="82" width="323" height="30" uuid="b67c3861-a6f7-4004-93c3-880a73af99f0">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1d0fc314-40cb-4560-8f36-ae953d0aa77c"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{userName}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="31" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="0" y="0" width="162" height="30" uuid="83db1f8d-ae4c-496a-9967-61ad482ecf38">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="9767553f-222c-43f6-9121-b41a41c1f043"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{numero_quittance}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="162" y="0" width="160" height="30" uuid="1f97f713-1d1a-4cca-afde-f02c7c053481">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="1d0fc314-40cb-4560-8f36-ae953d0aa77c"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Droit Simple}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="322" y="0" width="160" height="30" uuid="36a6e9f1-6c3f-4778-9f46-7cca8c17415f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="cc0f5e35-bb04-4918-863a-8d2030bd2036"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{penalite}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="482" y="0" width="160" height="30" uuid="98c03d4d-691e-43e7-ad44-4da91e05a360">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="e54b9b06-fdcd-4cf7-9cfe-b5885e427c14"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{redevance}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="642" y="0" width="160" height="30" uuid="c1fb91ab-52ae-4efe-8aed-239608fad29f">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="4981c577-501e-4b62-98a3-ca9e9b4cc619"/>
+				</reportElement>
+				<box>
+					<topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="14" isBold="true" isItalic="true" pdfFontName="Times-Roman" pdfEncoding=""/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{amende}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+</jasperReport>

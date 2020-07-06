@@ -11,9 +11,11 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -38,6 +40,7 @@ public class UserService {
 
 //  @Autowired
 //  private JwtTokenProvider jwtTokenProvider;
+
 
   @Autowired
   private AuthenticationManager authenticationManager;
@@ -80,19 +83,18 @@ public class UserService {
 
       return "Bearer "+createToken(username, roles);
     } catch (AuthenticationException e) {
-      throw new CustomException("Invalid username/password supplied", HttpStatus.UNPROCESSABLE_ENTITY);
+      throw new CustomException(" username ou password incorrect", HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 
   public String signup(Agent user) {
-    if (!userRepository.existsByUsername(user.getPassword())) {
+    if (!userRepository.existsByUsername(user.getUsername())) {
+      System.out.println("1111111111111111111111111");
       user.setPassword(passwordEncoder.encode(user.getPassword()));
       userRepository.save(user);
 
-
-
-
       List<AppRole> roles = new ArrayList<AppRole>();
+      roles =(List) user.getRoles();
       user.getRoles().forEach(r-> {
 
         System.out.println("RRRRRRRRRRRRRRRRRRRRRR====>"+r.getRoleName());
@@ -102,7 +104,32 @@ public class UserService {
 
       return createToken(user.getUsername(), roles);
     } else {
-      throw new CustomException("Username is already in use", HttpStatus.UNPROCESSABLE_ENTITY);
+
+      System.out.println("22222222222222222222222222");
+      Agent agent = userRepository.findByUsernameEquals(user.getUsername());
+      user.setId(agent.getId());
+      user.setPassword(agent.getPassword());
+//      userRepository.delete(agent);
+      userRepository.saveAndFlush(user);
+
+      List<AppRole> roles = new ArrayList<AppRole>();
+      roles =(List) user.getRoles();
+
+
+//        userRepository.deleteAgentRoleByUserName(user.getId());
+
+
+
+
+
+      user.getRoles().forEach(r-> {
+        System.out.println("Readd====>"+r.getRoleName());
+        accountService.addRoleToUse(user.getUsername(), r.getRoleName());
+      });
+
+      return createToken(user.getUsername(), roles);
+
+//      throw new CustomException("Modification de l'Agent est faite", HttpStatus.UNPROCESSABLE_ENTITY);
     }
   }
 
@@ -111,7 +138,7 @@ public class UserService {
   }
 
   public Agent search(String username) {
-      Agent user = userRepository.findByUsername(username);
+      Agent user = userRepository.findByUsernameEquals(username);
     if (user == null) {
       throw new CustomException("The user doesn't exist", HttpStatus.NOT_FOUND);
     }
@@ -121,12 +148,12 @@ public class UserService {
   public Agent whoami(HttpServletRequest req) {
 
 
-    return userRepository.findByUsername(getUsername(resolveToken(req)));
+    return userRepository.findByUsernameEquals(getUsername(resolveToken(req)));
   }
 
   public String refresh(String username) {
     List<AppRole> roles = new ArrayList<AppRole>();
-    userRepository.findByUsername(username).getRoles().forEach(r-> {
+    userRepository.findByUsernameEquals(username).getRoles().forEach(r-> {
       roles.add(new AppRole(r.getRoleName()));
     });
 

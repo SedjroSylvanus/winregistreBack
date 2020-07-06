@@ -29,24 +29,33 @@ public class BanqueApi {
 
 
 //	@Autowired
-//	private ExerciceDao exerciceDao;
+//	private ExerciceDao banqueDao;
 	
 	@Autowired
-	private BanqueDao exerciceDao;
+	private BanqueDao banqueDao;
 
 
 	@GetMapping(value = "/listBanques")
 	public List<Banque> getBanques() {
-		return exerciceDao.findAll();
+		return banqueDao.findAll();
 	}
+
+
+	@GetMapping(value = "/oneBanqueByDesignation/{designation}")
+	public Banque getBanqueByDesignation(@PathVariable String designation) {
+
+		return banqueDao.findByDesignationEquals(designation);
+	}
+
+
 
 	@PostMapping("/ajoutBanque")
 	public Banque ajoutBanque(@RequestBody Banque userForm) {
 
-		Banque userSearch = exerciceDao.findOne(userForm.getId());
+		Banque userSearch = banqueDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
-			exerciceDao.saveAndFlush(userForm);
+			banqueDao.saveAndFlush(userForm);
 		} else {
 			throw new RuntimeException(userSearch + "Exercice inexistant");
 		}
@@ -60,10 +69,10 @@ public class BanqueApi {
 	public boolean deleteBanque(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		Banque exercice = exerciceDao.findOne(id);
+		Banque exercice = banqueDao.findByIdIs(id);
 		
 		if (exercice != null) {
-			exerciceDao.delete(exercice);
+			banqueDao.delete(exercice);
 			return true;
 		}else {
 
@@ -76,10 +85,10 @@ public class BanqueApi {
 	@PutMapping(value = "/mergePBanque/{id}")
 	public Banque updateBanque(@PathVariable Long id) {
 
-		Banque exercice = exerciceDao.findOne(id);
+		Banque exercice = banqueDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
-			return exerciceDao.save(exercice);
+			return banqueDao.save(exercice);
 		}
 		return exercice;
 	}
@@ -87,7 +96,7 @@ public class BanqueApi {
 		@GetMapping(value = "/searchBanqueByCode/{code}")
 	public Banque updateBanqueByCode (@PathVariable String code) {
 
-		return exerciceDao.findByCodeLike("%"+code+"%");
+		return banqueDao.findByCodeLike("%"+code+"%");
 
 
 	}
@@ -95,12 +104,12 @@ public class BanqueApi {
 	@PatchMapping(value = "/mergeBanque")
 	public Banque updatePartielBanque( @Valid @RequestBody Banque banque) {
 
-		Banque banqueRecherchee = exerciceDao.findOne(banque.getId());
+		Banque banqueRecherchee = banqueDao.findByIdIs(banque.getId());
 		if (banqueRecherchee != null) {
 			banque.setId(banqueRecherchee.getId());
-			return exerciceDao.save(banque);
+			return banqueDao.save(banque);
 		}else{
-			exerciceDao.save(banque);
+			banqueDao.save(banque);
 		}
 		return banque;
 	}

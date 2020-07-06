@@ -1,31 +1,29 @@
 package com.dgi.dsi.winregistre.dao;
 
 import com.dgi.dsi.winregistre.entites.Acte;
-import com.dgi.dsi.winregistre.entites.BordereauActe;
-import com.dgi.dsi.winregistre.entites.ContribuableBis;
+import com.dgi.dsi.winregistre.entites.Departement;
 import com.dgi.dsi.winregistre.entites.Quittance;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.PagingAndSortingRepository;
 import org.springframework.data.repository.query.Param;
 
-import javax.transaction.Transactional;
 import java.util.List;
-import java.util.Optional;
 
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
-public interface ActeDao extends PagingAndSortingRepository<Acte, Long> {
+public interface ActePageableDao extends PagingAndSortingRepository<Acte, Long> {
 
     @Query("select u from Acte u where u.numero = :numeroActe")
     Acte findByNumeroActe(@Param("numeroActe") String numeroActe) ;
 
+    public Acte findByIdIs(String id);
+    public Acte findByIdIs(Long id);
+
 //    @Query("select u from Acte u where u.numero LIKE :numeroActe")
-    Acte findActeByNumeroEquals( String numeroActe) ;
+    Acte findActeByNumeroEquals(String numeroActe) ;
 
     @Query("select u from Quittance u where u.acteQuittance.numero =:numeroActe")
     List<Quittance> findByNumeroQuittance(@Param("numeroActe") String numeroActe) ;
@@ -33,9 +31,14 @@ public interface ActeDao extends PagingAndSortingRepository<Acte, Long> {
 
 
     @Query("select distinct b.numeroTransfert from Acte b where b.statutCourant like :statutCourant " )
-    Page<Acte> ListeTransfererStatut(@Param("statutCourant") String statutCourant, Pageable pageable);
+    List<Acte> listeTransfererStatutB(@Param("statutCourant") String statutCourant);
 
-    List<Acte> findActeByNumeroTransfertAndStatutCourantLike( String statutCourant);
+
+    @Query("select distinct b.numeroTransfert from Acte b where b.statutCourant like :statutCourant " )
+    Page<Acte> listeTransfererStatut(@Param("statutCourant") String statutCourant, Pageable pageable);
+
+
+//    List<Acte> findActeByNumeroTransfertAndStatutCourantLike(String statutCourant);
 
     @Override
     Page<Acte> findAll(Pageable pageable);

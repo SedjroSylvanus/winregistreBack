@@ -34,15 +34,15 @@ public class ExerciceApi {
 	@Autowired
 	private ExerciceDao exerciceDao;
 
-	@GetMapping(value = "/list")
+	@GetMapping(value = "/listExercices")
 	public List<Exercice> getExercice() {
 		return exerciceDao.findAll();
 	}
 
-	@PostMapping("/ajout")
+	@PostMapping("/ajoutExercice")
 	public Exercice ajoutExercice(@RequestBody Exercice userForm) {
 
-		Exercice userSearch = exerciceDao.findOne(userForm.getId());
+		Exercice userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -59,7 +59,7 @@ public class ExerciceApi {
 	public boolean deleteExercice(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		Exercice exercice = exerciceDao.findOne(id);
+		Exercice exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -75,7 +75,7 @@ public class ExerciceApi {
 	@PutMapping(value = "/mergeP/{id}")
 	public Exercice updateExercice(@PathVariable Long id) {
 
-		Exercice exercice = exerciceDao.findOne(id);
+		Exercice exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -86,7 +86,7 @@ public class ExerciceApi {
 	@PatchMapping(value = "/mergeExercice")
 	public Exercice updatePartielExercice(@Valid @RequestBody Exercice exercice) {
 
-		Exercice exerciceRech = exerciceDao.findOne(exercice.getId());
+		Exercice exerciceRech = exerciceDao.findByIdIs(exercice.getId());
 		if (exerciceRech != null) {
 			exercice.setId(exerciceRech.getId());
 			return exerciceDao.save(exercice);

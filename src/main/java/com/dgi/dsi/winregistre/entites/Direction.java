@@ -18,7 +18,7 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "direction")
+@Table(name = "direction", schema = "winregist")
 public class Direction extends EntityBaseBean implements Serializable {
 
 

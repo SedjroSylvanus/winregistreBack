@@ -10,6 +10,9 @@ import com.dgi.dsi.winregistre.entites.Institution;
 public interface InstitutionDao extends JpaRepository<Institution, Long>{
 
 
+
+    public Institution findByIdIs(String id);
+    public Institution findByIdIs(Long id);
     Institution findByCodeLike(String code);
 }
 	

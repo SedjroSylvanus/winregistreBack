@@ -16,9 +16,14 @@ import javax.persistence.TemporalType;
 
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 @Entity
-@Table(name="departement")
+@Audited
+@Table(name="departement", schema = "winregist")
+//@Table(name="departement")
+
 public class Departement extends EntityBaseBean implements Serializable{
 	
 
@@ -36,7 +41,9 @@ public class Departement extends EntityBaseBean implements Serializable{
 	
 	private String encodeur;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="departement")
+//	@NotAudited
 	List<Commune> communes = new ArrayList<>();
 
 
@@ -88,7 +95,7 @@ public class Departement extends EntityBaseBean implements Serializable{
 	}
 
 
-	@JsonIgnore
+//	@JsonIgnore
 	public void setCommunes(List<Commune> communes) {
 		this.communes = communes;
 	}

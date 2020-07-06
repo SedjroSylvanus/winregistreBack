@@ -3,6 +3,7 @@ package com.dgi.dsi.winregistre.entites;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /*import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,8 +12,11 @@ import lombok.NoArgsConstructor; */
 
 //@Data @NoArgsConstructor @AllArgsConstructor
 @Entity
+@Table(name = "app_role", schema = "winregist")
 public class AppRole {
-	@Id @GeneratedValue
+	
+	@Id
+	@GeneratedValue
 	private Long id;
 	private String roleName;
 	

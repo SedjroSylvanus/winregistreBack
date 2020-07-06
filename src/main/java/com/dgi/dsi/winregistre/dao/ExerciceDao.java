@@ -9,8 +9,10 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface ExerciceDao extends JpaRepository<Exercice, Long>{
-	
-	
+
+
+    public Exercice findByIdIs(String id);
+    public Exercice findByIdIs(Long id);
 }
 	
 

@@ -1,9 +1,15 @@
 package com.dgi.dsi.winregistre.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-
-
+import com.dgi.dsi.winregistre.dao.CategorieActeDao;
+import com.dgi.dsi.winregistre.dao.NatureActeBisDao;
+import com.dgi.dsi.winregistre.dao.NatureActeDao;
+import com.dgi.dsi.winregistre.entites.Acte;
+import com.dgi.dsi.winregistre.entites.BordereauActe;
+import com.dgi.dsi.winregistre.entites.CategorieActe;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,7 +22,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.dgi.dsi.winregistre.dao.NatureActeDao;
+
 import com.dgi.dsi.winregistre.entites.NatureActe;
 
 
@@ -26,10 +32,49 @@ public class NatureActeApi {
 
 
 //	@Autowired
-//	private ExerciceDao exerciceDao;
-	
+//	private NatureActeBisDao exerciceDao;
+//
 	@Autowired
 	private NatureActeDao exerciceDao;
+
+	@Autowired
+	private CategorieActeDao categorieActeDao;
+
+
+	@GetMapping(value = "/lastCodeNAtureActe/{codeCategorieActe}")
+//	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CLIENT')")
+	public Map<String, String> lastCodeNAtureActe(@PathVariable String codeCategorieActe) {
+
+		Map<String, String> coderetour = new HashMap<>(); 
+		System.out.println("----------------numBordereau-------------------"+ codeCategorieActe);
+		if(codeCategorieActe.isEmpty() || codeCategorieActe == null){
+			return null;
+		}else{
+
+
+
+				Long idNatureActe = exerciceDao.maxIdByCategorieActe(codeCategorieActe.toUpperCase()+"%");
+
+			
+				
+				if (idNatureActe != null){
+					NatureActe acteNature = exerciceDao.findByIdIs(idNatureActe);
+					if(acteNature != null){
+						 coderetour.put("dernierCodeNatureActe", acteNature.getCode());
+						 return coderetour;
+					}else{
+						return null;
+					}
+					
+				}else{
+					return null;
+				}
+
+			
+		}
+
+	}
+
 
 
 	@GetMapping(value = "/listNatureActes")
@@ -60,7 +105,7 @@ public class NatureActeApi {
 	@PostMapping("/ajoutNatureActe")
 	public NatureActe ajoutTypeActe(@RequestBody NatureActe userForm) {
 
-		NatureActe userSearch = exerciceDao.findOne(userForm.getId());
+		NatureActe userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -77,7 +122,7 @@ public class NatureActeApi {
 	public boolean deleteTypeActe(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		NatureActe exercice = exerciceDao.findOne(id);
+		NatureActe exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -93,7 +138,7 @@ public class NatureActeApi {
 	@PutMapping(value = "/mergePNatureActe/{id}")
 	public NatureActe updateTypeActe(@PathVariable Long id) {
 
-		NatureActe exercice = exerciceDao.findOne(id);
+		NatureActe exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -101,15 +146,34 @@ public class NatureActeApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeNatureActe/{id}")
+	@PatchMapping(value = "/mergeNatureActeBBBBIS/{id}")
 	public NatureActe updatePartielTypeActe(@PathVariable Long id) {
 
-		NatureActe exercice = exerciceDao.findOne(id);
+		NatureActe exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
 		}
 		return exercice;
+	}
+
+	@PatchMapping(value = "/mergeNatureActe")
+	public NatureActe updatePartielTypeActe(@RequestBody NatureActe userForm ) {
+
+		NatureActe userSearch = exerciceDao.findByIdIs(userForm.getId());
+
+		if (userSearch == null) {
+			throw new RuntimeException(userSearch + "Nature d'acte  inexistant");
+
+		} else {
+			userForm.setId(userSearch.getId());
+			exerciceDao.saveAndFlush(userForm);
+
+		}
+
+		return userForm;
+
+
 	}
 
 }

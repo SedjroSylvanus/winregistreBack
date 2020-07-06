@@ -3,21 +3,47 @@ package com.dgi.dsi.winregistre.entites;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Entity;
-
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 
 @Entity
-@Table(name = "avoirstatut")
-public class AvoirStatut extends EntityBaseBean implements Serializable {
+@Table(name = "avoirstatut", schema = "winregist")
+public class AvoirStatut  implements Serializable { //extends EntityBaseBean
 
 	private static final long serialVersionUID = 1L;
-	private String numero;
+
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+//    @GeneratedValue(strategy = GenerationType.AUTO, generator="seqgen")
+//    @SequenceGenerator(name="seqgen", sequenceName="winregist.DB_AUTOINC_SEQ")
+
+
+    private Long id;
+
+
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreation = new Date();
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateModification ;
+
+    private String encodeur;
+    private String Observation;
+
+
+
+
+
+
+
+
+
+
+
+    private String numero;
 
 	private String designation;
 
@@ -31,13 +57,15 @@ public class AvoirStatut extends EntityBaseBean implements Serializable {
 	
 	@ManyToOne
 	private Statut statut;
+	private String  statutString;
 
 	@ManyToOne
 	private Agent agent;
 
 	@ManyToOne
 	private MotifRejet motifrejet;
-	
+	private String motifrejetString;
+
 //	Act_Num` varchar(25) DEFAULT NULL, pour le num d'acte
 
 	public void setDesignation(String designation) {
@@ -81,12 +109,7 @@ public class AvoirStatut extends EntityBaseBean implements Serializable {
 		super();
 	}
 
-	@Override
-	public String toString() {
-		return "Banque [ designation=" + designation + "]";
-	}
-
-	public String getNumero() {
+    public String getNumero() {
 		return numero;
 	}
 
@@ -118,4 +141,90 @@ public class AvoirStatut extends EntityBaseBean implements Serializable {
 		this.statut = statut;
 	}
 
+	public String getStatutString() {
+		return statutString;
+	}
+
+	public void setStatutString(String statutString) {
+		this.statutString = statutString;
+	}
+
+	public String getMotifrejetString() {
+		return motifrejetString;
+	}
+
+	public void setMotifrejetString(String motifrejetString) {
+		this.motifrejetString = motifrejetString;
+	}
+
+
+    public Long getId() {
+        return id;
+    }
+
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
+    public Date getDateCreation() {
+        return dateCreation;
+    }
+
+
+    public void setDateCreation(Date dateCreation) {
+        this.dateCreation = dateCreation;
+    }
+
+
+    public Date getDateModification() {
+        return dateModification;
+    }
+
+
+    public void setDateModification(Date dateModification) {
+        this.dateModification = dateModification;
+    }
+
+
+    public String getEncodeur() {
+        return encodeur;
+    }
+
+
+    public void setEncodeur(String encodeur) {
+        this.encodeur = encodeur;
+    }
+
+
+    public String getObservation() {
+        return Observation;
+    }
+
+
+    public void setObservation(String observation) {
+        Observation = observation;
+    }
+
+
+    public String toString() {
+        return "AvoirStatut{" +
+                "id=" + id +
+                ", dateCreation=" + dateCreation +
+                ", dateModification=" + dateModification +
+                ", encodeur='" + encodeur + '\'' +
+                ", Observation='" + Observation + '\'' +
+                ", numero='" + numero + '\'' +
+                ", designation='" + designation + '\'' +
+                ", dateDebut=" + dateDebut +
+                ", dateFin=" + dateFin +
+                ", commentaire='" + commentaire + '\'' +
+                ", statut=" + statut +
+                ", statutString='" + statutString + '\'' +
+                ", agent=" + agent +
+                ", motifrejet=" + motifrejet +
+                ", motifrejetString='" + motifrejetString + '\'' +
+                '}';
+    }
 }

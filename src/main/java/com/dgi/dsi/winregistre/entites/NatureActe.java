@@ -13,18 +13,27 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="natureacte")
+@Table(name="natureacte", schema = "winregist")
+//@Table(name="natureacte")
+
 public class NatureActe extends EntityBaseBean implements Serializable  {
 	
 	private static final long serialVersionUID = 1L;	
 	private String code;
-	
 	private String designation;
 
+	private String nouveauCode;
+	private String nouveauDesignation;
+	private Boolean nouveau = Boolean.TRUE;
+
+	private Double tauxInflation;
+	private Double tauxFormaliteNotaire;
+	
 	@ManyToOne
 	private Tarif tarif;
 
 	@OneToMany(mappedBy = "natureActe")
+	@JsonIgnore
 	private List<Acte> actes = new ArrayList<>();
 
 
@@ -36,7 +45,8 @@ public class NatureActe extends EntityBaseBean implements Serializable  {
 	private Boolean gratis = Boolean.FALSE;
 	private Double tauxFixePenalite;
 	private Double mtFixePenalite;
-	private Boolean ifu = Boolean.FALSE;
+	private Boolean ifuBeneficiaire = Boolean.FALSE;
+	private Boolean ifuPrestataire = Boolean.FALSE;
 	private Double minRedevance;
 //	 `Ancien_PA` VARCHAR(10)  NOT NULL ,
 	private String ancienPA;
@@ -77,7 +87,6 @@ public class NatureActe extends EntityBaseBean implements Serializable  {
 		return actes;
 	}
 
-	@JsonIgnore
 	public void setActes(List<Acte> actes) {
 		this.actes = actes;
 	}
@@ -124,12 +133,23 @@ public class NatureActe extends EntityBaseBean implements Serializable  {
 	public void setMtFixePenalite(Double mtFixePenalite) {
 		this.mtFixePenalite = mtFixePenalite;
 	}
-	public Boolean getIfu() {
-		return ifu;
+
+	public Boolean getIfuBeneficiaire() {
+		return ifuBeneficiaire;
 	}
-	public void setIfu(Boolean ifu) {
-		this.ifu = ifu;
+
+	public void setIfuBeneficiaire(Boolean ifuBeneficiaire) {
+		this.ifuBeneficiaire = ifuBeneficiaire;
 	}
+
+	public Boolean getIfuPrestataire() {
+		return ifuPrestataire;
+	}
+
+	public void setIfuPrestataire(Boolean ifuPrestataire) {
+		this.ifuPrestataire = ifuPrestataire;
+	}
+
 	public Double getMinRedevance() {
 		return minRedevance;
 	}
@@ -167,15 +187,15 @@ public class NatureActe extends EntityBaseBean implements Serializable  {
 	public String toString() {
 		return "NatureActeDao [code=" + code + ", designation=" + designation + ", tarif=" + tarif + ", taux=" + taux
 				+ ", mtFixe=" + mtFixe + ", mtMinimum=" + mtMinimum + ", tauxRedevance=" + tauxRedevance + ", gratis="
-				+ gratis + ", tauxFixePenalite=" + tauxFixePenalite + ", mtFixePenalite=" + mtFixePenalite + ", ifu="
-				+ ifu + ", minRedevance=" + minRedevance + ", ancienPA=" + ancienPA + ", categorieActe=" + categorieActe
+				+ gratis + ", tauxFixePenalite=" + tauxFixePenalite + ", mtFixePenalite=" + mtFixePenalite + ", ifuBénéficiaire="
+				+ ifuBeneficiaire + ", minRedevance=" + minRedevance + ", ancienPA=" + ancienPA + ", categorieActe=" + categorieActe
 				+ ", penaliteAmende=" + typePenaliteAmende + ", nbreTimbre=" + nbreTimbre + "]";
 	}
 	public NatureActe() {
 		super();
 	}
 	public NatureActe(String code, String designation, String tarif, Double taux, Double mtFixe, Double mtMinimum,
-					  Double tauxRedevance, Boolean gratis, Double tauxFixePenalite, Double mtFixePenalite, Boolean ifu,
+					  Double tauxRedevance, Boolean gratis, Double tauxFixePenalite, Double mtFixePenalite, Boolean ifuBeneficiaire,  Boolean ifuPrestataire,
 					  Double minRedevance, String ancienPA, CategorieActe categorieActe, TypePenaliteAmende penaliteAmende,
 					  Integer nbreTimbre) {
 		super();
@@ -189,12 +209,46 @@ public class NatureActe extends EntityBaseBean implements Serializable  {
 		this.gratis = gratis;
 		this.tauxFixePenalite = tauxFixePenalite;
 		this.mtFixePenalite = mtFixePenalite;
-		this.ifu = ifu;
+		this.ifuBeneficiaire = ifuBeneficiaire;
+		this.ifuPrestataire = ifuPrestataire;
 		this.minRedevance = minRedevance;
 		this.ancienPA = ancienPA;
 		this.categorieActe = categorieActe;
 		this.typePenaliteAmende = penaliteAmende;
 		this.nbreTimbre = nbreTimbre;
+	}
+	public Boolean getNouveau() {
+		return nouveau;
+	}
+	public void setNouveau(Boolean nouveau) {
+		this.nouveau = nouveau;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+	public String getNouveauCode() {
+		return nouveauCode;
+	}
+	public void setNouveauCode(String nouveauCode) {
+		this.nouveauCode = nouveauCode;
+	}
+	public String getNouveauDesignation() {
+		return nouveauDesignation;
+	}
+	public void setNouveauDesignation(String nouveauDesignation) {
+		this.nouveauDesignation = nouveauDesignation;
+	}
+	public Double getTauxInflation() {
+		return tauxInflation;
+	}
+	public void setTauxInflation(Double tauxInflation) {
+		this.tauxInflation = tauxInflation;
+	}
+	public Double getTauxFormaliteNotaire() {
+		return tauxFormaliteNotaire;
+	}
+	public void setTauxFormaliteNotaire(Double tauxFormaliteNotaire) {
+		this.tauxFormaliteNotaire = tauxFormaliteNotaire;
 	}	
 	
 	

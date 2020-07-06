@@ -4,31 +4,34 @@ import com.dgi.dsi.winregistre.dao.ActeDao;
 import com.dgi.dsi.winregistre.dao.NatureActeDao;
 import com.dgi.dsi.winregistre.dao.TypePenaliteAmendeDao;
 import com.dgi.dsi.winregistre.entites.Acte;
+import com.dgi.dsi.winregistre.entites.Departement;
 import com.dgi.dsi.winregistre.entites.NatureActe;
 import com.dgi.dsi.winregistre.entites.TypePenaliteAmende;
+import com.dgi.dsi.winregistre.payload.ApiResponse;
 import com.dgi.dsi.winregistre.service.ZXingHelper;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import java.text.Normalizer.*;
 
-import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.OutputStream;
-import java.text.ParseException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 //import org.jfree.util.Log;
 
 @RestController
 @CrossOrigin("*")
-public class GlobalApi {
+public class ImportFichierExcelApi {
 
 //	@Autowired
 //	private agentDao agentDao;
@@ -36,189 +39,56 @@ public class GlobalApi {
 	@Autowired
 	private ActeDao acteDao;
 
-	@Autowired
-	private CalculDroit calculDroit;
+    @PostMapping("/importExcel")
+    public ResponseEntity<?> mapReapExcelDatatoDB(@RequestParam("file") MultipartFile reapExcelDataFile) throws IOException {
 
-	@Autowired
-	private WorkingOnController workingOnController;
+        PrintWriter writer = new PrintWriter("C:\\Users\\Admin\\Documents\\dgiprojet\\win\\winregistre\\src\\main\\resources\\test.txt");
 
-
-    @Autowired
-    private NatureActeDao natureActeDao;
-
-    @Autowired
-    private TypePenaliteAmendeDao typePenaliteAmendeDao;
+        List<Departement> tempStudentList = new ArrayList<>();
+        Departement tempStudent = new Departement();
+        XSSFWorkbook workbook = new XSSFWorkbook(reapExcelDataFile.getInputStream());
+        XSSFSheet worksheet = workbook.getSheetAt(0);
 
 
+        String code = (worksheet.getRow(0).getCell(0)).toString();
+        String libelle = (worksheet.getRow(0).getCell(1)).toString();
+        if(!code.toUpperCase().equals("code".toUpperCase())){
+            System.out.println("Premiere Cellule non conforme. Vérifier s'il y a libellé");
+            return new ResponseEntity(new ApiResponse(false, "Premiere Cellule non conforme. Vérifier s'il y a libellé!!"),
+                    HttpStatus.BAD_REQUEST);
+        }
+        if(!libelle.toUpperCase().equals("libelle".toUpperCase())){
+            System.out.println("Deuxieme Cellule non conforme. Vérifier s'il y a libellé");
+            return new ResponseEntity(new ApiResponse(false, "Deuxieme Cellule non conforme. Vérifier s'il y a libellé!!"),
+                    HttpStatus.BAD_REQUEST);
+        }
 
-    @RequestMapping(value = "qrcode/{id}", method = RequestMethod.GET)
-    public void qrcode(@PathVariable("id") String id, HttpServletResponse response) throws Exception {
-        response.setContentType("image/png");
-        OutputStream outputStream = response.getOutputStream();
-        outputStream.write(ZXingHelper.getQRCodeImage(id, 200, 200));
-        outputStream.flush();
-        outputStream.close();
-    }
+        for(int i=1; i<worksheet.getPhysicalNumberOfRows() ;i++) {
+            try{
 
+                XSSFRow row = worksheet.getRow(i);
 
-    @GetMapping(value = "/dateEcheanceActe/{numeroActe}")
-    public ResponseEntity<?> getDateEcheanceActe(@PathVariable String numeroActe) {
+                tempStudent.setId(i+0L);
+                tempStudent.setCode(((Double) row.getCell(0).getNumericCellValue()).toString());
+                tempStudent.setDesignation(row.getCell(1).getStringCellValue());
+                tempStudentList.add(tempStudent);
+            }catch (Exception e){
+                System.out.println("Veuillez revoir la ligne ===============> "+i+" du fichier "+reapExcelDataFile.getOriginalFilename());
+            //Voir comment écrire dans un fichier txt les erreurs  a uploader
+                System.out.println(e.getMessage());
 
+                writer.println("Veuillez revoir la ligne ===============> "+i+" " +
+                        "du fichier "+reapExcelDataFile.getOriginalFilename()+"// "+tempStudent);
 
-        System.out.println("------------Début-------getDateEcheanceActe----" );
-
-        Acte acte = acteDao.findActeByNumeroEquals(numeroActe);
-        System.out.println("OKAY");
-
-        Map<String, LocalDate> map = new HashMap<>();
-
-        String communeActe;
-        Long dureeActe;
-        Double majoration = 0.0;
-        Double droitSimple = 0.0;
-        Double penalite = 0.0;
-        LocalDate dateMajoration = LocalDate.now();
-        LocalDate dateEcheance = LocalDate.now();
-
-//        LocalDate dateFormatter = LocalDate.parse(date, DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH));
-        LocalDate dateActe = LocalDate.parse(acte.getDateActe().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH));
-        LocalDate dateEnregistrement = LocalDate.parse(acte.getDateEnregistrement().toString(), DateTimeFormatter.ofPattern("yyyy-MM-dd", Locale.ENGLISH));
-        System.out.println(acte.getNatureActe().getId());
-        NatureActe natureActe = natureActeDao.findByIdIs(acte.getNatureActe().getId());
-
-        System.out.println("-----je suis ici- début récupération---");
-
-
-        if (natureActe != null) {
-
-            TypePenaliteAmende typePenaliteAmende = typePenaliteAmendeDao.findByIdIs(natureActe.getTypePenaliteAmende().getId());
-            Boolean acteCommuneCentreEnregistrement = acte.getCommuneActe().getCentreEnregistrement() == null ? Boolean.FALSE : Boolean.TRUE;
-            String actenatureActeTypePenAmendeJourMoisAnnee = typePenaliteAmende.getJourMoisAnnee() == null ? "T" : typePenaliteAmende.getJourMoisAnnee();
-            System.out.println("-----je suis ici- fin récupération---");
-            //Durée plus 1 pour prendre un piquet + 2 pour les deux piquets
-            dureeActe = ChronoUnit.DAYS.between(dateEnregistrement, dateActe) + 1;
-
-            System.out.println("--->Durée entre date acte et date enrégistrement " + dureeActe);
-//            dureeActe = dureeActe+2;
-            System.out.println("--->Durée entre date acte et date enrégistrement Bis " + dureeActe);
-
-            JourFerieService jourFerie = new JourFerieService();
-            System.out.println("------acteCommuneCentreEnregistrement--------" + acteCommuneCentreEnregistrement);
-            System.out.println("----------actenatureActeTypePenAmendeJourMoisAnnee-------"+actenatureActeTypePenAmendeJourMoisAnnee);
-            if (acteCommuneCentreEnregistrement == true) {
-                System.out.println(actenatureActeTypePenAmendeJourMoisAnnee);
-                if (actenatureActeTypePenAmendeJourMoisAnnee == "J") { //acte.getNatureActe().getTypePenaliteAmende().getJourMoisAnnee()
-                    dateActe.plus(acte.getNatureActe().getTypePenaliteAmende().getDelaiEcheance(), ChronoUnit.DAYS);
-                }
-
-                System.out.println(acte.getNatureActe().getTypePenaliteAmende().getDelaiEcheance());
-                if (actenatureActeTypePenAmendeJourMoisAnnee == "M") { //acte.getNatureActe().getTypePenaliteAmende().getJourMoisAnnee()
-                    dateActe.plus(acte.getNatureActe().getTypePenaliteAmende().getDelaiEcheance(), ChronoUnit.MONTHS);
-                }
-                if (actenatureActeTypePenAmendeJourMoisAnnee == "A") { //acte.getNatureActe().getTypePenaliteAmende().getJourMoisAnnee()
-                    dateActe.plus(acte.getNatureActe().getTypePenaliteAmende().getDelaiEcheance(), ChronoUnit.YEARS);
-                }
-            } else {
-                if (actenatureActeTypePenAmendeJourMoisAnnee == "J") { //acte.getNatureActe().getTypePenaliteAmende().getJourMoisAnnee()
-                    dateActe.plus(2 * (acte.getNatureActe().getTypePenaliteAmende().getDelaiEcheance()), ChronoUnit.DAYS);
-                }
-                if (actenatureActeTypePenAmendeJourMoisAnnee == "M") { //acte.getNatureActe().getTypePenaliteAmende().getJourMoisAnnee()
-                    dateActe.plus(2 * (acte.getNatureActe().getTypePenaliteAmende().getDelaiEcheance()), ChronoUnit.MONTHS);
-                }
-                if (actenatureActeTypePenAmendeJourMoisAnnee == "A") { //acte.getNatureActe().getTypePenaliteAmende().getJourMoisAnnee()
-                    dateActe.plus(2 * (acte.getNatureActe().getTypePenaliteAmende().getDelaiEcheance()), ChronoUnit.YEARS);
-                }
 
             }
-
-            System.out.println("--->Date de l'acte" + acte.getDateActe());
-            System.out.println("--->Date de l'Enregistrement" + acte.getDateEnregistrement());
-            //Jour Férié
-            if (jourFerie.isFerie(acte.getDateEnregistrement().toString()) == true) {
-
-                dateEnregistrement = dateEnregistrement.plus(1, ChronoUnit.DAYS);
-//            acte.setDateActe(acte.getDateActe().plus(1, ChronoUnit.DAYS));
-                System.out.println("---------Ferie" + dateEnregistrement);
-                if (jourFerie.isSamedi(acte.getDateEnregistrement().toString()) == true) {
-
-                    dateEnregistrement = dateEnregistrement.plus(2, ChronoUnit.DAYS);
-//                acte.setDateActe(acte.getDateActe().plus(2, ChronoUnit.DAYS));
-                    System.out.println("---------FerieSamedi" + dateEnregistrement);
-                }
-                if (jourFerie.isDimanche(acte.getDateEnregistrement().toString()) == true) {
-
-                    dateEnregistrement = dateEnregistrement.plus(1, ChronoUnit.DAYS);
-//                acte.setDateActe(acte.getDateActe().plus(1, ChronoUnit.DAYS));
-                    System.out.println("---------FerieDimanche" + dateEnregistrement);
-                }
-            }
-
-            dureeActe = ChronoUnit.DAYS.between(dateEnregistrement, dateActe) + 1;
-            System.out.println("---> date de l'acte apres férié" + dateActe + "---durée" + dureeActe);
-
-             if (dureeActe <= 0) {
-                dateEcheance = dateEnregistrement;
-
-
-             }else{
-                dateEcheance = dateActe;
-
-
-             }
 
         }
 
-        map.put("dateEcheance", dateEcheance );
+        writer.close();
 
-
-        return ResponseEntity.ok().body(map);
-
+        return ResponseEntity.ok().body(tempStudentList);
     }
-
-	@GetMapping(value = "/dateServeur")
-//	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CLIENT')")
-//    ResponseEntity<?>
-	public ResponseEntity<?> getDateServeur() {
-
-
-
-//		return LocalDate.parse(LocalDate.now().toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.FRANCE));
-        Map<String, String> map = new HashMap();
-        SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd");
-
-        map.put("dateServeur",dt1.format(new Date()));
-
-        return ResponseEntity.ok()
-                .body(map);
-
-	}
-
-
-    @GetMapping(value = "/isSamedi/{dateTest}")
-    public Boolean isSamedi(@PathVariable String dateTest) {
-        JourFerieService testFonctionJF = new JourFerieService();
-
-        return testFonctionJF.isSamedi(dateTest);
-
-
-    }
-
-
-    @GetMapping(value = "/isDimanche/{date}")
-    public Boolean isDimanche(@PathVariable String date) {
-        JourFerieService testFonctionJF = new JourFerieService();
-	    return testFonctionJF.isDimanche(date);
-    }
-
-
-    @GetMapping(value = "/isFerie/{date}")
-    public Boolean isFerie(@PathVariable String date) {
-        JourFerieService testFonctionJF = new JourFerieService();
-	    return testFonctionJF.isFerie(date);
-    }
-
-
-
 
 
 

@@ -3,6 +3,7 @@ package com.dgi.dsi.winregistre.api;
 
 import com.dgi.dsi.winregistre.dao.TarifDao;
 
+import com.dgi.dsi.winregistre.entites.Service;
 import com.dgi.dsi.winregistre.entites.Tarif;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -31,7 +32,7 @@ public class TarifApi {
 	@PostMapping("/ajoutTarif")
 	public Tarif ajoutTarif(@RequestBody Tarif userForm) {
 
-		Tarif userSearch = tarifDao.findOne(userForm.getId());
+		Tarif userSearch = tarifDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			tarifDao.saveAndFlush(userForm);
@@ -48,7 +49,7 @@ public class TarifApi {
 	public boolean deleteBanque(@PathVariable Long id) {
 		// contactRepository.delete(id);
 
-		Tarif exercice = tarifDao.findOne(id);
+		Tarif exercice = tarifDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			tarifDao.delete(exercice);
@@ -64,7 +65,7 @@ public class TarifApi {
 	@PutMapping(value = "/mergePTarif/{id}")
 	public Tarif updateBanque(@PathVariable Long id) {
 
-		Tarif exercice = tarifDao.findOne(id);
+		Tarif exercice = tarifDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return tarifDao.save(exercice);
@@ -75,7 +76,7 @@ public class TarifApi {
 	@PatchMapping(value = "/mergeTarif")
 	public Tarif updatePartielBanque( @Valid @RequestBody Tarif banque) {
 
-		Tarif banqueRecherchee = tarifDao.findOne(banque.getId());
+		Tarif banqueRecherchee = tarifDao.findByIdIs(banque.getId());
 		if (banqueRecherchee != null) {
 			banque.setId(banqueRecherchee.getId());
 			return tarifDao.save(banque);
@@ -84,5 +85,20 @@ public class TarifApi {
 		}
 		return banque;
 	}
+
+	@GetMapping(value = "/tarifByCode/{code}")
+	public Tarif tarifByCode(@PathVariable String code) {
+
+		return tarifDao.tarifByCode(code);
+
+	}
+
+	@GetMapping(value = "/tarifByDEsignation/{designation}")
+	public Tarif tarifByDesignation(@PathVariable String designation) {
+
+		return tarifDao.findTarifByDesignation(designation);
+
+	}
+
 
 }

@@ -44,7 +44,7 @@ public class InstitutionApi {
 	@PostMapping("/ajoutInstitution")
 	public Institution ajoutInstitution(@RequestBody Institution userForm) {
 
-		Institution userSearch = exerciceDao.findOne(userForm.getId());
+		Institution userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -67,7 +67,7 @@ public class InstitutionApi {
 	public boolean deleteInstitution(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		Institution exercice = exerciceDao.findOne(id);
+		Institution exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -83,7 +83,7 @@ public class InstitutionApi {
 	@PutMapping(value = "/mergePInstitution/{id}")
 	public Institution updateInstitution(@PathVariable Long id) {
 
-		Institution exercice = exerciceDao.findOne(id);
+		Institution exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -94,7 +94,7 @@ public class InstitutionApi {
 	@PatchMapping(value = "/mergeInstitution")
 	public Institution updatePartielInstitution(@Valid @RequestBody Institution institution) {
 
-		Institution institutionRech = exerciceDao.findOne(institution.getId());
+		Institution institutionRech = exerciceDao.findByIdIs(institution.getId());
 		if (institutionRech != null) {
 			institution.setId(institutionRech.getId());
 			return exerciceDao.save(institution);

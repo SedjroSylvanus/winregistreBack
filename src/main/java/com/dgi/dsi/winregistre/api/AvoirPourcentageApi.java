@@ -44,7 +44,7 @@ public class AvoirPourcentageApi {
 	@PostMapping("/ajoutAvoirPourcentage")
 	public AvoirPourcentage ajoutAvoirPourcentage(@RequestBody AvoirPourcentage userForm) {
 
-		AvoirPourcentage userSearch = avoirPourcentageDao.findOne(userForm.getId());
+		AvoirPourcentage userSearch = avoirPourcentageDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			avoirPourcentageDao.saveAndFlush(userForm);
@@ -61,7 +61,7 @@ public class AvoirPourcentageApi {
 	public boolean deleteAvoirPourcentage(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		AvoirPourcentage exercice = avoirPourcentageDao.findOne(id);
+		AvoirPourcentage exercice = avoirPourcentageDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			avoirPourcentageDao.delete(exercice);
@@ -77,7 +77,7 @@ public class AvoirPourcentageApi {
 	@PutMapping(value = "/mergePAvoirPourcentage/{id}")
 	public AvoirPourcentage updateAvoirPourcentage(@PathVariable Long id) {
 
-		AvoirPourcentage exercice = avoirPourcentageDao.findOne(id);
+		AvoirPourcentage exercice = avoirPourcentageDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return avoirPourcentageDao.save(exercice);
@@ -88,7 +88,7 @@ public class AvoirPourcentageApi {
 	@PatchMapping(value = "/mergeAvoirPourcentage/{id}")
 	public AvoirPourcentage updatePartielAvoirPourcentage(@PathVariable Long id) {
 
-		AvoirPourcentage exercice = avoirPourcentageDao.findOne(id);
+		AvoirPourcentage exercice = avoirPourcentageDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return avoirPourcentageDao.save(exercice);

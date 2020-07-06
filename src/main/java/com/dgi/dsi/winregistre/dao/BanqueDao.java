@@ -3,6 +3,7 @@ package com.dgi.dsi.winregistre.dao;
 import java.util.Collection;
 import java.util.List;
 
+import com.dgi.dsi.winregistre.entites.Acte;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
@@ -16,6 +17,11 @@ import org.springframework.data.repository.query.Param;
 public interface BanqueDao extends JpaRepository<Banque, Long> {
 
     List<Banque> findByDesignationLike(String designation);
+    Banque findByDesignationEquals(String designation);
+
+
+    public Banque findByIdIs(String id);
+    public Banque findByIdIs(Long id);
 
     Banque findByCodeLike(String code);
 //exemple avec paramètre

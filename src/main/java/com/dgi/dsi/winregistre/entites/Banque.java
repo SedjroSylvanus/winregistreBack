@@ -1,14 +1,18 @@
 package com.dgi.dsi.winregistre.entites;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.Entity;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="banque")
+@Table(name="banque", schema = "winregist")
 public class Banque extends EntityBaseBean implements Serializable  {
 	
 
@@ -20,6 +24,10 @@ public class Banque extends EntityBaseBean implements Serializable  {
 	
 	private String designation;
 	
+
+	@OneToMany(mappedBy = "banque")
+	@JsonIgnore
+    private List<Quittance> quittaneBanque = new ArrayList<>();
 
 
 
@@ -57,9 +65,11 @@ public class Banque extends EntityBaseBean implements Serializable  {
 	}
 
 
-	
+	public List<Quittance> getQuittaneBanque() {
+		return quittaneBanque;
+	}
 
-	
-	
-
+	public void setQuittaneBanque(List<Quittance> quittaneBanque) {
+		this.quittaneBanque = quittaneBanque;
+	}
 }

@@ -12,7 +12,7 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="motifrejet")
+@Table(name="motifrejet", schema = "winregist")
 public class MotifRejet extends EntityBaseBean implements Serializable  {
 	
 

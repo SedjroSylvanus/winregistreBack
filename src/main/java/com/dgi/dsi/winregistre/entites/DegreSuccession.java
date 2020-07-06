@@ -13,7 +13,7 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="degresuccession")
+@Table(name="degresuccession", schema = "winregist")
 public class DegreSuccession extends EntityBaseBean implements Serializable  {
 	
 

@@ -45,15 +45,29 @@ public class AccountServiceImpl implements AccountService {
 	@Override
 	public void addRoleToUse(String username, String roleName) {
 		AppRole role=roleRepository.findByRoleName(roleName);
-        Agent user=userRepository.findByUsername(username);
-		((Agent) user).getRoles().add(role);
+        Agent user=userRepository.findByUsernameEquals(username);
+//		((Agent) user).getRoles().add(role);
+		user.getRoles().add(role);
 
 	}
+	@Override
+	public void removeRoleToUse(String username, String roleName) {
+		AppRole role=roleRepository.findByRoleName(roleName);
+        Agent user=userRepository.findByUsernameEquals(username);
+//		((Agent) user).getRoles().add(role);
+		if(user.getRoles().contains(role)){
+			user.getRoles().remove(role);
+		}
+
+
+	}
+
+
 
 	@Override
 	public Agent findUserByUsername(String username) {
 		// TODO Auto-generated method stub
-		return userRepository.findByUsername(username);
+		return userRepository.findByUsernameEquals(username);
 	}
 
 }

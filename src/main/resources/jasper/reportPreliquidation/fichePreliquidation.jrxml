@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.10.0.final using JasperReports Library version 6.10.0-unknown  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="756" pageHeight="467" columnWidth="716" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ce823cb7-6ccf-4588-8fc4-c94c60ef3bbd">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="SUBREPORT_DIR" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA["C:\\Users\\Admin\\Documents\\NetBeansProjects\\winregistre\\web\\report\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="ifu" class="java.lang.String"/>
+	<parameter name="natureActe" class="java.lang.String"/>
+	<parameter name="numeroActe" class="java.lang.String"/>
+	<parameter name="ds" class="java.lang.Double"/>
+	<parameter name="pen" class="java.lang.Double"/>
+	<parameter name="amende" class="java.lang.Double"/>
+	<parameter name="redevance" class="java.lang.Double"/>
+	<parameter name="logoMEF" class="java.lang.String"/>
+	<parameter name="logoDGI" class="java.lang.String"/>
+	<parameter name="dateSignature" class="java.lang.String"/>
+	<parameter name="timbre" class="java.lang.Double"/>
+	<parameter name="dateEcheance" class="java.lang.String"/>
+	<field name="numeroQuittance" class="java.lang.String"/>
+	<field name="quittancesDetail" class="java.util.List"/>
+	<field name="dateQuittance" class="java.util.Date"/>
+	<field name="dateCheque" class="java.util.Date"/>
+	<field name="montantPaye" class="java.lang.Double"/>
+	<field name="montantAutrePaiement" class="java.lang.Double"/>
+	<field name="referenceCheque" class="java.lang.String"/>
+	<field name="observation" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<columnHeader>
+		<band height="352">
+			<staticText>
+				<reportElement x="26" y="110" width="110" height="20" uuid="b0a48336-d3c5-4376-88b3-8f2579e2ec4f"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[N° IFU]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="24" y="130" width="115" height="20" uuid="64b74129-c3c7-489d-8d98-d536784c9318"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[Nature de l'Acte]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="136" y="110" width="566" height="20" uuid="712beee1-2317-40bd-8768-0e9095d7b96c"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ifu}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="137" y="131" width="566" height="20" uuid="c6c87a25-602d-45a7-b314-52c34b6c28a9"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{natureActe}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="77" y="55" width="570" height="30" uuid="903d8bd6-7b0c-4218-b397-299bd840f013"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="20" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[Fiche de préliquidation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="90" width="110" height="20" uuid="a0fea10d-8293-42dd-9319-40922966997d"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[N° Dossier]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="137" y="91" width="566" height="20" uuid="50dff30d-db53-4a98-8433-032ea7ae7310"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{numeroActe}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="24" y="240" width="195" height="20" uuid="f80e0d3e-a6ed-4cc8-96b9-b03202402a57"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[Amende]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="220" y="241" width="483" height="20" uuid="335e89a5-799e-498b-adb3-ffe5af7e79d7"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{amende}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="219" y="220" width="483" height="20" uuid="feaa9a7c-6ad5-4b1d-a708-17b207cf08b5"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{pen}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="26" y="220" width="190" height="20" uuid="b9e291a0-a63e-4637-97f8-733450ba0eb0"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[Pénalité]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="30" y="200" width="190" height="20" uuid="c824cc2c-db32-4550-8926-026cd99925d5"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[Droit Simple
+]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="220" y="201" width="483" height="20" uuid="7722a60e-0b38-4865-acc9-06f8bd49d7f7"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{ds}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="26" y="262" width="195" height="20" uuid="cb178667-fcb7-4720-997f-28894df72dbb"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[Redevance]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="222" y="263" width="483" height="20" uuid="344741ed-b562-4a5f-86f7-3ea33f54e4bb"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{redevance}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="35" y="160" width="655" height="35" uuid="5cc7c065-c60d-49bb-89ce-ddcf27fd9ba9"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="20" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[Droits d'enregistrement
+]]></text>
+			</staticText>
+			<image hAlign="Right">
+				<reportElement x="535" y="0" width="179" height="50" uuid="66501d81-32a2-4860-a1c7-c58bd7971598"/>
+				<imageExpression><![CDATA[$P{logoDGI}]]></imageExpression>
+			</image>
+			<image scaleImage="RetainShape" hAlign="Left">
+				<reportElement x="0" y="0" width="182" height="50" uuid="ce8328ea-3b21-4653-ae91-135f68ac332a"/>
+				<imageExpression><![CDATA[$P{logoMEF}]]></imageExpression>
+			</image>
+			<staticText>
+				<reportElement x="27" y="305" width="195" height="20" uuid="0f8adbea-eb2a-4174-834a-59ad56828ed0"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[Date Signature Acte]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="223" y="306" width="483" height="20" uuid="48c4a6a3-94db-4daf-90e3-437c3d4456f7"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dateSignature}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="222" y="284" width="483" height="20" uuid="98bb7a83-0840-4310-8b33-8a951505a10c"/>
+				<box>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.25" lineStyle="Dashed"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{timbre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="26" y="283" width="195" height="20" uuid="652aa79e-de27-4d37-b20e-9db88b6ee995"/>
+				<box>
+					<pen lineWidth="0.0"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.0"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.0"/>
+				</box>
+				<textElement>
+					<font fontName="Times New Roman" size="14" isBold="true" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<text><![CDATA[Montant Timbre]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="28" splitType="Stretch"/>
+	</detail>
+	<columnFooter>
+		<band height="24">
+			<textField isBlankWhenNull="true">
+				<reportElement mode="Transparent" x="0" y="1" width="710" height="20" forecolor="#FF0048" backcolor="#FFFFFF" uuid="962087f6-42d8-45ac-a000-793c0bc11706"/>
+				<box>
+					<topPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<leftPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<bottomPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+					<rightPen lineWidth="0.0" lineStyle="Solid" lineColor="#000000"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font fontName="Times New Roman" size="14" isBold="true" isUnderline="false" pdfFontName="Times-BoldItalic"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{dateEcheance}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="23"/>
+	</pageFooter>
+</jasperReport>

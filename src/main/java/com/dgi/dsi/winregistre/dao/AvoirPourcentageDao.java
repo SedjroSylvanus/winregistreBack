@@ -1,5 +1,6 @@
 package com.dgi.dsi.winregistre.dao;
 
+import com.dgi.dsi.winregistre.entites.Acte;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
@@ -11,6 +12,9 @@ import org.springframework.security.core.GrantedAuthority;
 public interface AvoirPourcentageDao extends JpaRepository<AvoirPourcentage, Long>{
 
 
+
+    public AvoirPourcentage findByIdIs(String id);
+    public AvoirPourcentage findByIdIs(Long id);
     enum Role implements GrantedAuthority {
       ROLE_ADMIN, ROLE_CLIENT;
 

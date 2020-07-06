@@ -3,6 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
+import com.dgi.dsi.winregistre.entites.GrilleActeSousSeingPrive;
 import com.dgi.dsi.winregistre.entites.TypePenaliteAmende;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -41,7 +42,7 @@ public class TypePenaliteAmendeApi {
 	@PostMapping("/ajoutTypePenaliteAmende")
 	public TypePenaliteAmende ajoutBanque(@RequestBody TypePenaliteAmende userForm) {
 
-		TypePenaliteAmende userSearch = exerciceDao.findOne(userForm.getId());
+		TypePenaliteAmende userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -58,7 +59,7 @@ public class TypePenaliteAmendeApi {
 	public boolean deletePenaliteAmende(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		TypePenaliteAmende exercice = exerciceDao.findOne(id);
+		TypePenaliteAmende exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -74,7 +75,7 @@ public class TypePenaliteAmendeApi {
 	@PutMapping(value = "/mergePTypePenaliteAmende/{id}")
 	public TypePenaliteAmende updatePenaliteAmende(@PathVariable Long id) {
 
-		TypePenaliteAmende exercice = exerciceDao.findOne(id);
+		TypePenaliteAmende exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -85,7 +86,7 @@ public class TypePenaliteAmendeApi {
 	@PatchMapping(value = "/mergeTypePenaliteAmende")
 	public TypePenaliteAmende updatePartielPenaliteAmende(@Valid @RequestBody TypePenaliteAmende penaliteAmende) {
 
-		TypePenaliteAmende penaliteAmendeRech = exerciceDao.findOne(penaliteAmende.getId());
+		TypePenaliteAmende penaliteAmendeRech = exerciceDao.findByIdIs(penaliteAmende.getId());
 		if (penaliteAmendeRech != null) {
 			penaliteAmende.setId(penaliteAmendeRech.getId());
 			return exerciceDao.save(penaliteAmende);
@@ -94,6 +95,22 @@ public class TypePenaliteAmendeApi {
 		}
 		return penaliteAmende;
 	}
+
+
+
+	@GetMapping(value = "/typePenaliteAmendeByCode/{code}")
+	public TypePenaliteAmende typePenaliteAmendeByCode(@PathVariable String code) {
+
+		return exerciceDao.findTypePenaliteAmendeByCode(code);
+
+	}
+
+
+	@GetMapping(value = "/typePenaliteAmendeByDesignation/{designation}")
+	public TypePenaliteAmende typePenaliteAmendeByDesignation(@PathVariable String designation) {
+		return exerciceDao.findTypePenaliteAmendeByDesignation(designation);
+	}
+
 
 
 }

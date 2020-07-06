@@ -1,19 +1,27 @@
 package com.dgi.dsi.winregistre.api;
 
 import com.dgi.dsi.winregistre.dao.ActeDao;
+import com.dgi.dsi.winregistre.dao.NatureActeDao;
+import com.dgi.dsi.winregistre.dao.TypePenaliteAmendeDao;
 import com.dgi.dsi.winregistre.entites.Acte;
-import com.dgi.dsi.winregistre.payload.EntrePaiement;
-import com.dgi.dsi.winregistre.payload.SortiePaiement;
-import com.dgi.dsi.winregistre.service.CalculDroit;
+import com.dgi.dsi.winregistre.entites.NatureActe;
+import com.dgi.dsi.winregistre.entites.TypePenaliteAmende;
 import com.dgi.dsi.winregistre.service.JourFerieService;
+import com.dgi.dsi.winregistre.service.ZXingHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletResponse;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 //import org.jfree.util.Log;
 
@@ -31,168 +39,101 @@ public class GlobalApi {
 	private CalculDroit calculDroit;
 
 	@Autowired
+	private CalculPenaliteASS calculPenaliteASS;
+
+	@Autowired
 	private WorkingOnController workingOnController;
 
+	@Autowired
+	private NatureActeDao natureActeDao;
 
+	@Autowired
+	private TypePenaliteAmendeDao typePenaliteAmendeDao;
 
+	@Autowired
+	private JourFerieService jourFerieService;
 
-
-
-
-
-	@GetMapping(value = "/dateServeur")
-//	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CLIENT')")
-	public LocalDate getDateServeur() {
-		return LocalDate.parse(LocalDate.now().toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.ENGLISH));
+	@RequestMapping(value = "qrcode/{id}", method = RequestMethod.GET)
+	public void qrcode(@PathVariable("id") String id, HttpServletResponse response) throws Exception {
+		response.setContentType("image/png");
+		OutputStream outputStream = response.getOutputStream();
+		outputStream.write(ZXingHelper.getQRCodeImage(id, 200, 200));
+		outputStream.flush();
+		outputStream.close();
 	}
 
+	@GetMapping(value = "/getActeByNumeroActe/{numeroActe}")
+	public Long getActeByNumeroActe(@PathVariable String numeroActe) {
 
-    @GetMapping(value = "/listActes")
-//	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CLIENT')")
-	public List<Acte> getActes() {
-
-		return acteDao.findAll();
-//		return ((acteDao.findAll()) != null) ?
-//				Response.ok(gson.toJson(acteDao.findAll())).build() :
-//				Response.status(Response.Status.NOT_FOUND).build();
+		return acteDao.getActeByNumeroEquals(numeroActe.toUpperCase()).getId();
 	}
 
-    @GetMapping(value = "/isSamedi/{dateTest}")
-    public Boolean isSamedi(@PathVariable String dateTest) {
-        JourFerieService testFonctionJF = new JourFerieService();
+	@GetMapping(value = "/getActeNumeroByNumero/{numeroActe}")
+	public Acte getActeNumeroByNumero(@PathVariable String numeroActe) {
 
-        return testFonctionJF.isSamedi(dateTest);
-
-
-    }
-
-
-    @GetMapping(value = "/isDimanche/{date}")
-    public Boolean isDimanche(@PathVariable String date) {
-        JourFerieService testFonctionJF = new JourFerieService();
-	    return testFonctionJF.isDimanche(date);
-    }
-
-
-    @GetMapping(value = "/isFerie/{date}")
-    public Boolean isFerie(@PathVariable String date) {
-        JourFerieService testFonctionJF = new JourFerieService();
-	    return testFonctionJF.isFerie(date);
-    }
-
-
-
-    @PostMapping("/calculPaiementAss")
-	public SortiePaiement calculPaiementAss( @RequestBody EntrePaiement userForm) {
-
-
-		return calculDroit.calculPaiement(userForm);
-
+		return acteDao.getActeByNumeroEquals(numeroActe.toUpperCase());
 	}
 
-//    @PostMapping("/ajoutActe")
-//	public Acte ajoutActe( @Valid @RequestBody Acte userForm) {
-//		System.out.println(userForm.getDateActe().toString());
-//
-//		Acte userSearch = acteDao.findOne(userForm.getId());
-//
-//
-//		if (userSearch == null) {
-//
-////			Date date = new Date();
-//			userForm.setPenalite(calculDroit.calculPaiement(userForm).getPenalite());
-//			userForm.setAmende(calculDroit.calculPaiement(userForm).getAmende());
-//			userForm.setDroitSimple(calculDroit.calculPaiement(userForm).getDroitSimple());
-//			userForm.setManqueeGain(calculDroit.calculPaiement(userForm).getManqueeGain());
-//			userForm.setRedevance(calculDroit.calculPaiement(userForm).getRedevance());
-//			userForm.setDateActe(LocalDate.parse(userForm.getDateActe().toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.ENGLISH)));
-//			userForm.setDateEnregistrement(LocalDate.parse(userForm.getDateActe().toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.ENGLISH)));
-//			Double mtDu = (Double) calculDroit.calculPaiement(userForm).getAmende()+calculDroit.calculPaiement(userForm).getDroitSimple()+
-//					calculDroit.calculPaiement(userForm).getRedevance()+ calculDroit.calculPaiement(userForm).getPenalite();
-//			userForm.setMontantDu(mtDu);
-//			userForm.setMontantPaye(0.0);
-////			workingOnController.addTache(new WorkingOn(userForm, LocalDate.now(),userForm.getAgentLiquidateur()));
-//			System.out.println(workingOnController.getAll());
-//			acteDao.saveAndFlush(userForm);
-//		} else {
-//
-//			userForm.setId(userForm.getId());
-//			userForm.setPenalite(calculDroit.calculPaiement(userForm).getPenalite());
-//			userForm.setAmende(calculDroit.calculPaiement(userForm).getAmende());
-//			userForm.setDroitSimple(calculDroit.calculPaiement(userForm).getDroitSimple());
-//			userForm.setManqueeGain(calculDroit.calculPaiement(userForm).getManqueeGain());
-//			userForm.setRedevance(calculDroit.calculPaiement(userForm).getRedevance());
-//			userForm.setDateActe(LocalDate.parse(userForm.getDateActe().toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.ENGLISH)));
-//			userForm.setDateEnregistrement(LocalDate.parse(userForm.getDateActe().toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.ENGLISH)));
-//
-////			workingOnController.addTache(new WorkingOn(userForm, LocalDate.now(),userForm.getAgentLiquidateur()));
-//			System.out.println(workingOnController.getAll());
-//			Double mtDu = (Double) calculDroit.calculPaiement(userForm).getAmende()+calculDroit.calculPaiement(userForm).getDroitSimple()+
-//					calculDroit.calculPaiement(userForm).getRedevance()+ calculDroit.calculPaiement(userForm).getPenalite();
-//			Double mtPaye = mtDu - userForm.getMontantPaye();
-//			userForm.setMontantDu(mtPaye);
-//
-//			acteDao.saveAndFlush(userForm);
-//			throw new RuntimeException(userSearch + "Acte inexistant");
-//		}
-//
-//		return userForm;
-//
-//	}
+	@GetMapping(value = "/getActeNumeroActe/{numeroActe}")
+	public Acte getActeNumeroActe(@PathVariable String numeroActe) {
 
-	@DeleteMapping(value = "/deleteActe/{id}")
-	public Acte deleteActe(@PathVariable Long id) {
-		// contactRepository.delete(id);
+		try {
+			// acte = new Acte();
 
-		Acte acte = acteDao.findOne(id);
+			System.out.println("-------------> Debut");
+			Acte acte = acteDao.getActeByNumeroEquals(numeroActe.toUpperCase());
+			System.out.println("----------> acte"+ acte);
 
-		if (acte != null) {
 
 			return acte;
-		} else {
 
+		} catch (Exception e) {
+			// TODO: handle exception
+			System.out.println("------>" + e.getMessage());
+			e.printStackTrace();
 			return null;
+
 		}
 
 	}
 
-	@PutMapping(value = "/mergePActe/{numero}")
-	public Acte updateAgent( @Valid @RequestBody Acte userForm,
-                              @PathVariable String numero) {
+	@GetMapping(value = "/dateServeur")
+//	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CLIENT')")
+//    ResponseEntity<?>
+	public ResponseEntity<?> getDateServeur() {
 
-        Acte acte = acteDao.findByNumeroEquals(numero);
-        if (acte != null) {
+//		return LocalDate.parse(LocalDate.now().toString(),DateTimeFormatter.ofPattern("yyyy-MM-dd",Locale.FRANCE));
+		Map<String, String> map = new HashMap();
+		SimpleDateFormat dt1 = new SimpleDateFormat("yyyy-MM-dd");
 
-            userForm.setId(acte.getId());
-            acteDao.saveAndFlush(userForm);
+		map.put("dateServeur", dt1.format(new Date()));
 
-        } else {
+		return ResponseEntity.ok().body(map);
 
-            acteDao.saveAndFlush(acte);
-        }
-        return acte;
+	}
+	
+	
+
+	
+	@GetMapping(value = "/isSamedi/{dateTest}")
+	public Boolean isSamedi(@PathVariable String dateTest) {
+		JourFerieService testFonctionJF = new JourFerieService();
+
+		return testFonctionJF.isSamedi(dateTest);
+
 	}
 
-	@PatchMapping(value = "/mergeActe")
-//	@PatchMapping(value = "/mergeAgent/{matricule}")
-	public Acte updatePartielActe( @Valid @RequestBody Acte userForm) {
-
-
-        Acte acte = acteDao.findByNumeroEquals(userForm.getNumero());
-
-        if (acte != null) {
-
-            userForm.setId(acte.getId());
-            acteDao.saveAndFlush(userForm);
-
-        } else {
-
-            acteDao.saveAndFlush(acte);
-        }
-        return acte;
+	@GetMapping(value = "/isDimanche/{date}")
+	public Boolean isDimanche(@PathVariable String date) {
+		JourFerieService testFonctionJF = new JourFerieService();
+		return testFonctionJF.isDimanche(date);
 	}
 
+	@GetMapping(value = "/isFerie/{date}")
+	public Boolean isFerie(@PathVariable String date) {
 
-
+		// JourFerieService testFonctionJF = new JourFerieService();
+		return jourFerieService.isFerie(date);
+	}
 
 }

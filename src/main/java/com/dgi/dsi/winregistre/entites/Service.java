@@ -11,7 +11,7 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "service")
+@Table(name = "service", schema = "winregist")
 public class Service extends EntityBaseBean implements Serializable {
 
 
@@ -81,9 +81,14 @@ public class Service extends EntityBaseBean implements Serializable {
 		super();
 	}
 
+
 	@Override
 	public String toString() {
-		return "Banque [code=" + code + ", designation=" + designation + "]";
+		return "Service{" +
+				"code='" + code + '\'' +
+				", designation='" + designation + '\'' +
+				", direction=" + direction +
+				", agents=" + agents +
+				'}';
 	}
-
 }

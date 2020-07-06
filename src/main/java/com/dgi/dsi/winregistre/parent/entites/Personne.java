@@ -38,8 +38,10 @@ public abstract class Personne extends EntityBaseBean implements Serializable {
     @Column(unique=true, length = 32, nullable = false)
     @Email(message = "Cette adresse n'est pas une adresse email valide.")
     private String email;
-    @Column(unique=true)
-    private long tel;
+    
+    
+//    @Column(unique=true)
+    private Long tel;
 
 
     @OneToMany(mappedBy="agent")
@@ -130,11 +132,11 @@ public abstract class Personne extends EntityBaseBean implements Serializable {
         this.email = email;
     }
 
-    public long getTel() {
+    public Long getTel() {
         return tel;
     }
 
-    public void setTel(long tel) {
+    public void setTel(Long tel) {
         this.tel = tel;
     }
 

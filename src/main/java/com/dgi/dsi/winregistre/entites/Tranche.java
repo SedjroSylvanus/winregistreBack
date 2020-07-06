@@ -16,7 +16,7 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "tranche")
+@Table(name = "tranche", schema = "winregist")
 public class Tranche extends EntityBaseBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;	

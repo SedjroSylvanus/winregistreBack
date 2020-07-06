@@ -1,95 +1,47 @@
 package com.dgi.dsi.winregistre.entites;
 
-import java.io.Serializable;
-import java.util.Date;
-
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 
+import javax.persistence.*;
+import java.io.Serializable;
+import java.time.LocalDate;
+import java.util.Date;
+
 @Entity
-@Table(name="exercice")
-public class Exercice extends EntityBaseBean implements Serializable{
-	
-
-	private static final long serialVersionUID = 1L;	
-	private String annee;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dateDebut;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dateFin;
-	
-	private Boolean cloturer;
-	
+@Table(name="numeroOrdre", schema = "winregist")
+public class NumeroOrdre extends EntityBaseBean implements Serializable{
 
 
+	private static final long serialVersionUID = 1L;
+
+	private Integer numeroOrdre;
+//	private LocalDate dateNumeroOrdre;
+
+	@OneToOne
+	private Service service;
 
 
+    public Integer getNumeroOrdre() {
+        return numeroOrdre;
+    }
 
-	public Exercice() {
-		super();
-	}
+    public void setNumeroOrdre(Integer numeroOrdre) {
+        this.numeroOrdre = numeroOrdre;
+    }
 
-	public String getAnnee() {
-		return annee;
-	}
+    public Service getService() {
+        return service;
+    }
 
-	public void setAnnee(String annee) {
-		this.annee = annee;
-	}
+    public void setService(Service service) {
+        this.service = service;
+    }
 
-	public Date getDateDebut() {
-		return dateDebut;
-	}
+    public NumeroOrdre() {
+    }
 
-	public void setDateDebut(Date dateDebut) {
-		this.dateDebut = dateDebut;
-	}
-
-	public Date getDateFin() {
-		return dateFin;
-	}
-
-	public void setDateFin(Date dateFin) {
-		this.dateFin = dateFin;
-	}
-
-	public Boolean getCloturer() {
-		return cloturer;
-	}
-
-	public void setCloturer(Boolean cloturer) {
-		this.cloturer = cloturer;
-	}
-
-	public Exercice(String annee, Date dateDebut, Date dateFin, Boolean cloturer) {
-		super();
-		this.annee = annee;
-		this.dateDebut = dateDebut;
-		this.dateFin = dateFin;
-		this.cloturer = cloturer;
-	}
-
-	@Override
-	public String toString() {
-		return "Exercice [annee=" + annee + ", dateDebut=" + dateDebut + ", dateFin=" + dateFin + ", cloturer="
-				+ cloturer + "]";
-	}
-
-	
-
-	
-
-
-
-	
-
+    public NumeroOrdre(Integer numeroOrdre, Service service) {
+        this.numeroOrdre = numeroOrdre;
+        this.service = service;
+    }
 }

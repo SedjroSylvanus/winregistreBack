@@ -1,61 +1,48 @@
 package com.dgi.dsi.winregistre.api;
 
-import java.util.List;
-
-
-import com.dgi.dsi.winregistre.entites.Agent;
+import com.dgi.dsi.winregistre.dao.GrilleActeSousSeingPriveDao;
+import com.dgi.dsi.winregistre.entites.Direction;
+import com.dgi.dsi.winregistre.entites.GrilleActeSousSeingPrive;
 import org.springframework.beans.factory.annotation.Autowired;
-
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.dgi.dsi.winregistre.dao.BanqueDao;
-
-import com.dgi.dsi.winregistre.entites.Banque;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 
 @RestController
 @CrossOrigin("*")
-public class BanqueApi {
+public class GrilleActeSousSeingPriveApi {
 
 
 //	@Autowired
-//	private ExerciceDao banqueDao;
+//	private ExerciceDao grilleActeSousSeingPriveDao;
 	
 	@Autowired
-	private BanqueDao banqueDao;
+	private GrilleActeSousSeingPriveDao grilleActeSousSeingPriveDao;
 
 
-	@GetMapping(value = "/listBanques")
-	public List<Banque> getBanques() {
-		return banqueDao.findAll();
+	@GetMapping(value = "/listGrilleActeSousSeingPrives")
+	public List<GrilleActeSousSeingPrive> getGrilleActeSousSeingPrives() {
+		return grilleActeSousSeingPriveDao.findAll();
 	}
 
 
-	@GetMapping(value = "/oneBanqueByDesignation/{designation}")
-	public Banque getBanqueByDesignation(@PathVariable String designation) {
+//	@GetMapping(value = "/oneGrilleActeSousSeingPriveByDesignation/{designation}")
+//	public GrilleActeSousSeingPrive getGrilleActeSousSeingPriveByDesignation(@PathVariable String designation) {
+//
+//		return grilleActeSousSeingPriveDao.findByDesignationEquals(designation);
+//	}
 
-		return banqueDao.findByDesignationEquals(designation);
-	}
 
 
+	@PostMapping("/ajoutGrilleActeSousSeingPrive")
+	public GrilleActeSousSeingPrive ajoutGrilleActeSousSeingPrive(@RequestBody GrilleActeSousSeingPrive userForm) {
 
-	@PostMapping("/ajoutBanque")
-	public Banque ajoutBanque(@RequestBody Banque userForm) {
-
-		Banque userSearch = banqueDao.findByIdIs(userForm.getId());
+		GrilleActeSousSeingPrive userSearch = grilleActeSousSeingPriveDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
-			banqueDao.saveAndFlush(userForm);
+			grilleActeSousSeingPriveDao.saveAndFlush(userForm);
 		} else {
 			throw new RuntimeException(userSearch + "Exercice inexistant");
 		}
@@ -65,14 +52,14 @@ public class BanqueApi {
 	}
 	
 	
-	@DeleteMapping(value = "/deleteBanque/{id}")
-	public boolean deleteBanque(@PathVariable Long id) {
+	@DeleteMapping(value = "/deleteGrilleActeSousSeingPrive/{id}")
+	public boolean deleteGrilleActeSousSeingPrive(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		Banque exercice = banqueDao.findByIdIs(id);
+		GrilleActeSousSeingPrive exercice = grilleActeSousSeingPriveDao.findByIdIs(id);
 		
 		if (exercice != null) {
-			banqueDao.delete(exercice);
+			grilleActeSousSeingPriveDao.delete(exercice);
 			return true;
 		}else {
 
@@ -82,36 +69,44 @@ public class BanqueApi {
 
 	}
 
-	@PutMapping(value = "/mergePBanque/{id}")
-	public Banque updateBanque(@PathVariable Long id) {
+	@PutMapping(value = "/mergePGrilleActeSousSeingPrive/{id}")
+	public GrilleActeSousSeingPrive updateGrilleActeSousSeingPrive(@PathVariable Long id) {
 
-		Banque exercice = banqueDao.findByIdIs(id);
+		GrilleActeSousSeingPrive exercice = grilleActeSousSeingPriveDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
-			return banqueDao.save(exercice);
+			return grilleActeSousSeingPriveDao.save(exercice);
 		}
 		return exercice;
 	}
 
-		@GetMapping(value = "/searchBanqueByCode/{code}")
-	public Banque updateBanqueByCode (@PathVariable String code) {
+//		@GetMapping(value = "/searchGrilleActeSousSeingPriveByCode/{code}")
+//	public GrilleActeSousSeingPrive updateGrilleActeSousSeingPriveByCode (@PathVariable String code) {
+//
+//		return grilleActeSousSeingPriveDao.findByCodeLike("%"+code+"%");
+//
+//
+//	}
 
-		return banqueDao.findByCodeLike("%"+code+"%");
+	@PatchMapping(value = "/mergeGrilleActeSousSeingPrive")
+	public GrilleActeSousSeingPrive updatePartielGrilleActeSousSeingPrive( @Valid @RequestBody GrilleActeSousSeingPrive grilleActeSousSeingPrive) {
 
-
-	}
-
-	@PatchMapping(value = "/mergeBanque")
-	public Banque updatePartielBanque( @Valid @RequestBody Banque banque) {
-
-		Banque banqueRecherchee = banqueDao.findByIdIs(banque.getId());
-		if (banqueRecherchee != null) {
-			banque.setId(banqueRecherchee.getId());
-			return banqueDao.save(banque);
+		GrilleActeSousSeingPrive grilleActeSousSeingPriveRecherchee = grilleActeSousSeingPriveDao.findByIdIs(grilleActeSousSeingPrive.getId());
+		if (grilleActeSousSeingPriveRecherchee != null) {
+			grilleActeSousSeingPrive.setId(grilleActeSousSeingPriveRecherchee.getId());
+			return grilleActeSousSeingPriveDao.save(grilleActeSousSeingPrive);
 		}else{
-			banqueDao.save(banque);
+			grilleActeSousSeingPriveDao.save(grilleActeSousSeingPrive);
 		}
-		return banque;
+		return grilleActeSousSeingPrive;
 	}
 
+
+
+	@GetMapping(value = "/grilleActeSousSeingPriveByCode/{code}")
+	public GrilleActeSousSeingPrive grilleActeSousSeingPriveByCode(@PathVariable String code) {
+
+		return grilleActeSousSeingPriveDao.grilleActeSousSeingPriveByCode(code);
+
+	}
 }

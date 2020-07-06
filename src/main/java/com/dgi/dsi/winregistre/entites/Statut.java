@@ -18,7 +18,7 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name="statut")
+@Table(name="statut", schema = "winregist")
 public class Statut extends EntityBaseBean implements Serializable  {
 	
 

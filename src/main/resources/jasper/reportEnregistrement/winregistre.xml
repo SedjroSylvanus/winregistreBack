@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<jdbcDataAdapter class="net.sf.jasperreports.data.jdbc.JdbcDataAdapterImpl"><name>winrregistreSource</name><driver>org.postgresql.Driver</driver><username>registuser</username><password>registuser</password><savePassword>true</savePassword><url>jdbc:postgresql://10.4.8.90:5432/registerdb?schema=winregist</url><database></database><serverAddress></serverAddress></jdbcDataAdapter>

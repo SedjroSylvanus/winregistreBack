@@ -44,7 +44,7 @@ public class DegreSuccessionApi {
 	@PostMapping("/ajoutDegreSuccession")
 	public DegreSuccession ajoutDegreSuccession(@RequestBody DegreSuccession userForm) {
 
-		DegreSuccession userSearch = exerciceDao.findOne(userForm.getId());
+		DegreSuccession userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -67,7 +67,7 @@ public class DegreSuccessionApi {
 	public boolean deleteDegreSuccession(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		DegreSuccession exercice = exerciceDao.findOne(id);
+		DegreSuccession exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -83,7 +83,7 @@ public class DegreSuccessionApi {
 	@PutMapping(value = "/mergePDegreSuccession/{id}")
 	public DegreSuccession updateDegreSuccession(@PathVariable Long id) {
 
-		DegreSuccession exercice = exerciceDao.findOne(id);
+		DegreSuccession exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -94,7 +94,7 @@ public class DegreSuccessionApi {
 	@PatchMapping(value = "/mergeDegreSuccession")
 	public DegreSuccession updatePartielDegreSuccession(@Valid @RequestBody DegreSuccession degreSuccession) {
 
-		DegreSuccession degreSuccessionRech = exerciceDao.findOne(degreSuccession.getId());
+		DegreSuccession degreSuccessionRech = exerciceDao.findByIdIs(degreSuccession.getId());
 		if (degreSuccessionRech != null) {
 			degreSuccession.setId(degreSuccessionRech.getId());
 			return exerciceDao.save(degreSuccession);

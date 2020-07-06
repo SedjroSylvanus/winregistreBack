@@ -10,8 +10,10 @@ import com.dgi.dsi.winregistre.entites.Tranche;
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface TrancheDao extends JpaRepository<Tranche, Long>{
-	
-	
+
+
+    public Tranche findByIdIs(String id);
+    public Tranche findByIdIs(Long id);
 }
 	
 

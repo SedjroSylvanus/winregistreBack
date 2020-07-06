@@ -1,26 +1,19 @@
 package com.dgi.dsi.winregistre.entites;
 
-import com.dgi.dsi.winregistre.Convertisseur.LocalDateConverter;
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
-import com.dgi.dsi.winregistre.parent.entites.Personne;
-import com.dgi.dsi.winregistre.entites.Contribuable;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.hibernate.validator.constraints.NotBlank;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.format.annotation.DateTimeFormat;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Entity
-@Table(name = "acte")
+@Table(name = "acte", schema = "winregist")
+//@Table(name = "acte")
 
 //		, uniqueConstraints = { @UniqueConstraint(name = "nom_prenom", columnNames = { "nom", "prenoms" }),
 //		@UniqueConstraint(name = "email", columnNames = { "email" }) })
@@ -29,12 +22,13 @@ import java.util.List;
 //        allowGetters = true)
 
 
+@Audited
 public class Acte extends EntityBaseBean implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
 
-    @Column(unique = true)
+//    @Column(unique = true)
     private String numero;
 
 
@@ -45,6 +39,18 @@ public class Acte extends EntityBaseBean implements Serializable {
 //    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm", iso = DateTimeFormat.ISO.DATE_TIME)
 //    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm")
     private LocalDate dateActe = LocalDate.now();
+    
+    private LocalDate dateAcquisitionActuelle;
+    private LocalDate ancienneDateAcquisition;
+    
+
+    private Double montantAcquisitionActuelle;
+    private Double ancienMontantAcquisition;
+    private Double plusValueImmobiliere;
+
+    
+    private LocalDate dateDepot;
+    
 //    @Convert(converter = LocalDateConverter.class)
 //    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
 //    @JsonFormat(pattern = "YYYY-MM-dd")
@@ -61,18 +67,20 @@ public class Acte extends EntityBaseBean implements Serializable {
 //    private String code;
 
 
-    private String valeurTimbre;
-    private Integer nombreTimbre;
+    private Double valeurTimbre;
+    private Double nombreTimbre;
 
     private Double montantActe;
     private Double manqueeGain;
     private String designationMarche;
     private String designation;
 
-    private String folioSommierAss;
-    private String caseSommierAss;
+    private Integer folioSommierAss;
+    private Integer caseSommierAss;
     private String volumeSommierAss;
-    private String numeroOrdreSommierAss;
+    private Integer numeroOrdreSommierAss;
+
+    private LocalDate dateEnregistrementSommier;
 
 
 //    private String depotSousMinite;
@@ -83,19 +91,6 @@ public class Acte extends EntityBaseBean implements Serializable {
     private String statutCourant;
 
     private LocalDate dateStatut;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Agent agentLiquidateur;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Agent agentCaisse;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Agent agentValidation;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Agent agentSommier;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Agent agentTransfert;
-
-
     private String beneficiaireMarche;
     private Double redevance;
 
@@ -104,9 +99,10 @@ public class Acte extends EntityBaseBean implements Serializable {
 
     private String numeroTransfert;
     private String nomParties;
-    private String nomContribuableSansIfu;
+    private String nomPrestataireSansIfu;
     private String nomBeneficiaireSansIfu;
     private String souceFinancementMarche;
+    private Boolean sourceInterne;
 
     private Double montantDu; //net à payer - montant paye
 
@@ -115,28 +111,131 @@ public class Acte extends EntityBaseBean implements Serializable {
 
     private Boolean contratRenouvelable;
 
-    @ManyToOne
+
+
+    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotAudited
+    private BordereauActe bordereauActe;
+    
+
+    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotAudited
+    private BordereauActe bordereauActeContrib;
+    
+    
+    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotAudited
+    private Agent agentDepot;
+
+    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotAudited
+    private Agent agentLiquidateur;
+    
+    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotAudited
+    private Agent agentCaisse;
+    
+    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotAudited
+    private Agent agentValidation;
+    
+    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotAudited
+    private Agent agentSommier;
+    
+    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotAudited
+    private Agent agentTransfert;
+
+    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotAudited
+    private Agent agentValidateurFinal;
+
+
+    @ManyToOne//(fetch = FetchType.LAZY)
+    @NotAudited
+    private Agent agentRejet;
+    
+    
+
+    public Agent getAgentRejet() {
+		return agentRejet;
+	}
+
+	public void setAgentRejet(Agent agentRejet) {
+		this.agentRejet = agentRejet;
+	}
+
+	public Agent getAgentValidateurFinal() {
+		return agentValidateurFinal;
+	}
+
+	public void setAgentValidateurFinal(Agent agentValidateurFinal) {
+		this.agentValidateurFinal = agentValidateurFinal;
+	}
+
+	public BordereauActe getBordereauActeContrib() {
+		return bordereauActeContrib;
+	}
+
+	public void setBordereauActeContrib(BordereauActe bordereauActeContrib) {
+		this.bordereauActeContrib = bordereauActeContrib;
+	}
+
+	@ManyToOne
     private Commune communeActe;
 
     @ManyToOne
+    private Commune communeSituationObjet;
+
+    @ManyToOne
+    @NotAudited
     private NatureActe natureActe;
 
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Contribuable contribuableBeneficiaire;
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Contribuable contribuablePrestataire;
+    @ManyToOne
+    @NotAudited
+    private ContribuableBis contribuablePrestataire;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+
+    @ManyToOne
+    @NotAudited
+    private ContribuableBis contribuableBeneficiaire                                                                                                                                                                                                                                                                                                         ;
+
+
+    @ManyToOne
+    @NotAudited
     private PenaliteAmende penaliteAmende;
 
-    @OneToMany(mappedBy = "acte")
+    @OneToMany(mappedBy = "acteQuittance")
+    @JsonIgnore
     private List<Quittance> quittances = new  ArrayList<>();
+
+    public BordereauActe getBordereauActe() {
+        return bordereauActe;
+    }
+
+    public void setBordereauActe(BordereauActe bordereauActe) {
+        this.bordereauActe = bordereauActe;
+    }
+
+    public Agent getAgentLiquidateur() {
+        return agentLiquidateur;
+    }
+
+    public void setAgentLiquidateur(Agent agentLiquidateur) {
+        this.agentLiquidateur = agentLiquidateur;
+    }
 
     public Acte() {
     }
 
-    public Acte(String numero, LocalDate dateActe, LocalDate dateEnregistrement, String reference, Double droitSimple, Double penalite, Double amende, String valeurTimbre, Integer nombreTimbre, Double montantActe, String designationMarche, Double montantPaye, Integer nombreEnfantSuccession, String statutCourant, LocalDate dateStatut, Agent agentLiquidateur, Agent agentCaisse, Agent agentValidation, Agent agentSommier, Agent agentTransfert, String beneficiaireMarche, Double redevance, LocalDate dateDebutBail, LocalDate dateFinBail, String numeroTransfert, String nomParties, String nomContribuableSansIfu, String nomBeneficiaireSansIfu, String souceFinancementMarche, Boolean contratRenouvelable, Commune communeActe, NatureActe natureActe, Contribuable contribuableBeneficiaire, Contribuable contribuablePrestataire, PenaliteAmende penaliteAmende, List<Quittance> quittances) {
+    public Acte(String numero, LocalDate dateActe, LocalDate dateEnregistrement,
+                String reference, Double droitSimple, Double penalite, Double amende,
+                Double valeurTimbre, Double nombreTimbre, Double montantActe,
+                Double manqueeGain, String designationMarche, String designation,
+                Integer folioSommierAss, Integer caseSommierAss, String volumeSommierAss,
+                Integer numeroOrdreSommierAss, Integer nombreEnfantSuccession, String statutCourant, LocalDate dateStatut, String beneficiaireMarche, Double redevance, LocalDate dateDebutBail, LocalDate dateFinBail, String numeroTransfert, String nomParties, String nomPrestataireSansIfu, String nomBeneficiaireSansIfu, String souceFinancementMarche, Boolean sourceInterne, Double montantDu, Double montantPaye, Boolean contratRenouvelable, BordereauActe bordereauActe, Agent agentLiquidateur, Agent agentCaisse, Agent agentValidation, Agent agentSommier, Agent agentTransfert, Commune communeActe, Commune communeSituationObjet, NatureActe natureActe, ContribuableBis contribuablePrestataire, ContribuableBis contribuableBeneficiaire, PenaliteAmende penaliteAmende, List<Quittance> quittances) {
         this.numero = numero;
         this.dateActe = dateActe;
         this.dateEnregistrement = dateEnregistrement;
@@ -147,30 +246,40 @@ public class Acte extends EntityBaseBean implements Serializable {
         this.valeurTimbre = valeurTimbre;
         this.nombreTimbre = nombreTimbre;
         this.montantActe = montantActe;
+        this.manqueeGain = manqueeGain;
         this.designationMarche = designationMarche;
-        this.montantPaye = montantPaye;
+        this.designation = designation;
+        this.folioSommierAss = folioSommierAss;
+        this.caseSommierAss = caseSommierAss;
+        this.volumeSommierAss = volumeSommierAss;
+        this.numeroOrdreSommierAss = numeroOrdreSommierAss;
         this.nombreEnfantSuccession = nombreEnfantSuccession;
         this.statutCourant = statutCourant;
         this.dateStatut = dateStatut;
-        this.agentLiquidateur = agentLiquidateur;
-        this.agentCaisse = agentCaisse;
-        this.agentValidation = agentValidation;
-        this.agentSommier = agentSommier;
-        this.agentTransfert = agentTransfert;
         this.beneficiaireMarche = beneficiaireMarche;
         this.redevance = redevance;
         this.dateDebutBail = dateDebutBail;
         this.dateFinBail = dateFinBail;
         this.numeroTransfert = numeroTransfert;
         this.nomParties = nomParties;
-        this.nomContribuableSansIfu = nomContribuableSansIfu;
+        this.nomPrestataireSansIfu = nomPrestataireSansIfu;
         this.nomBeneficiaireSansIfu = nomBeneficiaireSansIfu;
         this.souceFinancementMarche = souceFinancementMarche;
+        this.sourceInterne = sourceInterne;
+        this.montantDu = montantDu;
+        this.montantPaye = montantPaye;
         this.contratRenouvelable = contratRenouvelable;
+        this.bordereauActe = bordereauActe;
+        this.agentLiquidateur = agentLiquidateur;
+        this.agentCaisse = agentCaisse;
+        this.agentValidation = agentValidation;
+        this.agentSommier = agentSommier;
+        this.agentTransfert = agentTransfert;
         this.communeActe = communeActe;
+        this.communeSituationObjet = communeSituationObjet;
         this.natureActe = natureActe;
-        this.contribuableBeneficiaire = contribuableBeneficiaire;
         this.contribuablePrestataire = contribuablePrestataire;
+        this.contribuableBeneficiaire = contribuableBeneficiaire;
         this.penaliteAmende = penaliteAmende;
         this.quittances = quittances;
     }
@@ -231,19 +340,19 @@ public class Acte extends EntityBaseBean implements Serializable {
         this.amende = amende;
     }
 
-    public String getValeurTimbre() {
+    public Double getValeurTimbre() {
         return valeurTimbre;
     }
 
-    public void setValeurTimbre(String valeurTimbre) {
+    public void setValeurTimbre(Double valeurTimbre) {
         this.valeurTimbre = valeurTimbre;
     }
 
-    public Integer getNombreTimbre() {
+    public Double getNombreTimbre() {
         return nombreTimbre;
     }
 
-    public void setNombreTimbre(Integer nombreTimbre) {
+    public void setNombreTimbre(Double nombreTimbre) {
         this.nombreTimbre = nombreTimbre;
     }
 
@@ -295,13 +404,13 @@ public class Acte extends EntityBaseBean implements Serializable {
         this.dateStatut = dateStatut;
     }
 
-    public Agent getAgentLiquidateur() {
-        return agentLiquidateur;
-    }
-
-    public void setAgentLiquidateur(Agent agentLiquidateur) {
-        this.agentLiquidateur = agentLiquidateur;
-    }
+//    public Agent getAgentLiquidateur() {
+//        return agentLiquidateur;
+//    }
+//
+//    public void setAgentLiquidateur(Agent agentLiquidateur) {
+//        this.agentLiquidateur = agentLiquidateur;
+//    }
 
     public Agent getAgentCaisse() {
         return agentCaisse;
@@ -384,11 +493,11 @@ public class Acte extends EntityBaseBean implements Serializable {
     }
 
     public String getNomContribuableSansIfu() {
-        return nomContribuableSansIfu;
+        return nomPrestataireSansIfu;
     }
 
-    public void setNomContribuableSansIfu(String nomContribuableSansIfu) {
-        this.nomContribuableSansIfu = nomContribuableSansIfu;
+    public void setNomContribuableSansIfu(String nomPrestataireSansIfu) {
+        this.nomPrestataireSansIfu = nomPrestataireSansIfu;
     }
 
     public String getNomBeneficiaireSansIfu() {
@@ -431,20 +540,21 @@ public class Acte extends EntityBaseBean implements Serializable {
         this.natureActe = natureActe;
     }
 
-    public Contribuable getContribuableBeneficiaire() {
-        return contribuableBeneficiaire;
-    }
 
-    public void setContribuableBeneficiaire(Contribuable contribuableBeneficiaire) {
-        this.contribuableBeneficiaire = contribuableBeneficiaire;
-    }
-
-    public Contribuable getContribuablePrestataire() {
+    public ContribuableBis getContribuablePrestataire() {
         return contribuablePrestataire;
     }
 
-    public void setContribuablePrestataire(Contribuable contribuablePrestataire) {
+    public void setContribuablePrestataire(ContribuableBis contribuablePrestataire) {
         this.contribuablePrestataire = contribuablePrestataire;
+    }
+
+    public ContribuableBis getContribuableBeneficiaire() {
+        return contribuableBeneficiaire;
+    }
+
+    public void setContribuableBeneficiaire(ContribuableBis contribuableBeneficiaire) {
+        this.contribuableBeneficiaire = contribuableBeneficiaire;
     }
 
     public PenaliteAmende getPenaliteAmende() {
@@ -467,24 +577,24 @@ public class Acte extends EntityBaseBean implements Serializable {
         this.montantDu = montantDu;
     }
 
-    @JsonIgnore
+//    @JsonIgnore
     public void setQuittances(List<Quittance> quittances) {
         this.quittances = quittances;
     }
 
-    public String getFolioSommierAss() {
+    public Integer getFolioSommierAss() {
         return folioSommierAss;
     }
 
-    public void setFolioSommierAss(String folioSommierAss) {
+    public void setFolioSommierAss(Integer folioSommierAss) {
         this.folioSommierAss = folioSommierAss;
     }
 
-    public String getCaseSommierAss() {
+    public Integer getCaseSommierAss() {
         return caseSommierAss;
     }
 
-    public void setCaseSommierAss(String caseSommierAss) {
+    public void setCaseSommierAss(Integer caseSommierAss) {
         this.caseSommierAss = caseSommierAss;
     }
 
@@ -496,11 +606,11 @@ public class Acte extends EntityBaseBean implements Serializable {
         this.volumeSommierAss = volumeSommierAss;
     }
 
-    public String getNumeroOrdreSommierAss() {
+    public Integer getNumeroOrdreSommierAss() {
         return numeroOrdreSommierAss;
     }
 
-    public void setNumeroOrdreSommierAss(String numeroOrdreSommierAss) {
+    public void setNumeroOrdreSommierAss(Integer numeroOrdreSommierAss) {
         this.numeroOrdreSommierAss = numeroOrdreSommierAss;
     }
 
@@ -519,4 +629,150 @@ public class Acte extends EntityBaseBean implements Serializable {
     public void setDesignation(String designation) {
         this.designation = designation;
     }
+
+    public Commune getCommuneSituationObjet() {
+        return communeSituationObjet;
+    }
+
+    public void setCommuneSituationObjet(Commune communeSituationObjet) {
+        this.communeSituationObjet = communeSituationObjet;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Acte{" +
+                "numero='" + numero + '\'' +
+                ", dateActe=" + dateActe +
+                ", dateEnregistrement=" + dateEnregistrement +
+                ", reference='" + reference + '\'' +
+                ", droitSimple=" + droitSimple +
+                ", penalite=" + penalite +
+                ", amende=" + amende +
+                ", valeurTimbre=" + valeurTimbre +
+                ", nombreTimbre=" + nombreTimbre +
+                ", montantActe=" + montantActe +
+                ", manqueeGain=" + manqueeGain +
+                ", designationMarche='" + designationMarche + '\'' +
+                ", designation='" + designation + '\'' +
+                ", folioSommierAss='" + folioSommierAss + '\'' +
+                ", caseSommierAss='" + caseSommierAss + '\'' +
+                ", volumeSommierAss='" + volumeSommierAss + '\'' +
+                ", numeroOrdreSommierAss='" + numeroOrdreSommierAss + '\'' +
+                ", nombreEnfantSuccession=" + nombreEnfantSuccession +
+                ", statutCourant='" + statutCourant + '\'' +
+                ", dateStatut=" + dateStatut +
+                ", beneficiaireMarche='" + beneficiaireMarche + '\'' +
+                ", redevance=" + redevance +
+                ", dateDebutBail=" + dateDebutBail +
+                ", dateFinBail=" + dateFinBail +
+                ", numeroTransfert='" + numeroTransfert + '\'' +
+                ", nomParties='" + nomParties + '\'' +
+                ", nomPrestataireSansIfu='" + nomPrestataireSansIfu + '\'' +
+                ", nomBeneficiaireSansIfu='" + nomBeneficiaireSansIfu + '\'' +
+                ", souceFinancementMarche='" + souceFinancementMarche + '\'' +
+                ", sourceInterne=" + sourceInterne +
+                ", montantDu=" + montantDu +
+                ", montantPaye=" + montantPaye +
+                ", contratRenouvelable=" + contratRenouvelable +
+                ", bordereauActe=" + bordereauActe +
+                ", agentLiquidateur=" + agentLiquidateur +
+                ", agentCaisse=" + agentCaisse +
+                ", agentValidation=" + agentValidation +
+                ", agentSommier=" + agentSommier +
+                ", agentTransfert=" + agentTransfert +
+                ", communeActe=" + communeActe +
+                ", communeSituationObjet=" + communeSituationObjet +
+                ", natureActe=" + natureActe +
+                ", contribuablePrestataire=" + contribuablePrestataire +
+                ", contribuableBeneficiaire=" + contribuableBeneficiaire +
+                ", penaliteAmende=" + penaliteAmende +
+                ", quittances=" + quittances +
+                "} " + super.toString();
+    }
+
+    public String getNomPrestataireSansIfu() {
+        return nomPrestataireSansIfu;
+    }
+
+    public void setNomPrestataireSansIfu(String nomPrestataireSansIfu) {
+        this.nomPrestataireSansIfu = nomPrestataireSansIfu;
+    }
+
+    public Boolean getSourceInterne() {
+        return sourceInterne;
+    }
+
+    public void setSourceInterne(Boolean sourceInterne) {
+        this.sourceInterne = sourceInterne;
+    }
+
+    public LocalDate getDateEnregistrementSommier() {
+        return dateEnregistrementSommier;
+    }
+
+    public void setDateEnregistrementSommier(LocalDate dateEnregistrementSommier) {
+        this.dateEnregistrementSommier = dateEnregistrementSommier;
+    }
+
+	public LocalDate getDateAcquisitionActuelle() {
+		return dateAcquisitionActuelle;
+	}
+
+	public void setDateAcquisitionActuelle(LocalDate dateAcquisitionActuelle) {
+		this.dateAcquisitionActuelle = dateAcquisitionActuelle;
+	}
+
+	public LocalDate getAncienneDateAcquisition() {
+		return ancienneDateAcquisition;
+	}
+
+	public void setAncienneDateAcquisition(LocalDate ancienneDateAcquisition) {
+		this.ancienneDateAcquisition = ancienneDateAcquisition;
+	}
+
+	public LocalDate getDateDepot() {
+		return dateDepot;
+	}
+
+	public void setDateDepot(LocalDate dateDepot) {
+		this.dateDepot = dateDepot;
+	}
+
+	public Agent getAgentDepot() {
+		return agentDepot;
+	}
+
+	public void setAgentDepot(Agent agentDepot) {
+		this.agentDepot = agentDepot;
+	}
+
+	public Double getMontantAcquisitionActuelle() {
+		return montantAcquisitionActuelle;
+	}
+
+	public void setMontantAcquisitionActuelle(Double montantAcquisitionActuelle) {
+		this.montantAcquisitionActuelle = montantAcquisitionActuelle;
+	}
+
+	public Double getAncienMontantAcquisition() {
+		return ancienMontantAcquisition;
+	}
+
+	public void setAncienMontantAcquisition(Double ancienMontantAcquisition) {
+		this.ancienMontantAcquisition = ancienMontantAcquisition;
+	}
+
+	public Double getPlusValueImmobiliere() {
+		return plusValueImmobiliere;
+	}
+
+	public void setPlusValueImmobiliere(Double plusValueImmobiliere) {
+		this.plusValueImmobiliere = plusValueImmobiliere;
+	}
+
+
+
+    
+    
 }

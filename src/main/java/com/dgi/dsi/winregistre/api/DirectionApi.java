@@ -3,7 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
-import com.dgi.dsi.winregistre.entites.Departement;
+import com.dgi.dsi.winregistre.entites.*;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -19,9 +19,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.dgi.dsi.winregistre.dao.BanqueDao;
 import com.dgi.dsi.winregistre.dao.DirectionDao;
 import com.dgi.dsi.winregistre.dao.ExerciceDao;
-import com.dgi.dsi.winregistre.entites.Banque;
-import com.dgi.dsi.winregistre.entites.Direction;
-import com.dgi.dsi.winregistre.entites.Exercice;
 
 import javax.validation.Valid;
 
@@ -46,7 +43,7 @@ public class DirectionApi {
 	@PostMapping("/ajoutDirection")
 	public Direction ajoutBanque(@RequestBody Direction userForm) {
 
-		Direction userSearch = exerciceDao.findOne(userForm.getId());
+		Direction userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -68,7 +65,7 @@ public class DirectionApi {
 	public boolean deleteBanque(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		Direction exercice = exerciceDao.findOne(id);
+		Direction exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -84,7 +81,7 @@ public class DirectionApi {
 	@PutMapping(value = "/mergePDirection/{id}")
 	public Direction updateBanque(@PathVariable Long id) {
 
-		Direction exercice = exerciceDao.findOne(id);
+		Direction exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -95,7 +92,7 @@ public class DirectionApi {
 	@PatchMapping(value = "/mergeDirection")
 	public Direction updatePartielBanque(@Valid @RequestBody Direction direction) {
 
-		Direction directionRech = exerciceDao.findOne(direction.getId());
+		Direction directionRech = exerciceDao.findByIdIs(direction.getId());
 		if (directionRech != null) {
 			direction.setId(directionRech.getId());
 			return exerciceDao.save(direction);
@@ -106,4 +103,10 @@ public class DirectionApi {
 	}
 
 
+	@GetMapping(value = "/directionByCode/{code}")
+	public Direction directionByCode(@PathVariable String code) {
+
+		return exerciceDao.directionByCode(code);
+
+	}
 }

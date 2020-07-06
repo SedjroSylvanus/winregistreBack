@@ -11,6 +11,10 @@ import org.springframework.data.repository.query.Param;
 public interface UserApi extends JpaRepository<AppUser, Long>{
 	
 	public AppUser findByUsername(String username);
+
+	public AppUser findByIdIs(String id);
+	public AppUser findByIdIs(Long id);
+
 	
 	public AppUser findByEmail(String email);
 	public AppUser findByConfirmationToken(String confirmationToken);

@@ -3,6 +3,7 @@ package com.dgi.dsi.winregistre.entites;
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -14,7 +15,7 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name="jourferie")
+@Table(name="jourferie", schema = "winregist")
 public class JourFerie extends EntityBaseBean implements Serializable{
 	
 
@@ -25,8 +26,8 @@ public class JourFerie extends EntityBaseBean implements Serializable{
 	
 	private String designation;
 	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date dateJourFerie ;
+//	@Temporal(TemporalType.TIMESTAMP)
+	private LocalDate dateJourFerie ;
 	
 
 	
@@ -56,11 +57,11 @@ public class JourFerie extends EntityBaseBean implements Serializable{
 		super();
 	}
 
-	public Date getDateJourFerie() {
+	public LocalDate getDateJourFerie() {
 		return dateJourFerie;
 	}
 
-	public void setDateJourFerie(Date dateJourFerie) {
+	public void setDateJourFerie(LocalDate dateJourFerie) {
 		this.dateJourFerie = dateJourFerie;
 	}
 
@@ -70,7 +71,7 @@ public class JourFerie extends EntityBaseBean implements Serializable{
 				+ "]";
 	}
 
-	public JourFerie(String code, String designation, Date dateJourFerie, String encodeur) {
+	public JourFerie(String code, String designation, LocalDate dateJourFerie, String encodeur) {
 		super();
 		this.code = code;
 		this.designation = designation;

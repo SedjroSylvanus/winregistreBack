@@ -44,7 +44,7 @@ public class MotifRejetApi {
 	@PostMapping("/ajoutMotifRejet")
 	public MotifRejet ajoutMotifRejet(@RequestBody MotifRejet userForm) {
 
-		MotifRejet userSearch = exerciceDao.findOne(userForm.getId());
+		MotifRejet userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -66,7 +66,7 @@ public class MotifRejetApi {
 	public boolean deleteMotifRejet(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		MotifRejet exercice = exerciceDao.findOne(id);
+		MotifRejet exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -82,7 +82,7 @@ public class MotifRejetApi {
 	@PutMapping(value = "/mergePMotifRejet/{id}")
 	public MotifRejet updateMotifRejet(@PathVariable Long id) {
 
-		MotifRejet exercice = exerciceDao.findOne(id);
+		MotifRejet exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -93,7 +93,7 @@ public class MotifRejetApi {
 	@PatchMapping(value = "/mergeMotifRejet")
 	public MotifRejet updatePartielMotifRejet(@Valid @RequestBody MotifRejet motifRejet) {
 
-		MotifRejet motifRejetRech = exerciceDao.findOne(motifRejet.getId());
+		MotifRejet motifRejetRech = exerciceDao.findByIdIs(motifRejet.getId());
 		if (motifRejetRech != null) {
 			motifRejet.setId(motifRejetRech.getId());
 			return exerciceDao.save(motifRejet);

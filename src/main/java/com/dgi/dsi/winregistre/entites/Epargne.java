@@ -7,7 +7,7 @@ import javax.persistence.Table;
 import java.io.Serializable;
 
 @Entity
-@Table(name="Epargne")
+@Table(name="Epargne", schema = "winregist")
 public class Epargne extends Compte implements Serializable  {
 
 

@@ -12,7 +12,9 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "categorieacte")
+@Table(name = "categorieacte", schema = "winregist")
+//@Table(name = "categorieacte")
+
 public class CategorieActe extends EntityBaseBean implements Serializable {
 
 
@@ -26,18 +28,18 @@ public class CategorieActe extends EntityBaseBean implements Serializable {
 	private List<NatureActe> typeActes= new ArrayList<>();
 	
 	
-	@OneToMany(mappedBy="categorieActe")
-	private List<BordereauActe> borderauActes= new ArrayList<>();
+//	@OneToMany(mappedBy="categorieActe")
+//	private List<BordereauActe> borderauActes= new ArrayList<>();
+//
 	
-	
-	public List<BordereauActe> getBorderauActes() {
-		return borderauActes;
-	}
-
-	@JsonIgnore
-	public void setBorderauActes(List<BordereauActe> borderauActes) {
-		this.borderauActes = borderauActes;
-	}
+//	public List<BordereauActe> getBorderauActes() {
+//		return borderauActes;
+//	}
+//
+//	@JsonIgnore
+//	public void setBorderauActes(List<BordereauActe> borderauActes) {
+//		this.borderauActes = borderauActes;
+//	}
 
 	public String getCode() {
 		return code;

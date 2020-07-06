@@ -40,7 +40,7 @@ public class CommuneApi {
 	@PostMapping("/ajoutCommune")
 	public Commune ajoutExercice(@RequestBody Commune userForm) {
 
-		Commune userSearch = communeDao.findOne(userForm.getId());
+		Commune userSearch = communeDao.findByIdIs(userForm.getId());
 
 		System.out.println(userForm);
 		System.out.println(userSearch);
@@ -72,7 +72,7 @@ public class CommuneApi {
 	public boolean deleteCommune(@PathVariable Long id) {
 		// contactRepository.delete(id);
 
-		Commune exercice = communeDao.findOne(id);
+		Commune exercice = communeDao.findByIdIs(id);
 
 		if (exercice != null) {
 			communeDao.delete(exercice);
@@ -98,7 +98,7 @@ public class CommuneApi {
 	@PatchMapping(value = "/mergeCommune")
 	public Commune updatePartielCommune(@Valid @RequestBody Commune commune) {
 
-		Commune communeRech = communeDao.findOne(commune.getId());
+		Commune communeRech = communeDao.findByIdIs(commune.getId());
 		if (communeRech != null) {
 			commune.setId(communeRech.getId());
 			return communeDao.save(commune);

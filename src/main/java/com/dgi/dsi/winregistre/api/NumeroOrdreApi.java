@@ -1,66 +1,61 @@
 package com.dgi.dsi.winregistre.api;
 
-import java.util.List;
-
-
-
+import com.dgi.dsi.winregistre.dao.NumeroOrdreDao;
+import com.dgi.dsi.winregistre.entites.Acte;
+import com.dgi.dsi.winregistre.entites.NumeroOrdre;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
-
-import com.dgi.dsi.winregistre.dao.NatureActeDao;
-import com.dgi.dsi.winregistre.entites.NatureActe;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @RestController
 @CrossOrigin("*")
-public class NatureActeApi {
+public class NumeroOrdreApi {
 
 
 //	@Autowired
 //	private ExerciceDao exerciceDao;
 	
 	@Autowired
-	private NatureActeDao exerciceDao;
+	private NumeroOrdreDao exerciceDao;
 
 
-	@GetMapping(value = "/listNatureActes")
-	public List<NatureActe> getTypeActes() {
+	@GetMapping(value = "/listNumeroOrdres")
+	public List<NumeroOrdre> getTypeActes() {
 		return exerciceDao.findAll();
 	}
 
-	@GetMapping(value = "/getNatureActeByDesignation/{designation}")
-	public NatureActe getNatureActeByDesignation(@PathVariable String designation) {
-		// contactRepository.delete(id);
+	@GetMapping(value = "/getNumeroOrdreByCodeService/{codeService}")
+	public Integer getNumeroOrdreByCodeService(@PathVariable String codeService) {
 
-		return  exerciceDao.findByDesignationEquals(designation);
-
-
+		return exerciceDao.numeroOrdreService(codeService.toUpperCase());
+//		Map<String, Integer> map = new  HashMap<>();
+//		map.put("numeroOrdre", exerciceDao.numeroOrdreService(codeService.toUpperCase()));
+//		return ResponseEntity.ok().body(map);
 	}
 
-	@GetMapping(value = "/getNatureActeByCode/{code}")
-	public NatureActe getNatureActeByCode(@PathVariable String code) {
-		// contactRepository.delete(id);
+//	@GetMapping(value = "/getNumeroOrdreByCode/{code}")
+//	public NumeroOrdre getNumeroOrdreByCode(@PathVariable String code) {
+//		// contactRepository.delete(id);
+//
+//		return  exerciceDao.findByCodeEquals(code);
+//
+//
+//	}
 
-		return  exerciceDao.findByCodeEquals(code);
 
 
-	}
+	@PostMapping("/ajoutNumeroOrdre")
+	public NumeroOrdre ajoutTypeActe(@RequestBody NumeroOrdre userForm) {
 
-
-
-	@PostMapping("/ajoutNatureActe")
-	public NatureActe ajoutTypeActe(@RequestBody NatureActe userForm) {
-
-		NatureActe userSearch = exerciceDao.findByIdIs(userForm.getId());
+		NumeroOrdre userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -73,11 +68,11 @@ public class NatureActeApi {
 	}
 	
 	
-	@DeleteMapping(value = "/deleteNatureActe/{id}")
+	@DeleteMapping(value = "/deleteNumeroOrdre/{id}")
 	public boolean deleteTypeActe(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		NatureActe exercice = exerciceDao.findByIdIs(id);
+		NumeroOrdre exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -90,10 +85,10 @@ public class NatureActeApi {
 
 	}
 
-	@PutMapping(value = "/mergePNatureActe/{id}")
-	public NatureActe updateTypeActe(@PathVariable Long id) {
+	@PutMapping(value = "/mergePNumeroOrdre/{id}")
+	public NumeroOrdre updateTypeActe(@PathVariable Long id) {
 
-		NatureActe exercice = exerciceDao.findByIdIs(id);
+		NumeroOrdre exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -101,15 +96,36 @@ public class NatureActeApi {
 		return exercice;
 	}
 	
-	@PatchMapping(value = "/mergeNatureActe/{id}")
-	public NatureActe updatePartielTypeActe(@PathVariable Long id) {
+	@PatchMapping(value = "/mergeNumeroOrdre/{id}")
+	public NumeroOrdre updatePartielTypeActe(@PathVariable Long id) {
 
-		NatureActe exercice = exerciceDao.findByIdIs(id);
+		NumeroOrdre exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
 		}
 		return exercice;
+	}
+	@PatchMapping(value = "/updateNumeroOrdre/{numeroOrdre}/{codeService}")
+	public NumeroOrdre updateNumeroOrdre(@PathVariable Integer numeroOrdre,@PathVariable String codeService) {
+	NumeroOrdre numeroORdre = exerciceDao.numeroOrdreServiceObjet(codeService);
+		if (numeroORdre != null) {
+
+			numeroORdre.setNumeroOrdre(numeroOrdre);
+			return exerciceDao.saveAndFlush(numeroORdre);
+		}
+		return numeroORdre;
+	}
+
+	@PatchMapping(value = "/resetNumeroOrdre/{codeService}")
+	public NumeroOrdre resetNumeroOrdre(@PathVariable String codeService) {
+	NumeroOrdre numeroORdre = exerciceDao.numeroOrdreServiceObjet(codeService);
+		if (numeroORdre != null) {
+
+			numeroORdre.setNumeroOrdre(0);
+			return exerciceDao.saveAndFlush(numeroORdre);
+		}
+		return numeroORdre;
 	}
 
 }

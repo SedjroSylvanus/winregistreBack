@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.nio.MappedByteBuffer;
 
 @Entity
-@Table(name = "files")
+@Table(name = "files", schema = "winregist")
 public class DBFile {
     @Id
     @GeneratedValue(generator = "uuid")

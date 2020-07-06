@@ -3,6 +3,7 @@ package com.dgi.dsi.winregistre.api;
 import java.util.List;
 
 
+import com.dgi.dsi.winregistre.entites.Banque;
 import com.dgi.dsi.winregistre.entites.JourFerie;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -31,24 +32,31 @@ public class ModePaiementApi {
 
 
 //	@Autowired
-//	private ExerciceDao exerciceDao;
+//	private ExerciceDao modePaiementDao;
 	
 	@Autowired
-	private ModePaiementDao exerciceDao;
+	private ModePaiementDao modePaiementDao;
 
 
 	@GetMapping(value = "/listModePaiements")
 	public List<ModePaiement> getModePaiements() {
-		return exerciceDao.findAll();
+		return modePaiementDao.findAll();
+	}
+
+
+	@GetMapping(value = "/oneModePaiementByDesignation/{designation}")
+	public ModePaiement getModePaiementByDesignation(@PathVariable String designation) {
+
+		return modePaiementDao.findByDesignationEquals(designation);
 	}
 
 	@PostMapping("/ajoutModePaiement")
 	public ModePaiement ajoutModePaiement(@RequestBody ModePaiement userForm) {
 
-		ModePaiement userSearch = exerciceDao.findOne(userForm.getId());
+		ModePaiement userSearch = modePaiementDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
-			exerciceDao.saveAndFlush(userForm);
+			modePaiementDao.saveAndFlush(userForm);
 		} else {
 			throw new RuntimeException(userSearch + "Exercice inexistant");
 		}
@@ -60,7 +68,7 @@ public class ModePaiementApi {
 		@GetMapping(value = "/searchModePaiementByCode/{code}")
 	public ModePaiement updateModePaiementByCode(@PathVariable String code) {
 
-		return exerciceDao.findByCodeLike("%"+code+"%");
+		return modePaiementDao.findByCodeLike("%"+code+"%");
 
 	}
 
@@ -68,10 +76,10 @@ public class ModePaiementApi {
 	public boolean deleteModePaiement(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		ModePaiement exercice = exerciceDao.findOne(id);
+		ModePaiement exercice = modePaiementDao.findByIdIs(id);
 		
 		if (exercice != null) {
-			exerciceDao.delete(exercice);
+			modePaiementDao.delete(exercice);
 			return true;
 		}else {
 
@@ -84,10 +92,10 @@ public class ModePaiementApi {
 	@PutMapping(value = "/mergePModePaiement/{id}")
 	public ModePaiement updateModePaiement(@PathVariable Long id) {
 
-		ModePaiement exercice = exerciceDao.findOne(id);
+		ModePaiement exercice = modePaiementDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
-			return exerciceDao.save(exercice);
+			return modePaiementDao.save(exercice);
 		}
 		return exercice;
 	}
@@ -95,12 +103,12 @@ public class ModePaiementApi {
 	@PatchMapping(value = "/mergeModePaiement")
 	public ModePaiement updatePartielModePaiement(@Valid @RequestBody ModePaiement modePaiement) {
 
-		ModePaiement modePaiementRech = exerciceDao.findOne(modePaiement.getId());
+		ModePaiement modePaiementRech = modePaiementDao.findByIdIs(modePaiement.getId());
 		if (modePaiementRech != null) {
 			modePaiement.setId(modePaiementRech.getId());
-			return exerciceDao.save(modePaiement);
+			return modePaiementDao.save(modePaiement);
 		}else{
-			exerciceDao.save(modePaiement);
+			modePaiementDao.save(modePaiement);
 		}
 		return modePaiement;
 	}

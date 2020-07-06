@@ -12,6 +12,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @Service
 public class DBFileStorageService {
@@ -58,10 +59,10 @@ public class DBFileStorageService {
 
     public DBFile getFile(String fileId) {
         try {
-             dbFileRepository.findOne(fileId);
+             dbFileRepository.getOne(fileId);
         }catch (MyFileNotFoundException m){
             new MyFileNotFoundException("File not found with id " + fileId);
         }
-        return dbFileRepository.findOne(fileId);
+        return dbFileRepository.getOne(fileId);
     }
 }

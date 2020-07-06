@@ -1,8 +1,10 @@
 package com.dgi.dsi.winregistre.dao;
 
 import com.dgi.dsi.winregistre.entites.Banque;
+import com.dgi.dsi.winregistre.entites.Service;
 import com.dgi.dsi.winregistre.entites.Tarif;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.util.List;
@@ -11,6 +13,19 @@ import java.util.List;
 @EnableJpaRepositories("com.dgi.dsi.winregistre.dao")
 public interface TarifDao extends JpaRepository<Tarif, Long> {
 
+
+
+    public Tarif findByIdIs(String id);
+    public Tarif findByIdIs(Long id);
+
+    //exécuter une requête sql native
+    @Query(value = "SELECT * FROM tarif WHERE code = ?1", nativeQuery = true)
+    Tarif tarifByCode(String code);
+
+//exécuter une requête sql native
+//    @Query(value = "SELECT * FROM tarif WHERE designation = ?1", nativeQuery = true)
+//    Tarif tarifByDesignation(String designation);
+    Tarif findTarifByDesignation(String designation);
 
 
 //exemple avec paramètre

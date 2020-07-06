@@ -9,13 +9,16 @@ import java.util.List;
 /**
  * Created by rajeevkumarsingh on 19/08/17.
  */
-public class ObjetActeQuittance {
+public class ActeWithQuittance {
     private Acte acte;
     private List<Quittance> quittances = new ArrayList<>();
 
-    public ObjetActeQuittance(Acte acte, List<Quittance> quittances) {
+    public ActeWithQuittance(Acte acte, List<Quittance> quittances) {
         this.acte = acte;
         this.quittances = quittances;
+    }
+
+    public ActeWithQuittance() {
     }
 
     public Acte getActe() {

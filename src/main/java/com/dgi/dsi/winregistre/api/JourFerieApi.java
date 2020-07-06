@@ -45,7 +45,7 @@ public class JourFerieApi {
 	@PostMapping("/ajoutJourFerie")
 	public JourFerie ajoutJourFerie(@RequestBody JourFerie userForm) {
 
-		JourFerie userSearch = exerciceDao.findOne(userForm.getId());
+		JourFerie userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -68,7 +68,7 @@ public class JourFerieApi {
 	public boolean deleteJourFerie(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		JourFerie exercice = exerciceDao.findOne(id);
+		JourFerie exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -84,7 +84,7 @@ public class JourFerieApi {
 	@PutMapping(value = "/mergePJourFerie/{id}")
 	public JourFerie updateJourFerie(@PathVariable Long id) {
 
-		JourFerie exercice = exerciceDao.findOne(id);
+		JourFerie exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -95,7 +95,7 @@ public class JourFerieApi {
 	@PatchMapping(value = "/mergeJourFerie")
 	public JourFerie updatePartielJourFerie(@Valid @RequestBody JourFerie jourFerie) {
 
-		JourFerie jourFerieRech = exerciceDao.findOne(jourFerie.getId());
+		JourFerie jourFerieRech = exerciceDao.findByIdIs(jourFerie.getId());
 		if (jourFerieRech != null) {
 			jourFerie.setId(jourFerieRech.getId());
 			return exerciceDao.save(jourFerie);

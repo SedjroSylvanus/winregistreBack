@@ -8,7 +8,7 @@ import javax.persistence.Table;
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 
 @Entity
-@Table(name = "avoirpourcentage")
+@Table(name = "avoirpourcentage", schema = "winregist")
 public class AvoirPourcentage extends EntityBaseBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;

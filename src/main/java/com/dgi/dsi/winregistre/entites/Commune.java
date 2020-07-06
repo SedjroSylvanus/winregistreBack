@@ -2,6 +2,8 @@ package com.dgi.dsi.winregistre.entites;
 
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.envers.Audited;
+import org.hibernate.envers.NotAudited;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -12,7 +14,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 @Entity
-@Table(name="commune")
+@Audited
+@Table(name="commune", schema = "winregist")
+//@Table(name="commune")
+
 public class Commune extends EntityBaseBean implements Serializable{
 
 
@@ -20,25 +25,30 @@ public class Commune extends EntityBaseBean implements Serializable{
 
 	
 	private String code;
-	
 	private String designation;
 	private Boolean centreEnregistrement;
 
 
 	@ManyToOne
-	@NotNull(message="Le Département est obligatoire")
+//	@NotNull(message="Le Département est obligatoire")
 	private Departement departement;
 
 
 
+	@JsonIgnore
 	@OneToMany(mappedBy="communeActe")
 	List<Acte> actes = new ArrayList<>();
+	
+	@JsonIgnore
+	@OneToMany(mappedBy="communeSituationObjet")
+    @NotAudited
+    List<Acte> actesSituationObjet = new ArrayList<>();
 
 	public List<Acte> getActes() {
 		return actes;
 	}
 
-	@JsonIgnore
+	
 	public void setActes(List<Acte> actes) {
 		this.actes = actes;
 	}
@@ -73,6 +83,17 @@ public class Commune extends EntityBaseBean implements Serializable{
 //	public void setEncodeur(String encodeur) {
 //		this.encodeur = encodeur;
 //	}
+
+
+	public List<Acte> getActesSituationObjet() {
+		return actesSituationObjet;
+	}
+
+
+//	@JsonIgnore
+	public void setActesSituationObjet(List<Acte> actesSituationObjet) {
+		this.actesSituationObjet = actesSituationObjet;
+	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;

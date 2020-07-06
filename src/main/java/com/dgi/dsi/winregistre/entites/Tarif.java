@@ -11,7 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name="tarif")
+@Table(name="tarif", schema = "winregist")
+//@Table(name="tarif")
+
 public class Tarif extends EntityBaseBean implements Serializable  {
 
 
@@ -66,7 +68,7 @@ public class Tarif extends EntityBaseBean implements Serializable  {
 
 	@Override
 	public String toString() {
-		return "Banque [code=" + code + ", designation=" + designation + "]";
+		return "Tarif [code=" + code + ", designation=" + designation + "]";
 	}
 
 

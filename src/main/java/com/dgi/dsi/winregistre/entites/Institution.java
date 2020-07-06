@@ -12,7 +12,7 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "institution")
+@Table(name = "institution", schema = "winregist")
 public class Institution extends EntityBaseBean implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -23,18 +23,18 @@ public class Institution extends EntityBaseBean implements Serializable {
 
 	private String telephone;
 	
-	@OneToMany(mappedBy="institution")
-	private List<BordereauActe> borderauActes = new ArrayList<>();
+//	@OneToMany(mappedBy="institution")
+//	private List<BordereauActe> borderauActes = new ArrayList<>();
 
 
-	public List<BordereauActe> getBorderauActes() {
-		return borderauActes;
-	}
-
-	@JsonIgnore
-	public void setBorderauActes(List<BordereauActe> borderauActes) {
-		this.borderauActes = borderauActes;
-	}
+//	public List<BordereauActe> getBorderauActes() {
+//		return borderauActes;
+//	}
+//
+//	@JsonIgnore
+//	public void setBorderauActes(List<BordereauActe> borderauActes) {
+//		this.borderauActes = borderauActes;
+//	}
 
 	public String getCode() {
 		return code;

@@ -1,32 +1,32 @@
 package com.dgi.dsi.winregistre.entites;
 
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 @Entity
-@Table(name="modepaiement")
+@Table(name="modepaiement", schema = "winregist")
 public class ModePaiement  extends EntityBaseBean implements Serializable{
 	
 
 	private static final long serialVersionUID = 1L;	
 
 
-	private Long id;
-	
 	private String code;
 	
 	private String designation;
 	
+
+
+	@OneToMany(mappedBy = "modePaiement")
+	@JsonIgnore
+    private List<Quittance> quittaneModePaiement = new ArrayList<>();
 
 
 
@@ -69,10 +69,11 @@ public class ModePaiement  extends EntityBaseBean implements Serializable{
 
 	}
 
+	public List<Quittance> getQuittaneModePaiement() {
+		return quittaneModePaiement;
+	}
 
-	
-
-	
-	
-
+	public void setQuittaneModePaiement(List<Quittance> quittaneModePaiement) {
+		this.quittaneModePaiement = quittaneModePaiement;
+	}
 }

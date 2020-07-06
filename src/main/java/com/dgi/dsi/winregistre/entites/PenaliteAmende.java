@@ -20,7 +20,7 @@ import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-@Table(name = "penaliteamende")
+@Table(name = "penaliteamende", schema = "winregist")
 public class PenaliteAmende extends EntityBaseBean implements Serializable {
 
 

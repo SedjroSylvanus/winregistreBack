@@ -46,7 +46,7 @@ public class TrancheApi {
 	@PostMapping("/ajoutTranche")
 	public Tranche ajoutBanque(@RequestBody Tranche userForm) {
 
-		Tranche userSearch = exerciceDao.findOne(userForm.getId());
+		Tranche userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -63,7 +63,7 @@ public class TrancheApi {
 	public boolean deleteBanque(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		Tranche exercice = exerciceDao.findOne(id);
+		Tranche exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -79,7 +79,7 @@ public class TrancheApi {
 	@PutMapping(value = "/mergePTranche/{id}")
 	public Tranche updateBanque(@PathVariable Long id) {
 
-		Tranche exercice = exerciceDao.findOne(id);
+		Tranche exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -90,7 +90,7 @@ public class TrancheApi {
 	@PatchMapping(value = "/mergeTranche")
 	public Tranche updatePartielBanque(@Valid @RequestBody Tranche tranche) {
 
-		Tranche trancheRech = exerciceDao.findOne(tranche.getId());
+		Tranche trancheRech = exerciceDao.findByIdIs(tranche.getId());
 		if (trancheRech != null) {
 			tranche.setId(trancheRech.getId());
 			return exerciceDao.save(tranche);

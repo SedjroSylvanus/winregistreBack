@@ -12,6 +12,9 @@ import com.dgi.dsi.winregistre.entites.Statut;
 public interface StatutDao extends JpaRepository<Statut, Long>{
 
 
+
+    public Statut findByIdIs(String id);
+    public Statut findByIdIs(Long id);
     Statut findByCodeLike(String code);
 }
 	

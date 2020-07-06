@@ -1,9 +1,11 @@
 package com.dgi.dsi.winregistre.api;
 
+import java.util.ArrayList;
 import java.util.List;
 
 
 import com.dgi.dsi.winregistre.entites.DegreSuccession;
+import com.dgi.dsi.winregistre.payload.DepartementPayload;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.web.bind.annotation.*;
@@ -33,10 +35,18 @@ public class DepartementApi {
 		return departementDao.findAll();
 	}
 
+	@GetMapping(value = "/listDepartementsAudit")
+	public List getDepartementsAudit() {
+		List<Departement> listeDepartementAudit = new ArrayList<>();
+
+		departementDao.listDepAudit().forEach(s-> System.out.println(s.toString()));
+		return departementDao.listDepAudit();
+	}
+
 	@PostMapping("/ajoutDepartement")
 	public Departement ajoutDepartement(@RequestBody Departement userForm) {
 
-		Departement userSearch = departementDao.findOne(userForm.getId());
+		Departement userSearch = departementDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			departementDao.save(userForm);
@@ -60,11 +70,11 @@ public class DepartementApi {
 
 	}
 
-	@DeleteMapping(value = "/deleteDepartement/{id}")
-	public boolean deleteDepartement(@PathVariable Long id) {
+	@DeleteMapping(value = "/deleteDepartement")
+	public boolean deleteDepartement(@RequestBody Departement userForm) {
 		// contactRepository.delete(id);
 		
-		Departement exercice = departementDao.findOne(id);
+		Departement exercice = departementDao.findByIdIs(userForm.getId());
 		
 		if (exercice != null) {
 			departementDao.delete(exercice);
@@ -90,7 +100,7 @@ public class DepartementApi {
 	@PatchMapping(value = "/mergeDepartement")
 	public Departement updatePartielDepartement(@Valid @RequestBody Departement departement) {
 
-		Departement departementRech = departementDao.findOne(departement.getId());
+		Departement departementRech = departementDao.findByIdIs(departement.getId());
 		if (departementRech != null) {
 			departement.setId(departementRech.getId());
 			return departementDao.save(departement);

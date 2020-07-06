@@ -1,11 +1,15 @@
 package com.dgi.dsi.winregistre.api;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 import com.dgi.dsi.winregistre.entites.BordereauActe;
+import com.dgi.dsi.winregistre.entites.Quittance;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -30,40 +34,113 @@ public class BordereauCaisseApi {
 
 
 //	@Autowired
-//	private ExerciceDao exerciceDao;
+//	private ExerciceDao bordereaCaisseDao;
 	
 	@Autowired
-	private BordereauCaisseDao exerciceDao;
+	private BordereauCaisseDao bordereaCaisseDao;
 
 
-		@GetMapping(value = "/oneBordereauCaisseByINumero/{numero}")
-	public BordereauCaisse oneBordereauCaisseById(@PathVariable String numero) {
-		// contactRepository.delete(id);
+//		@GetMapping(value = "/oneBordereauCaisseByINumero/{numero}")
+//	public BordereauCaisse oneBordereauCaisseById(@PathVariable String numero) {
+//		// contactRepository.delete(id);
+//
+//			BordereauCaisse bordereauCaisse = bordereaCaisseDao.findByNumeroEquals(numero);
+//
+//
+//		return bordereauCaisse;
+//
+//	}
 
-			BordereauCaisse bordereauCaisse = exerciceDao.findByNumeroEquals(numero);
+
+//	@GetMapping(value = "/lastNumberBordereauActe/{numBordereauCaisse}/{codeNatureImpot}")
+////	@PreAuthorize("hasAuthority('ADMIN') or hasAuthority('CLIENT')")
+//	public ResponseEntity<?> getNumLastQuittancesBordereauCaisse(@PathVariable String numBordereauCaisse, @PathVariable String codeNatureImpot) {
+//
+//		System.out.println("----------------numBordereauCaisse-------------------"+ numBordereauCaisse);
+//
+//		BordereauCaisse bordereauCaisse = bordereauCaisseDao.findByNumeroEquals(numBordereauCaisse);
+//		Map<String, String> map = new HashMap();
+//
+//		if (bordereauCaisse != null){
+//			System.out.println("-----------bordereauCaisse.getId()----------"+ bordereauCaisse.getId());
+//			Long idBordereauCaisse = quittanceDao.maxIdByBordereauCaisse(bordereauCaisse.getId(), "%"+codeNatureImpot+"%");
+////        idBordereauActe = idBordereauActe==null ?1L: idBordereauActe;
+//			System.out.println("----------------idBordereauCaisse-------------------"+idBordereauCaisse);
+//
+//			if (idBordereauCaisse != null){
+//				Quittance quittance = quittanceDao.findOne(idBordereauCaisse);
+//
+//				System.out.println("----------------getNumeroQuittance-------------------"+quittance.getNumeroQuittance());
+//				String[] decoupe = quittance.getNumeroQuittance().split("_");
+//
+//				System.out.println(quittance.getNumeroQuittance());
+////				return decoupe[1];
+//				map.put("numeroQuittance",quittance.getNumeroQuittance());
+////				return quittance.getNumeroQuittance();
+//				return ResponseEntity.ok()
+//						.body(map);
+//
+//			}else{
+//				return ResponseEntity.notFound().build();
+//
+//			}
+//
+//		}else{
+//			return ResponseEntity.notFound().build();
+//
+//
+//		}
+//
+//
+//
+//	}
 
 
-		return bordereauCaisse;
 
-	}
+
+
+	@GetMapping(value = "/oneBordereauCaisseByNumero/{numero}")
+    public BordereauCaisse oneBordereauCaisseById(@PathVariable String numero) {
+        // contactRepository.delete(id);
+
+        if(numero.isEmpty() || numero == null){
+            return null;
+        }else{
+            BordereauCaisse bordereauCaisse = bordereaCaisseDao.findByNumeroEquals(numero);
+
+            if(bordereauCaisse==null){
+                return null;
+            }else{
+                return bordereauCaisse;
+            }
+        }
+
+
+    }
+
 
 	@GetMapping(value = "/listBordereauCaisses")
 	public List<BordereauCaisse> getBordereauCaisses() {
-		return exerciceDao.findAll();
+		return bordereaCaisseDao.findAll();
 	}
 
 	@PostMapping("/ajoutBordereauCaisse")
 	public BordereauCaisse ajoutBordereauCaisse(@RequestBody BordereauCaisse userForm) {
 
-		BordereauCaisse userSearch = exerciceDao.findOne(userForm.getId());
+        if( userForm == null){
+            return null;
+        }else{
+            BordereauCaisse userSearch = bordereaCaisseDao.findByIdIs(userForm.getId());
 
-		if (userSearch == null) {
-			exerciceDao.saveAndFlush(userForm);
-		} else {
-			throw new RuntimeException(userSearch + "Exercice inexistant");
-		}
+            if (userSearch == null) {
+                bordereaCaisseDao.saveAndFlush(userForm);
+            } else {
+                throw new RuntimeException(userSearch + "Exercice inexistant");
+            }
 
-		return userForm;
+            return userForm;
+        }
+
 
 	}
 	
@@ -72,10 +149,10 @@ public class BordereauCaisseApi {
 	public boolean deleteBordereauCaisse(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		BordereauCaisse exercice = exerciceDao.findOne(id);
+		BordereauCaisse bordereaCaisse = bordereaCaisseDao.findByIdIs(id);
 		
-		if (exercice != null) {
-			exerciceDao.delete(exercice);
+		if (bordereaCaisse != null) {
+			bordereaCaisseDao.delete(bordereaCaisse);
 			return true;
 		}else {
 
@@ -88,23 +165,23 @@ public class BordereauCaisseApi {
 	@PutMapping(value = "/mergePBordereauCaisse/{id}")
 	public BordereauCaisse updateBordereauCaisse(@PathVariable Long id) {
 
-		BordereauCaisse exercice = exerciceDao.findOne(id);
-		if (exercice != null) {
-			exercice.setId(id);
-			return exerciceDao.save(exercice);
+		BordereauCaisse bordereaCaisse = bordereaCaisseDao.findByIdIs(id);
+		if (bordereaCaisse != null) {
+			bordereaCaisse.setId(id);
+			return bordereaCaisseDao.save(bordereaCaisse);
 		}
-		return exercice;
+		return bordereaCaisse;
 	}
 	
-	@PatchMapping(value = "/mergeBordereauCaisse/{id}")
-	public BordereauCaisse updatePartielBanque(@Valid @RequestBody BordereauCaisse bordereauCaisse) {
+	@PatchMapping(value = "/mergeBordereauCaisse")
+	public BordereauCaisse updatePartielBanque( @RequestBody BordereauCaisse bordereauCaisse) {
 
-		BordereauCaisse bordereauCaisseRech = exerciceDao.findOne(bordereauCaisse.getId());
+		BordereauCaisse bordereauCaisseRech = bordereaCaisseDao.findByIdIs(bordereauCaisse.getId());
 		if (bordereauCaisseRech != null) {
 			bordereauCaisse.setId(bordereauCaisseRech.getId());
-			return exerciceDao.save(bordereauCaisse);
+			return bordereaCaisseDao.save(bordereauCaisse);
 		}else{
-			exerciceDao.save(bordereauCaisse);
+			bordereaCaisseDao.save(bordereauCaisse);
 		}
 		return bordereauCaisse;
 	}

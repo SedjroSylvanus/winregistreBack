@@ -16,7 +16,9 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Entity
-@Table(name = "agent")
+@Table(name = "agent", schema = "winregist")
+//@Table(name = "agent")
+
 //,
 
 //		uniqueConstraints = {
@@ -42,19 +44,18 @@ public class Agent extends Personne  implements Serializable {
 
 //	private Boolean caissier;
 	private String indiceAgent;
-//	`CAI_Code` VARCHAR(10)  NOT NULL ,
-//	private Boolean cServiceRecette;
-//	private Boolean cServiceAssiette;
+	private Boolean estDejaConnecte = Boolean.FALSE;
 
-//    @Column(nullable = false, updatable = false)
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @CreatedDate
-//    private Date createdAt;
-//
-//    @Column(nullable = false)
-//    @Temporal(TemporalType.TIMESTAMP)
-//    @LastModifiedDate
-//    private Date updatedAt ;
+
+
+
+	public Boolean getEstDejaConnecte() {
+		return estDejaConnecte;
+	}
+
+	public void setEstDejaConnecte(Boolean estDejaConnecte) {
+		this.estDejaConnecte = estDejaConnecte;
+	}
 
 
 
@@ -73,39 +74,12 @@ public class Agent extends Personne  implements Serializable {
 	}
 
 
-//	@ManyToMany(fetch = FetchType.LAZY)
-//	@JoinTable(name = "user_roles",
-//			joinColumns = @JoinColumn(name = "user_id"),
-//			inverseJoinColumns = @JoinColumn(name = "role_id"))
-//	private Set<Role> roles = new HashSet<>();
-//
-//	public Set<Role> getRoles() {
-//		return roles;
-//	}
-//
-//	public void setRoles(Set<Role> roles) {
-//		this.roles = roles;
-//	}
 
 	public Agent() {
 		super();
 	}
 
-//    public Date getCreatedAt() {
-//        return createdAt;
-//    }
-//
-//    public void setCreatedAt(Date createdAt) {
-//        this.createdAt = createdAt;
-//    }
-//
-//    public Date getUpdatedAt() {
-//        return updatedAt;
-//    }
-//
-//    public void setUpdatedAt(Date updatedAt) {
-//        this.updatedAt = updatedAt;
-//    }
+
 
 
 
@@ -123,17 +97,6 @@ public class Agent extends Personne  implements Serializable {
 
 
 
-
-//	public Boolean getCaissier() {
-//		return caissier;
-//	}
-//
-//	public void setCaissier(Boolean caissier) {
-//		this.caissier = caissier;
-//	}
-//
-//
-//
 	public String getIndiceAgent() {
 		return indiceAgent;
 	}
@@ -141,38 +104,58 @@ public class Agent extends Personne  implements Serializable {
 	public void setIndiceAgent(String indiceAgent) {
 		this.indiceAgent = indiceAgent;
 	}
-//
-//	public Boolean getcServiceRecette() {
-//		return cServiceRecette;
-//	}
-//
-//	public void setcServiceRecette(Boolean cServiceRecette) {
-//		this.cServiceRecette = cServiceRecette;
-//	}
-//
-//	public Boolean getcServiceAssiette() {
-//		return cServiceAssiette;
-//	}
-//
-//	public void setcServiceAssiette(Boolean cServiceAssiette) {
-//		this.cServiceAssiette = cServiceAssiette;
-//	}
 
-	//	@Override
-//	public String toString() {
-//		return "Agent{" +
-//				"matricule='" + matricule + '\'' +
-//				", caissier=" + caissier +
-//				", roles=" + roles +
-//				'}';
-//	}
 
+
+	@OneToMany(mappedBy="agent")
+	List<BordereauActe> bordereauActes = new ArrayList<>();
+
+
+
+
+	@OneToMany(mappedBy="agentLiquidateur")
+	List<Acte> actesLiquidateur = new ArrayList<>();
+
+	@OneToMany(mappedBy="caissier")
+	List<Quittance> quittanceCaissier = new ArrayList<>();
+//
+//	@OneToMany(mappedBy="agentLiquidateur")
+//	List<Acte> actesLiquidateur = new ArrayList<>();
+
+
+	public List<BordereauActe> getBordereauActes() {
+		return bordereauActes;
+	}
+
+	@JsonIgnore
+	public void setBordereauActes(List<BordereauActe> bordereauActes) {
+		this.bordereauActes = bordereauActes;
+	}
 
 	public Collection<AppRole> getRoles() {
 		return roles;
 	}
 
+
 	public void setRoles(Collection<AppRole> roles) {
 		this.roles = roles;
+	}
+
+	public List<Acte> getActesLiquidateur() {
+		return actesLiquidateur;
+	}
+
+	@JsonIgnore
+	public void setActesLiquidateur(List<Acte> actesLiquidateur) {
+		this.actesLiquidateur = actesLiquidateur;
+	}
+
+	public List<Quittance> getQuittanceCaissier() {
+		return quittanceCaissier;
+	}
+
+	@JsonIgnore
+	public void setQuittanceCaissier(List<Quittance> quittanceCaissier) {
+		this.quittanceCaissier = quittanceCaissier;
 	}
 }

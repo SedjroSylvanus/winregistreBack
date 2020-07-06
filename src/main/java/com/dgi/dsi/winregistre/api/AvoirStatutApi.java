@@ -42,7 +42,7 @@ public class AvoirStatutApi {
 	@PostMapping("/ajoutAvoirStatut")
 	public AvoirStatut ajoutAvoirStatut(@RequestBody AvoirStatut userForm) {
 
-		AvoirStatut userSearch = exerciceDao.findOne(userForm.getId());
+		AvoirStatut userSearch = exerciceDao.findByIdIs(userForm.getId());
 
 		if (userSearch == null) {
 			exerciceDao.saveAndFlush(userForm);
@@ -59,7 +59,7 @@ public class AvoirStatutApi {
 	public boolean deleteAvoirStatut(@PathVariable Long id) {
 		// contactRepository.delete(id);
 		
-		AvoirStatut exercice = exerciceDao.findOne(id);
+		AvoirStatut exercice = exerciceDao.findByIdIs(id);
 		
 		if (exercice != null) {
 			exerciceDao.delete(exercice);
@@ -75,7 +75,7 @@ public class AvoirStatutApi {
 	@PutMapping(value = "/mergePAvoirStatut/{id}")
 	public AvoirStatut updateAvoirStatut(@PathVariable Long id) {
 
-		AvoirStatut exercice = exerciceDao.findOne(id);
+		AvoirStatut exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);
@@ -86,7 +86,7 @@ public class AvoirStatutApi {
 	@PatchMapping(value = "/mergeAvoirStatut/{id}")
 	public AvoirStatut updatePartielAvoirStatut(@PathVariable Long id) {
 
-		AvoirStatut exercice = exerciceDao.findOne(id);
+		AvoirStatut exercice = exerciceDao.findByIdIs(id);
 		if (exercice != null) {
 			exercice.setId(id);
 			return exerciceDao.save(exercice);

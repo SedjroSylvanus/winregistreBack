@@ -7,29 +7,34 @@ import java.util.logging.Logger;
 import javax.persistence.TypedQuery;
 import javax.transaction.Transactional;
 
-import com.dgi.dsi.winregistre.entites.AppUser;
-import com.dgi.dsi.winregistre.entites.Service;
+import com.dgi.dsi.winregistre.entites.*;
 import org.hibernate.SessionFactory;
 import org.hibernate.annotations.common.util.impl.LoggerFactory;
-import org.springframework.boot.autoconfigure.web.ServerProperties.Session;
+//import org.springframework.boot.autoconfigure.web.ServerProperties.Session;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.data.repository.NoRepositoryBean;
-
-import com.dgi.dsi.winregistre.entites.Agent;
 
 
 @EnableJpaRepositories ("com.dgi.dsi.winregistre.dao")
 public interface AgentDao extends JpaRepository<Agent, Long>{
 
-    Agent findByUsername(String username);
+    Agent findByUsernameEquals(String username);
+
     Boolean existsByUsername(String username);
 
     Boolean existsByEmail(String email);
 
+
+    public Agent findByIdIs(String id);
+    public Agent findByIdIs(Long id);
+
+
+    Agent findByIndiceAgentEquals(String indiceAgent);
 
     Agent findByMatriculeEquals(String matricule);
 
@@ -56,7 +61,7 @@ public interface AgentDao extends JpaRepository<Agent, Long>{
     public Agent findByMatricule(String matricule);
 //    Optional<Agent> findByLogin(String login);
 
-    List<Agent> findAllByNom(String param, String param2);
+//    List<Agent> findByNomEquals(String param, String param2);
 
 //    public List<Agent> findByNom(String nom);
 
@@ -75,8 +80,11 @@ public interface AgentDao extends JpaRepository<Agent, Long>{
 //	        Agent account = query.getSingleResult();
 //	        return account;
 //	    }
-	
-	
+
+
+    @Query(value = "delete from agent_roles where agent_id=?1", nativeQuery = true)
+    Boolean deleteAgentRoleByUserName(Long agentId);
+
 }
 	
 

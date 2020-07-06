@@ -14,7 +14,7 @@ import javax.persistence.TemporalType;
 import com.dgi.dsi.winregistre.parent.entites.EntityBaseBean;
 
 @Entity
-@Table(name="exercice")
+@Table(name="exercice", schema = "winregist")
 public class Exercice extends EntityBaseBean implements Serializable{
 	
 
