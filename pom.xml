@@ -33,7 +33,7 @@
         <java.version>1.8</java.version>
 
         <!--<tomcat.version>9.0.20</tomcat.version>-->
-        <postgresql.version>42.1.4</postgresql.version>
+        <postgresql.version>42.2.25</postgresql.version>
 
 
     </properties>
